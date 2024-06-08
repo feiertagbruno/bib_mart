@@ -1,0 +1,22 @@
+{% extends "bibm/estru.html" %}
+{% load static %}
+
+{% block content %}
+	<div class="add-livro-autor-box">
+		<form action="{% url 'bibm:add_livro_autor' %}" class="search-form-add-livro-autor caixa-de-pesquisa">
+			<input type="search" class="search-input" name="q" value="{{ search_term }}" />
+			<button type="submit" class="search-button lupa">
+				<img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" />
+			</button>
+		</form>
+	</div>
+	{% for autor in autores %}
+		<span class="add-livro-nome-autor">
+			{{autor.prim_nome}} {{autor.ult_nome}}
+		</span>
+	{% empty %}
+		<span class="add-livro-nao-encontrado">
+			Nenhum autor encontrado.
+		</span>
+	{% endfor %}
+{% endblock content %}

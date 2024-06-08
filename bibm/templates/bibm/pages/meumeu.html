@@ -1,0 +1,18 @@
+{% extends "bibm/estru.html" %}
+
+{% block content %}
+
+	{% include "bibm/partials/meumeuPrimeiraFrase.html" %}
+	{% for livro in livros_lendo %}
+		{% include "bibm/partials/meumeuTituloSeLendo.html" %}
+	{% empty %}
+		{% for livro in livros_planejamento %}
+			{% include "bibm/partials/meumeuTituloComPlan.html" %}
+		{% empty %}
+			{% include "bibm/partials/meumeuTituloSemPlan.html" %}
+		{% endfor %}
+	{% endfor %}
+</div>
+
+{% include "bibm/partials/meumeuMenu.html" %}
+{% endblock content %}

@@ -1,0 +1,30 @@
+<div class="botoes-filtro-box">
+	<div class="decoracao-linha-filtros-acima"></div>
+	<span>Filtros</span>
+	<div class="filtros-linha">
+		{% for fil_chave, fil_valor in filtros.items %}
+			{% if filtro == fil_chave %}
+			<span class="{{classe_btn}}-estatico">
+				{% if caller == "meus_livros" %}
+				<a href="{% url 'bibm:meus_livros' fil_chave %}">
+				{% else %}
+				<a href="{% url 'bibm:editar_planejamento' fil_chave %}">
+				{% endif %}
+					{{fil_valor}}
+				</a>
+			</span>
+			{% else %}
+			<span class="{{classe_btn}}">
+				{% if caller == "meus_livros" %}
+				<a href="{% url 'bibm:meus_livros' fil_chave %}">
+				{% else %}
+				<a href="{% url 'bibm:editar_planejamento' fil_chave %}">
+				{% endif %}
+					{{fil_valor}}
+				</a>
+			</span>
+			{% endif %}
+		{% endfor %}
+	</div>
+	<div class="decoracao-linha-filtros-abaixo"></div>
+</div>

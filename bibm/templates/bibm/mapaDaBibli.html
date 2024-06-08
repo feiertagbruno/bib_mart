@@ -1,0 +1,32 @@
+{% extends 'bibm/estru.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container-search-box-mapa">
+    <form action="{% url 'bibm:mapa_da_bibli' %}" class="search-form-mapa caixa-de-pesquisa">
+      <input type="search" class="search-input" name="q" value="{{ search_term }}" />
+      <button type="submit" class="search-button lupa">
+				<img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" />
+		</button>
+    </form>
+  </div>
+	<div class="container-mapa-box">
+		{% for endereco, tupla in enderecos.items %}
+		<div class="endereco-box">
+			<div class="endereco-titulo-box">
+				<span class="endereco-titulo">{{ endereco }}</span>
+			</div>
+			{% if tupla.0 %}
+			<div class="endereco-descricao-box">
+				<span class="endereco-descricao">{{ tupla.0 }}</span>
+			</div>
+			{% endif %}
+			{% for livro in tupla.1 %}
+			<div class="endereco-livros">
+				<span class="endereco-livro-titulo opc-infla">{{ livro }}</span>
+			</div>
+			{% endfor %}
+		</div>
+		{% endfor %}
+	</div>
+{% endblock %}
