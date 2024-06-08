@@ -1,0 +1,61 @@
+{% extends "bibm/estru.html" %}
+{% load static %}
+
+{% block content %}
+
+	<div class="bloco-anotacoes">
+		{% if edicao %}
+		<form action="{% url 'bibm:edit_anotacao' livro_id anotacao_id %}" method="POST" class="form-anotacao">
+		{% else %}
+		<form action="{% url 'bibm:add_anotacao' livro_id %}" method="POST" class="form-anotacao">
+		{% endif %}
+
+			<p class="titulo-form">{{titulo}}</p>
+			{% csrf_token %}
+			<label class="invisivel">{{ form_anotacao.livro }}</label>
+			<label class="data-inclusao-anotacao">
+				{% if edicao %}
+					Editar Anotação
+				{% else %}
+					Nova Anotação
+				{% endif %}
+				 - {{ data_inclusao }}
+			</label>
+			<div class="caixa-texto-anotacao">
+				{{ form_anotacao.anotacao }}
+				<button name="submit" class="botao-mudanca-de-cor btn-adicionar-anotacao">Adicionar</button>
+			</div>
+
+		</form>
+
+		<div class="bloco-anotacoes">
+			{% for anotacao in todas_anotacoes_livro %}
+				<div class="data-inicial-anotacao">
+					<div class="decoracao-antes"></div>
+					<span class="titulo-anotacao-salva">
+						{{ anotacao.data_inclusao }}
+						<a class="btn-editar" method="GET" href="{% url 'bibm:edit_anotacao' livro_id anotacao.id %}">
+							<img 
+								src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+								alt="Editar esta anotação"
+								title="Editar esta anotação"
+							>
+						</a>
+						<a method="GET" href="{% url 'bibm:delete_anotacao' livro_id anotacao.id %}"
+							onclick="return confirm('Você deseja excluir esta anotação?')">
+							<img 
+								src="{% static 'bibm/img/trash-solid.svg' %}" 
+								alt="Excluir esta anotação"
+								title="Excluir esta anotação"
+								class="btn-excluir"
+							>
+						</a>
+					</span>
+					<div class="decoracao-depois"></div>
+				</div>
+				<span class="conteudo-anotacao-salva">{{ anotacao.anotacao }}</span>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock content %}

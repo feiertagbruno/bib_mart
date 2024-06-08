@@ -1,0 +1,53 @@
+<span class="livro-lendo">
+	{{ livro.titulo }}
+	{% if livro.endereco.codigo %}
+	<span class="endereco">endereço: {{ livro.endereco.codigo }}</span>
+	{% endif %}
+</span>
+<div class="opcoes-livro-atual">
+	<div class="opc-livro-atual">
+		<span class="botao-mudanca-de-cor">
+			<a href="{% url 'bibm:add_anotacao' livro.id %}">
+				Anotações
+			</a>
+		</span>
+	</div>
+	<div class="opc-livro-atual">
+		<span class="botao-mudanca-de-cor">
+			Alterar Cadastro do Livro
+		</span>
+	</div>
+	<div class="opc-livro-atual">
+		{% if devolvendo and livro.id == livro_id %}
+			{% if classificacao %}
+			<form action="{% url 'bibm:devolver_sim' %}" method="POST" class="form-classificacao">
+				{% csrf_token %}
+				<span>{{ form_classificacao.as_p }}</span>
+				<input type="hidden" name="livro_id" value = "{{livro.id}}">
+				<div class="form-devolver-sim">
+					<button type="submit" class="btn-hover-azul btn-tamanho-padrao">Devolver</button>
+				</div>
+			</form>
+			{% else %}
+			<span class="pergunta-se-leu">Você terminou de ler?</span>
+			<div class="sim-nao-devolver-box">
+					{% comment %} <a href="{% url 'bibm:devolver_sim_classificacao' livro.id %}">Sim</a> {% endcomment %}
+					<form action="{% url 'bibm:devolver_sim_classificacao' livro.id %}" method="get">
+						{% csrf_token %}
+						<input type="hidden" name="livro_id" value="{{livro.id}}">
+						<button class="btn-hover-azul" type="submit">Sim</button>
+					</form>
+					<form action="{% url 'bibm:devolver_nao' %}" method="post">
+						{% csrf_token %}
+						<input type="hidden" name="livro_id" value="{{livro.id}}">
+						<button class="btn-hover-azul" type="submit">Não</button>
+					</form>
+			</div>
+			{% endif %}
+		{% else %}
+		<span class="botao-mudanca-de-cor">
+			<a href="{% url 'bibm:devolver' livro.id %}">Devolver</a>
+		</span>
+		{% endif %}
+	</div>
+</div>

@@ -1,0 +1,51 @@
+      <div class="livro-box">
+        <span class="meus-livros-titulo">{{ livro.titulo }}</span>
+        <div class="meus-livros-abaixo-titulo-box">
+          <div class="autor-editora linha-livro-info">
+            {% if livro.autor.prim_nome == 'Autor Desconhecido' %}
+              <span class="meus-livros-autor">Autor Desconhecido</span>
+            {% else %}
+              <span class="meus-livros-autor">Autor: {{ livro.autor.ult_nome }}, {{ livro.autor.prim_nome }}</span>
+            {% endif %}
+            <span class="meus-livros-editora">Editora: {{ livro.editora }}</span>
+          </div>
+          <span class="meus-livros-genero linha-livro-info">Gênero: {{ livro.genero.genero }}</span>
+          {% if livro.tema %}
+            <span class="meus-livros-tema linha-livro-info">Tema: {{ livro.tema }}</span>
+          {% endif %}
+          {% if livro.lido %}
+            <div class="livro-lido-linha linha-livro-info">
+              <span class="meus-livros-lido"><u>Lido</u></span>
+              <span class="meus-livros-data-leitura">Data: {{ livro.data_leitura }}</span>
+            </div>
+            {% if livro.classificacao %}
+            <div class="livro-classificacao">
+              Classificação: {{ livro.classificacao }}
+            </div>
+            {% endif %}
+          {% endif %}
+          {% if livro.leria_de_novo %}
+            <span class="meus-livros-leria-de-novo">Leria de novo</span>
+          {% endif %}
+          {% if livro.planejamento == None %}
+          <div class="btn-livros-box">
+            {% if caller == "meus_livros" %}
+              <form action="{% url 'bibm:acrescentar_no_planejamento_meus_livros' %}" method="post">
+            {% else %}
+              <form action="{% url 'bibm:acrescentar_no_planejamento'%}" method="post">
+            {% endif %}
+              {% csrf_token %}
+              {% if filtro %}
+                <input type="hidden" name="filtro" value="{{filtro}}">
+              {% endif %}
+              <input type="hidden" name="livro_id" value={{ livro.id }}>
+              <button type="submit" class="{{classe_btn}}">Acrescentar no planejamento</button>
+            </form>
+          </div>
+          {% else %}
+          <span class="ja-no-planejamento">
+            <u>No planejamento</u>
+          </span>
+          {% endif %}
+        </div>
+      </div>

@@ -1,0 +1,19 @@
+{% extends 'bibm/estru.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container-search-box">
+    <form action="{% url 'bibm:meus_livros' 'todos' %}" class="search-form caixa-de-pesquisa">
+      <input type="search" class="search-input" name="q" value="{{ search_term }}" />
+      <button type="submit" class="search-button lupa"><img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" /></button>
+    </form>
+  </div>
+  {% include "bibm/partials/botoesFiltro.html" %}
+  <div class="meus-livros-box">
+    {% for livro in meus_livros %}
+      {% include "bibm/partials/livroDetalheForm.html" %}
+    {% empty %}
+      Você ainda não possui nenhum livro
+    {% endfor %}
+  </div>
+{% endblock %}

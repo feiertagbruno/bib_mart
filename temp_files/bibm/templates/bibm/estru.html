@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bibli da Martinha</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="{% static 'bibm/css/estilos.css' %}" rel="stylesheet">
+</head>
+
+<body>
+		<aside class="madimi-one-regular main-bg section">
+			<div class="maxwidth">
+			<div class="container-titulo">
+				<div class="titulo">
+					<span class="nome-app">
+						<a href="{% url 'bibm:home' %}">bibli da martinha</a>
+					</span>
+					<p class="comentario">amor, leitura e organização</p>
+				</div>
+			</div>
+			
+			{% include "bibm/partials/messages.html" %}
+
+			{% block content %}
+			{% endblock content %}
+			
+		</div>
+
+		<div class="espaco-embaixo"></div>
+
+		<footer class="rodape">
+			<div class="frase-rodape-container">
+				<p class="frase-rodape">"(...) cada começo é só continuação e o livro dos eventos está sempre aberto no meio."</p>
+				<p class="autor-rodape">Wislawa Szymborska</p>
+			</div>
+		</footer>
+
+	</aside>
+	<script src="{% static 'bibm/js/selecaoAutores.js' %}"></script>
+</body>
+
+</html>
