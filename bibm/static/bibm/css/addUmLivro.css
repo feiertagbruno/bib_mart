@@ -1,0 +1,35 @@
+.autor-box {
+	width: fit-content;
+}
+
+.autores-opcoes {
+	display: none;
+}
+
+.autor-input-container {
+	display: flex;
+	width: var(--recuo-padrao);
+    border: 2px solid var(--cor-da-borda);
+	min-width: 19.5rem;
+    width: 40vw;
+    border-radius: 20px;
+    position: relative;
+}
+
+.abrir-select img {
+	position: relative;
+	width: 2rem;
+	cursor: pointer;
+	left: calc(-1vw);
+}
+
+.autores-opcoes {
+	position: relative;
+	width: 93%;
+	margin: 0 auto;
+	overflow: hidden;
+	background: none;
+	padding: 0 1rem;
+	font-size: inherit;
+	font-family: inherit;
+}

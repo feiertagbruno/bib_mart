@@ -141,7 +141,7 @@ def delete_anotacao(request, livro_id, anotacao_id):
 
 def meus_livros(request, filtro):
     termo_busca = request.GET.get("q", "").strip()
-    classe_btn = "btn-hover-azul"
+    classe_btn = "btn-azul"
     filtros = {
         "todos": "Todos", 
         "naolidos": "Não lidos", 
@@ -271,7 +271,7 @@ def editar_planejamento(request, filtro):
         "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
-    classe_btn = "btn-livros-vermelho"
+    classe_btn = "btn-vermelho"
 
     livros_plan = livros_planejamento()
     ultimo_plan = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]

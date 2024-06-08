@@ -10,25 +10,22 @@
 			{% csrf_token %}
 			<input type="hidden" name="livro_id" value={{ livro.id }}>
 			<input type="hidden" name="filtro" value={{ filtro }}>
-			<button type="submit" class="livro-atual-content-planejamento">Pegar este livro</button>
+			<button type="submit" class="btn-menu-grande btn-verde">Pegar este livro</button>
 		</form>
 	</div>
 	<div class="opc-livro-atual">
-		<span class="livro-atual-content-planejamento">
+		<span class="btn-menu-grande btn-verde">
 			<a href="{% url 'bibm:editar_planejamento' 'naolidos' %}">
 				Editar Planejamento
 			</a>
 		</span>
 		</div>
 	<div class="opc-livro-atual">
-		{% comment %} <a href="{% url 'bibm:pular_este' livro.id %}" class="livro-atual-content-planejamento">
-			Pular Este
-		</a> {% endcomment %}
 		<form method="post" action="{% url 'bibm:pular_este'%}">
 			{% csrf_token %}
 			<input type="hidden" name="livro_id" value={{ livro.id }}>
 			<input type="hidden" name="filtro" value={{ filtro }}>
-			<button type="submit" class="livro-atual-content-planejamento">Pular Este</button>
+			<button type="submit" class="btn-menu-grande btn-verde">Pular Este</button>
 		</form>
 	</div>
 </div>

@@ -1,0 +1,40 @@
+@media (max-width: 600px) {
+	.search-form:focus-within {
+		border-color: var(--color-primary);
+		background: rgba(255, 255, 255, .3);
+		width: 85vw;
+	}	
+
+	.opcoes-meumeu {
+		flex-flow: column;
+	}
+
+	body {
+		font-size: calc(1.5rem + 1.2vw);
+	}
+
+	.opc {
+		font-size: calc(1.6rem + 1.5vw);
+	}
+
+	.endereco-titulo {
+		font-size: calc(2rem + 2vw);
+	}
+	
+	.endereco-descricao {
+		font-size: calc(1.3rem + .8vw);
+	}
+
+	.btn-menu-grande {
+		font-size: calc(1.6rem + 1.5vw);
+		text-align: center;
+	}
+
+	.titulo-livro-atual {
+		font-size: calc(1.3rem + 1vw);
+	}
+
+	.abrir-select img {
+		left: 2vw;
+	}
+}

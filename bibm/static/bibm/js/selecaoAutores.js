@@ -70,10 +70,16 @@ botao_abrir_select.addEventListener("click", function(e) {
 	autor_input.focus()
 })
 
-autor_input.addEventListener("blur", function(e) {
-    setTimeout(() => {
-        select_opc.style.display = "none";
-    }, 500);
+document.addEventListener("click", function(e) {
+	if (
+		!botao_abrir_select.contains(e.target) && 
+		!autor_input.contains(e.target) && 
+		!select_opc.contains(e.target)
+	) {
+		setTimeout(() => {
+			select_opc.style.display = "none";
+		}, 300);
+	}
 });
 
 function eventoFocusDoSelect() {

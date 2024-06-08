@@ -17,7 +17,7 @@
 				{% csrf_token %}
 				<input type="hidden" name="livro_id" value={{ livro.id }}>
 				<input type="hidden" name="filtro" value={{ filtro }}>
-				<button type="submit" class="opc-plan">Pegar este livro</button>
+				<button type="submit" class="btn-medio btn-vermelho">Pegar este livro</button>
 			</form>
 		</div>
 		<div class="opc-plan-box">
@@ -25,7 +25,7 @@
 			  {% csrf_token %}
 			  <input type="hidden" name="livro_id" value={{ livro.id }}>
 			  <input type="hidden" name="filtro" value={{ filtro }}>
-			  <button type="submit" class="opc-plan">Remover do planejamento</button>
+			  <button type="submit" class="btn-medio btn-vermelho">Remover do planejamento</button>
 			</form>
 		</div>
 	  </div>

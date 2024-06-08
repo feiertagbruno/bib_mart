@@ -4,30 +4,31 @@
 {% block content %}
 
 	<div class="bloco-anotacoes">
-		{% if edicao %}
-		<form action="{% url 'bibm:edit_anotacao' livro_id anotacao_id %}" method="POST" class="form-anotacao">
-		{% else %}
-		<form action="{% url 'bibm:add_anotacao' livro_id %}" method="POST" class="form-anotacao">
-		{% endif %}
+		<div class="form-anotacao-div">
+			{% if edicao %}
+			<form action="{% url 'bibm:edit_anotacao' livro_id anotacao_id %}" method="POST" class="form-anotacao">
+			{% else %}
+			<form action="{% url 'bibm:add_anotacao' livro_id %}" method="POST" class="form-anotacao">
+			{% endif %}
 
-			<p class="titulo-form">{{titulo}}</p>
-			{% csrf_token %}
-			<label class="invisivel">{{ form_anotacao.livro }}</label>
-			<label class="data-inclusao-anotacao">
-				{% if edicao %}
-					Editar Anotação
-				{% else %}
-					Nova Anotação
-				{% endif %}
-				 - {{ data_inclusao }}
-			</label>
-			<div class="caixa-texto-anotacao">
-				{{ form_anotacao.anotacao }}
-				<button name="submit" class="botao-mudanca-de-cor btn-adicionar-anotacao">Adicionar</button>
-			</div>
+				<p class="titulo-form">{{titulo}}</p>
+				{% csrf_token %}
+				<label class="invisivel">{{ form_anotacao.livro }}</label>
+				<label class="data-inclusao-anotacao">
+					{% if edicao %}
+						Editar Anotação
+					{% else %}
+						Nova Anotação
+					{% endif %}
+					- {{ data_inclusao }}
+				</label>
+				<div class="caixa-texto-anotacao">
+					{{ form_anotacao.anotacao }}
+					<button name="submit" class="btn-hover-azul btn-adicionar-anotacao">Adicionar</button>
+				</div>
 
-		</form>
-
+			</form>
+		</div>
 		<div class="bloco-anotacoes">
 			{% for anotacao in todas_anotacoes_livro %}
 				<div class="data-inicial-anotacao">
