@@ -1,35 +1,61 @@
 .autor-box {
-	width: fit-content;
+	position: relative;
+	display: flex;
+	flex-flow: column;
+	width: calc(80vw);
+	margin: 0 auto;
+	text-align: center;
+	place-items: center;
+}
+
+.autor-box-form {
+	position: relative;
+	display: flex;
+	flex-flow: column;
+	gap: 1rem;
+	width: 80%;
+	place-items: center;
+}
+
+.input-container {
+    position: relative;
+	display: flex;
+	width: var(--recuo-padrao);
+    border: 2px solid var(--cor-da-borda);
+	min-width: 19.5rem;
+    width: 80%;
+    border-radius: 20px;
 }
 
 .autores-opcoes {
 	display: none;
 }
 
-.autor-input-container {
-	display: flex;
-	width: var(--recuo-padrao);
-    border: 2px solid var(--cor-da-borda);
-	min-width: 19.5rem;
-    width: 40vw;
-    border-radius: 20px;
-    position: relative;
+.abrir-select {
+	position: absolute;
+	right: 1rem;
+	top: -0.3rem;
 }
 
 .abrir-select img {
-	position: relative;
+	display: flex;
 	width: 2rem;
 	cursor: pointer;
-	left: calc(-1vw);
 }
 
 .autores-opcoes {
 	position: relative;
-	width: 93%;
+	width: inherit;
 	margin: 0 auto;
 	overflow: hidden;
 	background: none;
 	padding: 0 1rem;
 	font-size: inherit;
 	font-family: inherit;
+}
+
+.titulo-add-um-livro {
+	position: relative;
+	font-size: calc(2rem + 1.2vw);
+	padding: 2rem 0;
 }

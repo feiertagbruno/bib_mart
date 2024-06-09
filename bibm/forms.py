@@ -15,12 +15,18 @@ class AnotacaoForm(forms.ModelForm):
         ]
 
 class LivroForm(forms.ModelForm):
+    autor = forms.IntegerField(
+        widget=forms.HiddenInput(
+            attrs={
+                "id":"autor_id"
+            }
+        )
+    )
     class Meta:
         model = Livro
         fields = [
             "titulo",
             "editora",
-            "autor",
             "genero",
             "tema",
             "lido",
@@ -32,6 +38,18 @@ class LivroForm(forms.ModelForm):
             "regiao",
             "comentario",
         ]
+        widgets = {
+            "titulo":forms.TextInput(
+                attrs={
+                    "class":"autor-input"
+                }
+            ),
+            "editora":forms.TextInput(
+                attrs={
+                    "class":"autor-input"
+                }
+            ),
+        }
 
 class ClassificacaoForm(forms.Form):
     classificacao = forms.ChoiceField(

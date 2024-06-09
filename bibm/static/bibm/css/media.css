@@ -37,4 +37,12 @@
 	.abrir-select img {
 		left: 2vw;
 	}
+
+	.input-container {
+		width: 100%;
+	}
+
+	.autor-box-form {
+		width: 100%;
+	}
 }

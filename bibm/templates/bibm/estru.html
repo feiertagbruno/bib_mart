@@ -45,7 +45,10 @@
 		</footer>
 
 	</aside>
+	{% if add_um_livro %}
 	<script src="{% static 'bibm/js/selecaoAutores.js' %}"></script>
+	<script src="{% static 'bibm/js/selecaoGenero.js' %}"></script>
+	{% endif %}
 </body>
 
 </html>

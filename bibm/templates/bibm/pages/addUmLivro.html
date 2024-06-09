@@ -3,18 +3,30 @@
 
 {% block content %}
 	<div class="autor-box">
-		<label for="autor-input">Autor:</label>
-		<div class="autor-input-container">
-			<input type="text" name="autor" id="autor-input" class="autor-input">
-			<span class="abrir-select">
-				<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
-			</span>
-		</div>
-		<select name="autores" class="autores-opcoes" size="5">
-			{% for autor in autores %}
-				<option class="opc-autor" value="{{autor}}">{{autor}}</option>
-			{% endfor %}
-		</select>
+		<span class="titulo-add-um-livro">Adicionar Um Livro</span>
+		<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
+			{% csrf_token %}
+			<label for="autor-input">Autor:</label>
+			<div class="input-container">
+				{{form.autor}}
+				<input type="text" name="autor" id="autor-input" class="autor-input" placeholder="Digite para buscar o autor.">
+				<span class="abrir-select">
+					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+				</span>
+			</div>
+			<select name="autores" class="autores-opcoes" size="5">
+				{% for autor_id, autor_nome in autores %}
+				<option class="opc-autor" value="{{autor_id}}">{{autor_nome}}</option>
+				{% endfor %}
+			</select>
+			<label for="titulo">Título:</label>
+			<div class="input-container" id="titulo">{{form.titulo}}</div>
+			<label for="editora">Editora:</label>
+			<div class="input-container" id="editora">{{form.editora}}</div>
+			<label for="genero">Genero:</label>
+			<div class="" id="genero">{{form.genero}}</div>
+			<button type="submit" class="btn-medio btn-azul">Adicionar</button>
+		</form>
 	</div>
 
 	

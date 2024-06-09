@@ -423,12 +423,14 @@ def add_um_livro(request):
     form = LivroForm()
 
     autores = list(Autor.objects.annotate(
-        nome=Concat("prim_nome", Value(" "), "ult_nome")
-    ).values_list("nome", flat=True))
+            nome=Concat("prim_nome", Value(" "), "ult_nome")
+        ).values_list("id", "nome")
+    )
 
     context = {
         "form":form,
         "autores": autores,
+        "add_um_livro": True,
     }
     return render(request, "bibm/pages/addUmLivro.html", context)
 
