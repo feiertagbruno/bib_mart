@@ -37,14 +37,15 @@ body {
 	overflow: hidden auto;
 }
 
-input[type="text"], textarea {
+input[type="text"], textarea,
+input[type="date"] {
 	outline: none;
 	background: none;
 	border: none;
 	width: inherit;
 	height: inherit;
-	/* font-family: inherit;
-	font-size: inherit; */
+	font-family: inherit;
+	/* font-size: inherit; */
 	border-radius: none;
 }
 
@@ -214,6 +215,7 @@ a {
 	display: flex;
 	flex-flow: row wrap;
 	place-content: center;
+	padding: 1rem 0;
 }
 
 .livro-lendo {
@@ -586,8 +588,7 @@ a {
 }
 
 .search-input,
-.search-button,
-.autor-input {
+.search-button {
     border: none;
     background: none;
     outline: none;

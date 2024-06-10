@@ -49,7 +49,7 @@
 
 .autores-opcoes {
 	position: relative;
-	width: inherit;
+	width: 77%;
 	margin: 0 auto;
 	overflow: hidden;
 	background: none;
@@ -67,18 +67,40 @@
 .div-dois-campos {
 	display: flex;
 	flex-flow: row wrap;
-	gap: 2rem;
+	justify-content: space-between;
+	place-content: center;
+	gap: 2%;
 	width: 80%;
 }
 
 .campo-dois-campos {
 	display: flex;
 	flex-flow: column;
-	width: 100%;
+	width: calc(98%/2);
+	min-width: 25rem;
+	place-items: center;
+	place-content: center;
+}
+
+.campo-tres-campos {
+	display: flex;
+	flex-flow: column;
+	width: calc(96%/3);
+	min-width: 20rem;
 	place-items: center;
 	place-content: center;
 }
 
 .input-container-menor {
 	width: 100%;
+}
+
+.autor-input {
+	padding: 1rem;
+}
+
+.data-input {
+	display: flex;
+	padding: 1rem;
+	place-content: center;
 }

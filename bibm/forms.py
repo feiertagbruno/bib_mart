@@ -73,7 +73,7 @@ class LivroForm(forms.ModelForm):
             "data_compra":forms.DateInput(
                 attrs={
                     "type":"date",
-                    "class":"autor-input",
+                    "class":"data-input",
                 }
             ),
         }
