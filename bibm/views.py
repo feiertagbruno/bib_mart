@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Livro, Anotacao, Historico, Endereco, Autor
+from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero
 from .forms import AnotacaoForm, LivroForm, ClassificacaoForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -427,10 +427,20 @@ def add_um_livro(request):
         ).values_list("id", "nome")
     )
 
+    generos = list(Genero.objects.all().values_list("id","genero"))
+
+    enderecos = list(
+        Endereco.objects.annotate(
+            nome=Concat("codigo", Value(" "), "descricao")
+        ).values_list("id", "nome")
+    )
+
     context = {
         "form":form,
         "autores": autores,
         "add_um_livro": True,
+        "generos":generos,
+        "enderecos":enderecos,
     }
     return render(request, "bibm/pages/addUmLivro.html", context)
 
@@ -465,7 +475,7 @@ def acrescentar_no_planejamento_meus_livros(request):
     return HttpResponseRedirect(reverse("bibm:meus_livros"))
 
 def chamar_html_teste(request):
-    form = ClassificacaoForm()
+    form = LivroForm()
     context = {
         "form":form
     }

@@ -1,103 +1,105 @@
-const select_opc = document.querySelector(".autores-opcoes")
+const select_opc_gen = document.querySelector("#generos-opcoes")
+const generos = select_opc_gen.options
+let lista_generos = []
+const genero_input = document.querySelector("#genero-input")
+const botao_abrir_select_gen = document.querySelector("#abrir-select-genero")
+const genero_id = document.querySelector("#genero_id")
 
-const autores = select_opc.options
-let lista_autores = []
-const autor_input = document.querySelector("#autor-input")
-const botao_abrir_select = document.querySelector(".abrir-select")
-const autor_id = document.querySelector("#autor_id")
-
-for (let aut of autores) {
-	lista_autores.push(aut)
+for (let gen of generos) {
+	lista_generos.push(gen)
 }
 
-autor_input.addEventListener("input", function(e) {
+genero_input.addEventListener("input", function(e) {
 	const inputValue = this.value.toLowerCase()
-	select_opc.innerHTML = ""
+	select_opc_gen.innerHTML = ""
 
 	if (inputValue) {
-		const filtro = lista_autores.filter(item => item.text.toLowerCase().includes(inputValue))
+		const filtro = lista_generos.filter(item => item.text.toLowerCase().includes(inputValue))
 
 		for (let item of filtro) {
 			const option = document.createElement("option")
 			option.value = item.value
 			option.textContent = item.text
-			select_opc.appendChild(option)
+			select_opc_gen.appendChild(option)
 		}
 
 		eventoFocusDoSelect()
 		
-		select_opc.style.display = filtro.length ? "block" : "none"
+		select_opc_gen.style.display = filtro.length ? "block" : "none"
 		if (filtro.length) {
-			select_opc.selectedIndex = 0
+			select_opc_gen.selectedIndex = 0
 		} else {
-			select_opc.style.display = "none"
+			select_opc_gen.style.display = "none"
 		}
 	} else {
-		select_opc.style.display = "none"
-		for (let item of lista_autores) {
+		select_opc_gen.style.display = "none"
+		for (let item of lista_generos) {
 			const option = document.createElement("option")
-			option.value = item
-			option.textContent = item
-			const elemento = select_opc.appendChild(option)
+			option.value = item.value
+			option.textContent = item.text
+			const elemento = select_opc_gen.appendChild(option)
 			eventoFocusDoSelect()
 		}
 	}
 })
 
-autor_input.addEventListener("keydown", function(e) {
+genero_input.addEventListener("keydown", function(e) {
 	if (e.key === "Enter" || e.key === "Tab") {
 		if (e.key ==="Enter") e.preventDefault()
-		if (select_opc.style.display === "block" && autores.length > 0) {
-			autor_input.value = select_opc.options[select_opc.selectedIndex].text
-			autor_id.value = select_opc.options[select_opc.selectedIndex].value
-			select_opc.style.display = "none"
+		if (select_opc_gen.style.display === "block" && generos.length > 0) {
+			genero_input.value = select_opc_gen.options[select_opc_gen.selectedIndex].text
+			genero_id.value = select_opc_gen.options[select_opc_gen.selectedIndex].value
+			select_opc_gen.style.display = "none"
 		}
 	}
 	if (e.key === "ArrowDown") {
 		e.preventDefault()
-		if (select_opc.style.display === "block" && autores.length > 0) {
-			select_opc.selectedIndex = (select_opc.selectedIndex + 1) % select_opc.options.length
+		if (select_opc_gen.style.display === "block" && generos.length > 0) {
+			select_opc_gen.selectedIndex = (select_opc_gen.selectedIndex + 1) % select_opc_gen.options.length
 		}
 	}
 	if (e.key === "ArrowUp") {
 		e.preventDefault()
-		if (select_opc.style.display === "block" && autores.length > 0) {
-			select_opc.selectedIndex = (select_opc.selectedIndex - 1 + select_opc.options.length)
-			% select_opc.options.length
+		if (select_opc_gen.style.display === "block" && generos.length > 0) {
+			select_opc_gen.selectedIndex = (select_opc_gen.selectedIndex - 1 + select_opc_gen.options.length)
+			% select_opc_gen.options.length
 		}
+	}
+	if (e.key === "Backspace") {
+		genero_id.value = null
 	}
 })
 
-botao_abrir_select.addEventListener("click", function(e) {
-	select_opc.style.display = "block"
-	autor_input.focus()
+botao_abrir_select_gen.addEventListener("click", function(e) {
+	select_opc_gen.style.display = "block"
+	genero_input.focus()
 })
 
 document.addEventListener("click", function(e) {
 	if (
-		!botao_abrir_select.contains(e.target) && 
-		!autor_input.contains(e.target) && 
-		!select_opc.contains(e.target)
+		!botao_abrir_select_gen.contains(e.target) && 
+		!genero_input.contains(e.target) && 
+		!select_opc_gen.contains(e.target)
 	) {
 		setTimeout(() => {
-			select_opc.style.display = "none";
+			select_opc_gen.style.display = "none";
 		}, 300);
 	}
 });
 
 function eventoFocusDoSelect() {
-	for (let i = 0; i < select_opc.length; i++) {
-		select_opc[i].addEventListener("mouseover",function(e) {
-			select_opc.selectedIndex = e.target.index
+	for (let i = 0; i < select_opc_gen.length; i++) {
+		select_opc_gen[i].addEventListener("mouseover",function(e) {
+			select_opc_gen.selectedIndex = e.target.index
 		});
 	};
 }
 eventoFocusDoSelect()
 
-select_opc.addEventListener("click", function(e) {
+select_opc_gen.addEventListener("click", function(e) {
 	if (e.target.tagName === "OPTION") {
-		autor_input.value = e.target.text
-		autor_id.value = e.target.value
-		select_opc.style.display = "none"
+		genero_input.value = e.target.text
+		genero_id.value = e.target.value
+		select_opc_gen.style.display = "none"
 	}
 })

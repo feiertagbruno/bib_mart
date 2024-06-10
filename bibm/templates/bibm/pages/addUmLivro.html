@@ -6,28 +6,89 @@
 		<span class="titulo-add-um-livro">Adicionar Um Livro</span>
 		<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
 			{% csrf_token %}
-			<label for="autor-input">Autor:</label>
+			{% comment %} AUTOR {% endcomment %}
+			<label class="label-add-um-livro" for="autor-input">Autor:</label>
 			<div class="input-container">
 				{{form.autor}}
 				<input type="text" name="autor" id="autor-input" class="autor-input" placeholder="Digite para buscar o autor.">
-				<span class="abrir-select">
+				<span id="abrir-select-autor" class="abrir-select">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</span>
 			</div>
-			<select name="autores" class="autores-opcoes" size="5">
+			<select name="autores" id="autores-opcoes" class="autores-opcoes" size="5">
 				{% for autor_id, autor_nome in autores %}
 				<option class="opc-autor" value="{{autor_id}}">{{autor_nome}}</option>
 				{% endfor %}
 			</select>
-			<label for="titulo">Título:</label>
+			{% comment %} TITULO {% endcomment %}
+			<label class="label-add-um-livro" for="titulo">Título:</label>
 			<div class="input-container" id="titulo">{{form.titulo}}</div>
-			<label for="editora">Editora:</label>
+			{% comment %} EDITORA {% endcomment %}
+			<label class="label-add-um-livro" for="editora">Editora:</label>
 			<div class="input-container" id="editora">{{form.editora}}</div>
-			<label for="genero">Genero:</label>
-			<div class="" id="genero">{{form.genero}}</div>
-			<button type="submit" class="btn-medio btn-azul">Adicionar</button>
+			{% comment %} GENERO {% endcomment %}
+			<div class="div-dois-campos">
+				<div class="campo-dois-campos">
+					<label class="label-add-um-livro" for="genero">Genero:</label>
+					<div class="input-container input-container-menor">
+						{{form.genero}}
+						<input type="text" name="autor" id="genero-input" class="autor-input" placeholder="Digite o gênero.">
+						<span id="abrir-select-genero" class="abrir-select">
+							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+						</span>
+					</div>
+					<select name="generos" id="generos-opcoes" class="autores-opcoes" size="5">
+						{% for genero_id, genero_nome in generos %}
+						<option class="opc-autor" value="{{genero_id}}">{{genero_nome}}</option>
+						{% endfor %}
+					</select>
+				</div>
+			{% comment %} TEMA {% endcomment %}
+			<div class="campo-dois-campos">
+					<label class="label-add-um-livro" for="tema">Tema:</label>
+					<div class="input-container input-container-menor" id="tema">{{form.tema}}</div>
+			</div>
+			</div>
+			{% comment %} LIDO LERIA-DE-NOVO E CLASSIFICAÇÃO {% endcomment %}
+			<div class="div-dois-campos espaco-top-bottom-2rem">
+				<div class="campo-dois-campos flex-flow-row">
+					<label class="label-add-um-livro" for="tema">Lido:</label>
+					{{form.lido}}
+				</div>
+				<div class="campo-dois-campos flex-flow-row">
+					<label class="label-add-um-livro" for="tema">Leria de novo:</label>
+					{{form.leria_de_novo}}
+				</div>
+				<div class="campo-dois-campos flex-flow-row">
+					<label class="label-add-um-livro" for="tema">Classificação:</label>
+					{{form.classificacao}}
+				</div>
+			</div>
+			{% comment %} ENDEREÇO {% endcomment %}
+			<div class="div-dois-campos">
+				<div class="campo-dois-campos">
+					<label class="label-add-um-livro" for="endereco-input">Endereço:</label>
+					<div class="input-container input-container-menor">
+						{{form.endereco}}
+						<input type="text" name="endereco" id="endereco-input" class="autor-input" placeholder="Digite para buscar o endereco.">
+						<span id="abrir-select-endereco" class="abrir-select">
+							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+						</span>
+					</div>
+					<select name="enderecos" id="enderecos-opcoes" class="autores-opcoes" size="5">
+						{% for endereco_id, endereco_nome in enderecos %}
+						<option class="opc-autor" value="{{endereco_id}}">{{endereco_nome}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="campo-dois-campos">
+					<label class="label-add-um-livro" for="data_compra">Data de compra:</label>
+					<div class="input-container input-container-menor texto-centralizado" id="data_compra">{{form.data_compra}}</div>
+				</div>
+			</div>
+			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-2rem">Adicionar</button>
 		</form>
-	</div>
+</div>
 
 	
 {% endblock content %}

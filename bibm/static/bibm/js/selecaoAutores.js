@@ -1,9 +1,8 @@
-const select_opc = document.querySelector(".autores-opcoes")
-
+const select_opc = document.querySelector("#autores-opcoes")
 const autores = select_opc.options
 let lista_autores = []
 const autor_input = document.querySelector("#autor-input")
-const botao_abrir_select = document.querySelector(".abrir-select")
+const botao_abrir_select = document.querySelector("#abrir-select-autor")
 const autor_id = document.querySelector("#autor_id")
 
 for (let aut of autores) {
@@ -36,8 +35,8 @@ autor_input.addEventListener("input", function(e) {
 		select_opc.style.display = "none"
 		for (let item of lista_autores) {
 			const option = document.createElement("option")
-			option.value = item
-			option.textContent = item
+			option.value = item.value
+			option.textContent = item.text
 			const elemento = select_opc.appendChild(option)
 			eventoFocusDoSelect()
 		}
@@ -65,6 +64,9 @@ autor_input.addEventListener("keydown", function(e) {
 			select_opc.selectedIndex = (select_opc.selectedIndex - 1 + select_opc.options.length)
 			% select_opc.options.length
 		}
+	}
+	if (e.key === "Backspace") {
+		autor_id.value = null
 	}
 })
 

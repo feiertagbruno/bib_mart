@@ -115,6 +115,20 @@ a {
 	display: none;
 }
 
+.espaco-top-bottom-2rem {
+	margin-top: 2rem;
+	margin-bottom: .5rem;
+}
+
+.flex-flow-row {
+	flex-flow: row;
+	gap: 1rem;
+}
+
+.texto-centralizado {
+	display: flex;
+	justify-content: center;
+}
 /* FIM GENERICOS */
 
 /* BOTÕES */

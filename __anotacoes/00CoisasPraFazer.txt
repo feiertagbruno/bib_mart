@@ -1,0 +1,5 @@
+no modo celular, o texto em baixo da aplicação, está cobrindo o conteúdo (estudar para aumentar o espaço embaixo)
+
+continuar amanhã:
+colocar a região no html addUmLivro
+a região vai ser um form com javascript, copiar os outros e adaptar para as regiões
