@@ -121,6 +121,11 @@ a {
 	margin-bottom: .5rem;
 }
 
+.espaco-top-bottom-4rem {
+	margin-top: 4rem;
+	margin-bottom: 3rem;
+}
+
 .flex-flow-row {
 	flex-flow: row;
 	gap: 1rem;

@@ -36,6 +36,13 @@ class LivroForm(forms.ModelForm):
             }
         )
     )
+    regiao = forms.IntegerField(
+        widget=forms.HiddenInput(
+            attrs={
+                "id":"regiao_id"
+            }
+        )
+    )
     class Meta:
         model = Livro
         fields = [

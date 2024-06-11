@@ -21,6 +21,7 @@ urlpatterns = [
 	path("pulareste/", views.pular_este, name="pular_este"),
 	path("removerdoplanejamento/", views.remover_do_planejamento, name="remover_do_planejamento"),
 	path("mapadabibli/", views.mapa_da_bibli, name="mapa_da_bibli"),
+	path("adicionarumlivro/post/", views.add_um_livro_post, name="add_um_livro_post"),
 	path("adicionarumlivro/", views.add_um_livro, name="add_um_livro"),
 	path("adicionarumlivro/autor/", views.add_livro_autor, name="add_livro_autor"),
 	path("acrescentarnoplanejamento/", views.acrescentar_no_planejamento, name="acrescentar_no_planejamento"),

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero
+from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
 from .forms import AnotacaoForm, LivroForm, ClassificacaoForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -420,20 +420,21 @@ def mapa_da_bibli(request):
     return render(request, "bibm/mapaDaBibli.html",context)
 
 def add_um_livro(request):
-    form = LivroForm()
+    info_form = request.session.get("info_form", None)
+
+    form = LivroForm(info_form)
 
     autores = list(Autor.objects.annotate(
             nome=Concat("prim_nome", Value(" "), "ult_nome")
         ).values_list("id", "nome")
     )
-
     generos = list(Genero.objects.all().values_list("id","genero"))
-
     enderecos = list(
         Endereco.objects.annotate(
             nome=Concat("codigo", Value(" "), "descricao")
         ).values_list("id", "nome")
     )
+    regioes = Regiao.objects.all().values_list("id", "regiao")
 
     context = {
         "form":form,
@@ -441,8 +442,21 @@ def add_um_livro(request):
         "add_um_livro": True,
         "generos":generos,
         "enderecos":enderecos,
+        "regioes": regioes,
     }
     return render(request, "bibm/pages/addUmLivro.html", context)
+
+def add_um_livro_post(request):
+    POST = request.POST
+    request.session["info_form"] = POST
+    form = LivroForm(POST)
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Livro adicionado com sucesso!")
+        del(request.session["info_form"])
+    
+    return HttpResponseRedirect(reverse("bibm:add_um_livro"))
 
 def add_livro_autor(request):
     termo_busca = request.GET.get("q","")

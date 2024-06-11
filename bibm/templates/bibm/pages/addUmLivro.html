@@ -4,7 +4,7 @@
 {% block content %}
 	<div class="autor-box">
 		<span class="titulo-add-um-livro">Adicionar Um Livro</span>
-		<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
+		<form action="{% url "bibm:add_um_livro_post" %}" method="post" class="autor-box-form">
 			{% csrf_token %}
 			{% comment %} AUTOR {% endcomment %}
 			<label class="label-add-um-livro" for="autor-input">Autor:</label>
@@ -26,6 +26,20 @@
 			{% comment %} EDITORA {% endcomment %}
 			<label class="label-add-um-livro" for="editora">Editora:</label>
 			<div class="input-container" id="editora">{{form.editora}}</div>
+			{% comment %} REGIÃO {% endcomment %}
+			<label class="label-add-um-livro" for="regiao-input">Região:</label>
+			<div class="input-container">
+				{{form.regiao}}
+				<input type="text" name="regiao" id="regiao-input" class="autor-input" placeholder="Digite para buscar a região.">
+				<span id="abrir-select-regiao" class="abrir-select">
+					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+				</span>
+			</div>
+			<select name="regioes" id="regioes-opcoes" class="autores-opcoes" size="5">
+				{% for regiao_id, regiao_nome in regioes %}
+				<option class="opc-autor" value="{{regiao_id}}">{{regiao_nome}}</option>
+				{% endfor %}
+			</select>
 			{% comment %} GENERO {% endcomment %}
 			<div class="div-dois-campos">
 				<div class="campo-dois-campos">
@@ -86,7 +100,7 @@
 					<div class="input-container input-container-menor texto-centralizado" id="data_compra">{{form.data_compra}}</div>
 				</div>
 			</div>
-			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-2rem">Adicionar</button>
+			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem">Adicionar</button>
 		</form>
 </div>
 
