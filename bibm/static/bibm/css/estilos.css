@@ -116,9 +116,12 @@ a {
 	display: none;
 }
 
-.espaco-top-bottom-2rem {
+.espaco-top-2rem {
 	margin-top: 2rem;
-	margin-bottom: .5rem;
+}
+
+.espaco-bottom-2rem {
+	margin-bottom: 2rem;
 }
 
 .espaco-top-bottom-4rem {

@@ -3,7 +3,7 @@ const generos = select_opc_gen.options
 let lista_generos = []
 const genero_input = document.querySelector("#genero-input")
 const botao_abrir_select_gen = document.querySelector("#abrir-select-genero")
-const genero_id = document.querySelector("#genero_id")
+const genero_id = document.querySelector("#genero_id_field")
 
 for (let gen of generos) {
 	lista_generos.push(gen)

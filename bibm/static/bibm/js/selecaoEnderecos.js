@@ -3,7 +3,7 @@ const enderecos = select_opc_end.options
 let lista_enderecos = []
 const endereco_input = document.querySelector("#endereco-input")
 const botao_abrir_select_end = document.querySelector("#abrir-select-endereco")
-const endereco_id = document.querySelector("#endereco_id")
+const endereco_id = document.querySelector("#endereco_id_field")
 
 for (let aut of enderecos) {
 	lista_enderecos.push(aut)

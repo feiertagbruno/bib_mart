@@ -3,7 +3,7 @@ const regioes = select_opc_reg.options
 let lista_regioes = []
 const regiao_input = document.querySelector("#regiao-input")
 const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao")
-const regiao_id = document.querySelector("#regiao_id")
+const regiao_id = document.querySelector("#regiao_id_field")
 
 for (let reg of regioes) {
 	lista_regioes.push(reg)

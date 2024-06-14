@@ -3,7 +3,7 @@ const autores = select_opc.options
 let lista_autores = []
 const autor_input = document.querySelector("#autor-input")
 const botao_abrir_select = document.querySelector("#abrir-select-autor")
-const autor_id = document.querySelector("#autor_id")
+const autor_id = document.querySelector("#autor_id_field")
 
 for (let aut of autores) {
 	lista_autores.push(aut)

@@ -3,7 +3,7 @@ from django import forms
 from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms.utils import ErrorList
-from .models import Anotacao, Livro
+from bibm.models import Anotacao, Livro, Endereco, Regiao, Autor, Genero
 
 class AnotacaoForm(forms.ModelForm):
     
@@ -18,28 +18,28 @@ class LivroForm(forms.ModelForm):
     autor = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
-                "id":"autor_id"
+                "id":"autor_id_field"
             }
         )
     )
     genero = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
-                "id":"genero_id"
+                "id":"genero_id_field"
             }
         )
     )
     endereco = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
-                "id":"endereco_id"
+                "id":"endereco_id_field"
             }
         )
     )
     regiao = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
-                "id":"regiao_id"
+                "id":"regiao_id_field"
             }
         )
     )
@@ -83,7 +83,31 @@ class LivroForm(forms.ModelForm):
                     "class":"data-input",
                 }
             ),
+            "data_leitura":forms.DateInput(
+                attrs={
+                    "type":"date",
+                    "class":"data-input",
+                }
+            ),
+            "lido":forms.CheckboxInput(
+                attrs={
+                    "id":"checkbox-lido"
+                }
+            )
         }
+
+    def clean(self):
+        cleaned_fields = super().clean()
+        cleaned_fields["autor"] = Autor.objects.filter(id=self.data["autor"]).first()
+        cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
+        cleaned_fields["genero"] = Genero.objects.filter(id=self.data["genero"]).first()
+        cleaned_fields["endereco"] = Endereco.objects.filter(id=self.data["endereco"]).first()
+        return cleaned_fields
+    
+    def save(self, commit=True):
+        livro = super().save(commit=False)
+        ...
+        return livro
 
 class ClassificacaoForm(forms.Form):
     classificacao = forms.ChoiceField(

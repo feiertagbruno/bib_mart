@@ -4,13 +4,13 @@
 {% block content %}
 	<div class="autor-box">
 		<span class="titulo-add-um-livro">Adicionar Um Livro</span>
-		<form action="{% url "bibm:add_um_livro_post" %}" method="post" class="autor-box-form">
+		<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
 			{% csrf_token %}
 			{% comment %} AUTOR {% endcomment %}
 			<label class="label-add-um-livro" for="autor-input">Autor:</label>
 			<div class="input-container">
 				{{form.autor}}
-				<input type="text" name="autor" id="autor-input" class="autor-input" placeholder="Digite para buscar o autor.">
+				<input type="text" name="autor_name" id="autor-input" class="autor-input" placeholder="Digite para buscar o autor.">
 				<span id="abrir-select-autor" class="abrir-select">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</span>
@@ -30,7 +30,7 @@
 			<label class="label-add-um-livro" for="regiao-input">Região:</label>
 			<div class="input-container">
 				{{form.regiao}}
-				<input type="text" name="regiao" id="regiao-input" class="autor-input" placeholder="Digite para buscar a região.">
+				<input type="text" name="regiao_name" id="regiao-input" class="autor-input" placeholder="Digite para buscar a região.">
 				<span id="abrir-select-regiao" class="abrir-select">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</span>
@@ -46,7 +46,7 @@
 					<label class="label-add-um-livro" for="genero">Genero:</label>
 					<div class="input-container input-container-menor">
 						{{form.genero}}
-						<input type="text" name="autor" id="genero-input" class="autor-input" placeholder="Digite o gênero.">
+						<input type="text" name="genero_name" id="genero-input" class="autor-input" placeholder="Digite o gênero.">
 						<span id="abrir-select-genero" class="abrir-select">
 							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 						</span>
@@ -63,19 +63,26 @@
 					<div class="input-container input-container-menor" id="tema">{{form.tema}}</div>
 			</div>
 			</div>
-			{% comment %} LIDO LERIA-DE-NOVO E CLASSIFICAÇÃO {% endcomment %}
-			<div class="div-dois-campos espaco-top-bottom-2rem">
-				<div class="campo-tres-campos flex-flow-row">
+			{% comment %} LIDO LERIA-DE-NOVO{% endcomment %}
+			<div class="div-dois-campos espaco-top-2rem">
+				<div class="campo-dois-campos flex-flow-row">
 					<label class="label-add-um-livro" for="tema">Lido:</label>
 					{{form.lido}}
+				</div>
+			</div>
+			{% comment %} CLASSIFICAÇÃO E DATA DA LEITURA {% endcomment %}
+			<div id="box-se-lido" class="div-dois-campos espaco-top-2rem espaco-bottom-2rem invisivel">
+				<div class="campo-tres-campos flex-flow-row">
+					<label class="label-add-um-livro" for="tema">Classificação:</label>
+					{{form.classificacao}}
+				</div>
+				<div class="campo-tres-campos">
+					<label class="label-add-um-livro" for="data_leitura">Data da leitura:</label>
+					<div class="input-container input-container-menor texto-centralizado" id="data_leitura">{{form.data_leitura}}</div>
 				</div>
 				<div class="campo-tres-campos flex-flow-row">
 					<label class="label-add-um-livro" for="tema">Leria de novo:</label>
 					{{form.leria_de_novo}}
-				</div>
-				<div class="campo-tres-campos flex-flow-row">
-					<label class="label-add-um-livro" for="tema">Classificação:</label>
-					{{form.classificacao}}
 				</div>
 			</div>
 			{% comment %} ENDEREÇO {% endcomment %}
@@ -84,7 +91,7 @@
 					<label class="label-add-um-livro" for="endereco-input">Endereço:</label>
 					<div class="input-container input-container-menor">
 						{{form.endereco}}
-						<input type="text" name="endereco" id="endereco-input" class="autor-input" placeholder="Digite para buscar o endereco.">
+						<input type="text" name="endereco_name" id="endereco-input" class="autor-input" placeholder="Digite para buscar o endereco.">
 						<span id="abrir-select-endereco" class="abrir-select">
 							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 						</span>

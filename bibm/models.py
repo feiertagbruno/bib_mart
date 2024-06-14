@@ -67,7 +67,7 @@ class Livro(models.Model):
     notas = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),(6,"6"),(7,"7"),(8,"8"),(9,"9"),(10,"10")]
     classificacao = models.IntegerField(choices=notas, blank=True, null=True)
     endereco = models.ForeignKey(Endereco, on_delete=models.SET_NULL, blank=True, null=True)
-    data_compra = models.DateField()
+    data_compra = models.DateField(null=True)
     regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=2)
     comentario = models.TextField(blank=True, null=True)
     planejamento = models.PositiveIntegerField(unique=True, blank=True, null=True)

@@ -31,6 +31,28 @@ def context_home():
 
     return context
 
+def context_add_um_livro():
+        autores = list(Autor.objects.annotate(
+                nome=Concat("prim_nome", Value(" "), "ult_nome")
+            ).values_list("id", "nome")
+        )
+        generos = list(Genero.objects.all().values_list("id","genero"))
+        enderecos = list(
+            Endereco.objects.annotate(
+                nome=Concat("codigo", Value(" "), "descricao")
+            ).values_list("id", "nome")
+        )
+        regioes = Regiao.objects.all().values_list("id", "regiao")
+
+        context = {
+            "autores": autores,
+            "add_um_livro": True,
+            "generos":generos,
+            "enderecos":enderecos,
+            "regioes": regioes,
+        }
+        return context
+
 def livros_planejamento():
     livros_plan = Livro.objects.exclude(planejamento=None).order_by("planejamento")
     ultimo_plan = len(livros_plan)
@@ -420,43 +442,21 @@ def mapa_da_bibli(request):
     return render(request, "bibm/mapaDaBibli.html",context)
 
 def add_um_livro(request):
-    info_form = request.session.get("info_form", None)
+    if request.method == "POST":
+        form = LivroForm(request.POST)
+        if form.is_valid():
+            livro = form.save(commit=False)
+            ...
+        else:
+            for er in form.errors:
+                messages.error(request, er)
 
-    form = LivroForm(info_form)
-
-    autores = list(Autor.objects.annotate(
-            nome=Concat("prim_nome", Value(" "), "ult_nome")
-        ).values_list("id", "nome")
-    )
-    generos = list(Genero.objects.all().values_list("id","genero"))
-    enderecos = list(
-        Endereco.objects.annotate(
-            nome=Concat("codigo", Value(" "), "descricao")
-        ).values_list("id", "nome")
-    )
-    regioes = Regiao.objects.all().values_list("id", "regiao")
-
-    context = {
-        "form":form,
-        "autores": autores,
-        "add_um_livro": True,
-        "generos":generos,
-        "enderecos":enderecos,
-        "regioes": regioes,
-    }
+    form = LivroForm()
+    context = context_add_um_livro()
+    if form:
+        context.update({"form":form})
+        
     return render(request, "bibm/pages/addUmLivro.html", context)
-
-def add_um_livro_post(request):
-    POST = request.POST
-    request.session["info_form"] = POST
-    form = LivroForm(POST)
-
-    if form.is_valid():
-        form.save()
-        messages.success(request, "Livro adicionado com sucesso!")
-        del(request.session["info_form"])
-    
-    return HttpResponseRedirect(reverse("bibm:add_um_livro"))
 
 def add_livro_autor(request):
     termo_busca = request.GET.get("q","")
