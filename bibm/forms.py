@@ -151,3 +151,26 @@ class AutorForm(forms.ModelForm):
             "regiao",
             "comentario",
         ]
+        widgets = {
+            "prim_nome":forms.TextInput(
+                attrs={
+                    "class":"autor-input",
+                    "placeholder": "Digite aqui a primeira parte do nome.",
+                    "autocomplete": "off",
+                }
+            ),
+            "ult_nome":forms.TextInput(
+                attrs={
+                    "class":"autor-input",
+                    "placeholder": "Digite aqui o sobrenome.",
+                    "autocomplete": "off",
+                }
+            ),
+            "nacionalidade":forms.TextInput(
+                attrs={
+                    "class":"autor-input",
+                    "placeholder": "Digite aqui a nacionalidade deste autor.",
+                    "autocomplete": "off",
+                }
+            ),
+        }
