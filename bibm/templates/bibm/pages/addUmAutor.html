@@ -1,0 +1,11 @@
+{% extends "bibm/estru.html" %}
+
+{% block content %}
+
+    <form action="{% url "bibm:add_um_autor_livro_save" %}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Adicionar Autor</button>
+    </form>
+
+{% endblock content %}

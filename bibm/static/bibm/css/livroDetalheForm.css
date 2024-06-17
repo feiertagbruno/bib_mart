@@ -1,0 +1,37 @@
+.livro-box {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 3rem;
+}
+
+.meus-livros-titulo {
+	font-size: calc(1.5rem + 1.5vw);
+	/* margin-left: calc(2rem + 2vw); */
+}
+
+.meus-livros-abaixo-titulo-box {
+	margin-left: calc(.5rem + .5vw);
+	display: flex;
+	flex-direction: column;
+}
+
+.autor-editora {
+	display: inline-flex;
+}
+
+.linha-livro-info {
+	padding: 0.2rem 0;
+}
+
+.meus-livros-autor {
+	margin-right: calc(1.5rem + 1vw);
+}
+
+.livro-lido-linha {
+	display: inline-flex;
+}
+
+.meus-livros-lido {
+	margin-right: calc(1.5rem + 1vw);
+}

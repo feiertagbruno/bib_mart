@@ -16,7 +16,7 @@ class Regiao(models.Model):
         verbose_name_plural = "regiões"
 
     def __str__(self):
-        return str(self.id) + " - " + str(self.regiao)
+        return str(self.regiao)
     
 
 class Genero(models.Model):
@@ -39,7 +39,10 @@ class Endereco(models.Model):
         verbose_name = "Endereço"
 
     def __str__(self):
-        return str(self.id) + " - " + str(self.codigo)
+        if self.descricao is not None:
+            return str(self.codigo) + " - " + str(self.descricao)
+        else:
+            return str(self.codigo)
 
 class Autor(models.Model):
     prim_nome = models.CharField(max_length=65)

@@ -9,37 +9,62 @@
 	  </span>
 
 	  <div class="opcoes-planejamento">
-		<div class="opc-plan-box">
-		  {% comment %} <a class="opc-plan" href="{% url 'bibm:pegar_este_livro' livro.id %}">
-							  Pegar este Livro
-						  </a> {% endcomment %}
-			<form method="post" action="{% url 'bibm:pegar_este_livro'%}">
-				{% csrf_token %}
-				<input type="hidden" name="livro_id" value={{ livro.id }}>
-				<input type="hidden" name="filtro" value={{ filtro }}>
-				<button type="submit" class="btn-medio btn-vermelho">Pegar este livro</button>
-			</form>
-		</div>
-		<div class="opc-plan-box">
-			<form method="post" action="{% url 'bibm:remover_do_planejamento'%}">
-			  {% csrf_token %}
-			  <input type="hidden" name="livro_id" value={{ livro.id }}>
-			  <input type="hidden" name="filtro" value={{ filtro }}>
-			  <button type="submit" class="btn-medio btn-vermelho">Remover do planejamento</button>
-			</form>
-		</div>
+
+			<div class="opc-plan-box">
+				<form method="post" action="{% url 'bibm:pegar_este_livro'%}">
+					{% csrf_token %}
+					<input type="hidden" name="livro_id" value={{ livro.id }}>
+					<input type="hidden" name="filtro" value={{ filtro }}>
+					<button type="submit" class="btn-medio btn-vermelho">Pegar este livro</button>
+				</form>
+			</div>
+
+			<div class="opc-plan-box">
+				<form method="post" action="{% url 'bibm:remover_do_planejamento'%}">
+					{% csrf_token %}
+					<input type="hidden" name="livro_id" value={{ livro.id }}>
+					<input type="hidden" name="filtro" value={{ filtro }}>
+					<button type="submit" class="btn-medio btn-vermelho">Remover do planejamento</button>
+				</form>
+			</div>
+
 	  </div>
 	</div>
-	<div class="opc-plan-box">
+	<div class="setas-plan-box">
+
 	  {% if livro.planejamento != 1 %}
-		<div class="opc-plan-subir-descer opc-plan-subir">
-		  <a href="{% url 'bibm:subir_plan' livro.id %}"><img src="{% static 'bibm/img/sort-up-solid.svg' %}" alt="Seta para cima" /></a>
+
+		<div class="opc-plan-subir-descer">
+			<form method="post" action="{% url 'bibm:subir_plan' %}">
+				{% csrf_token %}
+				<input type="hidden" name="livro_id" value="{{livro.id}}">
+				<input type="hidden" name="filtro" value="{{filtro}}">
+				<button type="submit" class="btn-nulo btn-subir">
+					<img src="{% static 'bibm/img/sort-up-solid.svg' %}" alt="Seta para cima" />
+				</button>
+			</form>
 		</div>
+
 	  {% else %}
+
 		<div class="opc-plan-subir-vazia"></div>
+
 	  {% endif %}
+
 	  {% if livro.planejamento != ultimo_plan %}
-		<span class="opc-plan-subir-descer opc-plan-descer"><a href="{% url 'bibm:descer_plan' livro.id %}"><img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" /></a></span>
+
+		<span class="opc-plan-subir-descer">
+			<form method="post" action="{% url 'bibm:descer_plan' %}">
+				{% csrf_token %}
+				<input type="hidden" name="livro_id" value="{{livro.id}}">
+				<input type="hidden" name="filtro" value="{{filtro}}">
+				<button type="submit" class="btn-nulo btn-descer">
+					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+				</button>
+			</form>
+		</span>
+
 	  {% endif %}
+
 	</div>
-  </div>
+</div>

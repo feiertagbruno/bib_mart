@@ -130,6 +130,7 @@ a {
 }
 
 .flex-flow-row {
+	display: flex;
 	flex-flow: row;
 	gap: 1rem;
 }
@@ -393,6 +394,7 @@ a {
 	margin-left: 2rem;
 	width: 2.2rem;
 	top: .2rem;
+	cursor: pointer;
 }
 
 .btn-excluir {
@@ -400,6 +402,7 @@ a {
 	width: 1.7rem;
 	margin-left: 2rem;
 	top: .2rem;
+	cursor: pointer;
 }
 
 .meus-livros-box {
@@ -410,55 +413,27 @@ a {
 	flex-flow: column;
 }
 
-.livro-box {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 3rem;
-}
-
-.meus-livros-titulo {
-	font-size: calc(1.5rem + 1.5vw);
-	/* margin-left: calc(2rem + 2vw); */
-}
-
-.linha-livro-info {
-	padding: 0.2rem 0;
-}
-
 .meus-livros-abaixo-titulo-box {
 	margin-left: calc(.5rem + .5vw);
 	display: flex;
 	flex-direction: column;
 }
 
-.autor-editora {
-	display: inline-flex;
-}
-
-.meus-livros-autor {
-	margin-right: calc(1.5rem + 1vw);
-}
-
-.livro-lido-linha {
-	display: inline-flex;
-}
-
-.meus-livros-lido {
-	margin-right: calc(1.5rem + 1vw);
-}
-
 .livro-lendo-plan {
 	display: flex;
-	place-content: right;
+	width: fit-content;
+	justify-content: left;
 	font-size: calc(1rem + 1.2vw);
-	text-align: center;
+	text-align: left;
 }
 
 .planejamento-box {
+	display: flex;
+	flex-flow: column;
 	width: fit-content;
-	max-width: 80%;
+	max-width: 95%;
 	margin: 0 auto;
+	justify-content: left;
 }
 
 .plan-box {
@@ -472,7 +447,11 @@ a {
 }
 
 .plan-box-esquerda {
-	align-content: center;
+	display: flex;
+	flex-flow: column;
+	width: fit-content;
+	justify-content: left;
+	align-content: left;
 }
 
 .opcoes-planejamento {
@@ -504,43 +483,14 @@ a {
 	transition: all 300ms ease-in-out;
 	padding: .09rem .4rem;
 }
-
-.opc-plan-subir-descer {
-	position: relative;
-	display: flex;
-	border: .2rem solid var(--cor-da-borda);
-	border-radius: 1rem;
-	transition: all 300ms ease-in-out;
-	margin: .1rem .1rem;
-	height: 2.7rem;
-}
-
-.opc-plan-subir-descer a {
-	position: relative;
-	display: flex;
-	width: calc(1rem + .8vw);
-	justify-content: center;
-	padding: 0 .5rem;
-}
-
-.opc-plan-subir-descer:hover {
-	cursor: pointer;
-	background-color: rgba(100, 234, 201, 0.664);
-	filter: invert(100%);
-}
-
+/* 
 .opc-plan-subir {
 	position: relative;
 	display: flex;
-}
-
-.opc-plan-descer {
-	position: relative;
-	display: flex;
-}
+} */
 
 .opc-plan-subir-vazia {
-	width: calc(1rem + .8vw);
+	width: 100%;
 	height: 2.5rem;
 	transition: all 300ms ease-in-out;
 	padding: 0 .5rem;
@@ -739,8 +689,8 @@ a {
 	flex-flow: row wrap;
 	gap: 2rem;
 	padding-bottom: 1rem;
-	/* border-bottom: 2px solid rgba(20, 20, 20, 0.5); */
 	width: inherit;
+	height: fit-content;
 }
 
 .decoracao-linha-filtros-abaixo {

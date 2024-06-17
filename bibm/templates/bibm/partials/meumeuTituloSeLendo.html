@@ -14,7 +14,9 @@
 	</div>
 	<div class="opc-livro-atual">
 		<span class="btn-menu-grande btn-azul">
-			Alterar Cadastro do Livro
+			<a href="{% url "bibm:editar_um_livro" livro.id %}">
+				Alterar Cadastro do Livro
+			</a>
 		</span>
 	</div>
 	<div class="opc-livro-atual">

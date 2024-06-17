@@ -5,13 +5,7 @@
 		{% for fil_chave, fil_valor in filtros.items %}
 			{% if filtro == fil_chave %}
 			<span class="{{classe_btn}}-estatico">
-				{% if caller == "meus_livros" %}
-				<a href="{% url 'bibm:meus_livros' fil_chave %}">
-				{% else %}
-				<a href="{% url 'bibm:editar_planejamento' fil_chave %}">
-				{% endif %}
-					{{fil_valor}}
-				</a>
+				{{fil_valor}}
 			</span>
 			{% else %}
 			<span class="btn-medio {{classe_btn}}">

@@ -1,8 +1,4 @@
-from typing import Any, Mapping
 from django import forms
-from django.core.files.base import File
-from django.db.models.base import Model
-from django.forms.utils import ErrorList
 from bibm.models import Anotacao, Livro, Endereco, Regiao, Autor, Genero
 
 class AnotacaoForm(forms.ModelForm):
@@ -57,24 +53,30 @@ class LivroForm(forms.ModelForm):
             "data_compra",
             "regiao",
             "comentario",
+            "autor",
+            "genero",
+            "planejamento",
         ]
         widgets = {
             "titulo":forms.TextInput(
                 attrs={
                     "class":"autor-input",
                     "placeholder": "Digite aqui o título do livro.",
+                    "autocomplete": "off",
                 }
             ),
             "editora":forms.TextInput(
                 attrs={
                     "class":"autor-input",
                     "placeholder":"Digite aqui a editora.",
+                    "autocomplete": "off",
                 }
             ),
             "tema":forms.TextInput(
                 attrs={
                     "class":"autor-input",
                     "placeholder":"Digite o tema.",
+                    "autocomplete": "off",
                 }
             ),
             "data_compra":forms.DateInput(
@@ -93,7 +95,17 @@ class LivroForm(forms.ModelForm):
                 attrs={
                     "id":"checkbox-lido"
                 }
-            )
+            ),
+            "planejamento":forms.HiddenInput(
+                attrs={
+                    "id":"planejamento_id_field"
+                }
+            ),
+            "id":forms.HiddenInput(
+                attrs={
+                    "id":"form_id_field"
+                }
+            ),
         }
 
     def clean(self):
@@ -102,12 +114,6 @@ class LivroForm(forms.ModelForm):
         cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
         cleaned_fields["genero"] = Genero.objects.filter(id=self.data["genero"]).first()
         cleaned_fields["endereco"] = Endereco.objects.filter(id=self.data["endereco"]).first()
-        return cleaned_fields
-    
-    def save(self, commit=True):
-        livro = super().save(commit=False)
-        ...
-        return livro
 
 class ClassificacaoForm(forms.Form):
     classificacao = forms.ChoiceField(
@@ -134,3 +140,14 @@ class ClassificacaoForm(forms.Form):
             }
         )
     )
+
+class AutorForm(forms.ModelForm):
+    class Meta:
+        model = Autor
+        fields = [
+            "prim_nome",
+            "ult_nome",
+            "nacionalidade",
+            "regiao",
+            "comentario",
+        ]

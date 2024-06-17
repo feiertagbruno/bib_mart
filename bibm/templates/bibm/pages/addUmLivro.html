@@ -4,13 +4,27 @@
 {% block content %}
 	<div class="autor-box">
 		<span class="titulo-add-um-livro">Adicionar Um Livro</span>
-		<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
+			{% if editar_um_livro %}
+			<form action="{% url "bibm:editar_um_livro_save" %}" method="post" class="autor-box-form">
+				{% else %}
+			<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
+			{% endif %}
 			{% csrf_token %}
+			<input type="hidden" name="livro_id" value="{{livro_id}}">
+			{{form.planejamento}}
+			
 			{% comment %} AUTOR {% endcomment %}
 			<label class="label-add-um-livro" for="autor-input">Autor:</label>
 			<div class="input-container">
 				{{form.autor}}
-				<input type="text" name="autor_name" id="autor-input" class="autor-input" placeholder="Digite para buscar o autor.">
+				<input
+					type="text" 
+					name="autor_name" 
+					id="autor-input" 
+					class="autor-input" 
+					placeholder="Digite para buscar o autor."
+					autocomplete="off"
+				>
 				<span id="abrir-select-autor" class="abrir-select">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</span>
@@ -20,9 +34,14 @@
 				<option class="opc-autor" value="{{autor_id}}">{{autor_nome}}</option>
 				{% endfor %}
 			</select>
+
+			{% comment %} BOTÃO ADICIONAR UM AUTOR {% endcomment %}
+			<button type="submit" id="add_um_autor_livro" class="btn-medio btn-azul invisivel">Adicionar um Autor</button>
+
 			{% comment %} TITULO {% endcomment %}
 			<label class="label-add-um-livro" for="titulo">Título:</label>
 			<div class="input-container" id="titulo">{{form.titulo}}</div>
+
 			{% comment %} EDITORA {% endcomment %}
 			<label class="label-add-um-livro" for="editora">Editora:</label>
 			<div class="input-container" id="editora">{{form.editora}}</div>
@@ -30,7 +49,14 @@
 			<label class="label-add-um-livro" for="regiao-input">Região:</label>
 			<div class="input-container">
 				{{form.regiao}}
-				<input type="text" name="regiao_name" id="regiao-input" class="autor-input" placeholder="Digite para buscar a região.">
+				<input 
+					type="text" 
+					name="regiao_name" 
+					id="regiao-input" 
+					class="autor-input" 
+					placeholder="Digite para buscar a região."
+					autocomplete="off"
+				>
 				<span id="abrir-select-regiao" class="abrir-select">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</span>
@@ -46,7 +72,14 @@
 					<label class="label-add-um-livro" for="genero">Genero:</label>
 					<div class="input-container input-container-menor">
 						{{form.genero}}
-						<input type="text" name="genero_name" id="genero-input" class="autor-input" placeholder="Digite o gênero.">
+						<input 
+							type="text" 
+							name="genero_name" 
+							id="genero-input" 
+							class="autor-input" 
+							placeholder="Digite o gênero."
+							autocomplete="off"
+						>
 						<span id="abrir-select-genero" class="abrir-select">
 							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 						</span>
@@ -91,7 +124,14 @@
 					<label class="label-add-um-livro" for="endereco-input">Endereço:</label>
 					<div class="input-container input-container-menor">
 						{{form.endereco}}
-						<input type="text" name="endereco_name" id="endereco-input" class="autor-input" placeholder="Digite para buscar o endereco.">
+						<input 
+							type="text" 
+							name="endereco_name" 
+							id="endereco-input" 
+							class="autor-input" 
+							placeholder="Digite para buscar o endereco."
+							autocomplete="off"
+						>
 						<span id="abrir-select-endereco" class="abrir-select">
 							<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 						</span>
@@ -107,7 +147,7 @@
 					<div class="input-container input-container-menor texto-centralizado" id="data_compra">{{form.data_compra}}</div>
 				</div>
 			</div>
-			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem">Adicionar</button>
+			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem" id="btn_adicionar">Adicionar</button>
 		</form>
 </div>
 

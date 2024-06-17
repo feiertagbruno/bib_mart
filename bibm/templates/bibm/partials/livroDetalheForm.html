@@ -1,51 +1,110 @@
-      <div class="livro-box">
-        <span class="meus-livros-titulo">{{ livro.titulo }}</span>
-        <div class="meus-livros-abaixo-titulo-box">
-          <div class="autor-editora linha-livro-info">
-            {% if livro.autor.prim_nome == 'Autor Desconhecido' %}
-              <span class="meus-livros-autor">Autor Desconhecido</span>
-            {% else %}
-              <span class="meus-livros-autor">Autor: {{ livro.autor.ult_nome }}, {{ livro.autor.prim_nome }}</span>
-            {% endif %}
-            <span class="meus-livros-editora">Editora: {{ livro.editora }}</span>
-          </div>
-          <span class="meus-livros-genero linha-livro-info">Gênero: {{ livro.genero.genero }}</span>
-          {% if livro.tema %}
-            <span class="meus-livros-tema linha-livro-info">Tema: {{ livro.tema }}</span>
-          {% endif %}
-          {% if livro.lido %}
-            <div class="livro-lido-linha linha-livro-info">
-              <span class="meus-livros-lido"><u>Lido</u></span>
-              <span class="meus-livros-data-leitura">Data: {{ livro.data_leitura }}</span>
-            </div>
-            {% if livro.classificacao %}
-            <div class="livro-classificacao">
-              Classificação: {{ livro.classificacao }}
-            </div>
-            {% endif %}
-          {% endif %}
-          {% if livro.leria_de_novo %}
-            <span class="meus-livros-leria-de-novo">Leria de novo</span>
-          {% endif %}
-          {% if livro.planejamento == None %}
-          <div class="btn-livros-box">
-            {% if caller == "meus_livros" %}
-              <form action="{% url 'bibm:acrescentar_no_planejamento_meus_livros' %}" method="post">
-            {% else %}
-              <form action="{% url 'bibm:acrescentar_no_planejamento'%}" method="post">
-            {% endif %}
-              {% csrf_token %}
-              {% if filtro %}
-                <input type="hidden" name="filtro" value="{{filtro}}">
-              {% endif %}
-              <input type="hidden" name="livro_id" value={{ livro.id }}>
-              <button type="submit" class="btn-medio {{classe_btn}}">Acrescentar no planejamento</button>
-            </form>
-          </div>
-          {% else %}
-          <span class="ja-no-planejamento">
-            <u>No planejamento</u>
-          </span>
-          {% endif %}
-        </div>
+{% load static %}
+
+<div class="livro-box">
+
+  <span class="meus-livros-titulo">{{ livro.titulo }}</span>
+
+  <div class="meus-livros-abaixo-titulo-box">
+
+    <div class="autor-editora linha-livro-info">
+      {% if livro.autor.prim_nome == 'Autor Desconhecido' %}
+        <span class="meus-livros-autor">Autor Desconhecido</span>
+      {% else %}
+        <span class="meus-livros-autor">Autor: {{ livro.autor.ult_nome }}, {{ livro.autor.prim_nome }}</span>
+      {% endif %}
+      <span class="meus-livros-editora">Editora: {{ livro.editora }}</span>
+    </div>
+
+    <span class="linha-livro-info">Região: {{livro.regiao}}</span>
+    
+    <span class="meus-livros-genero linha-livro-info">Gênero: {{ livro.genero.genero }}</span>
+
+    {% if livro.tema %}
+      <span class="meus-livros-tema linha-livro-info">Tema: {{ livro.tema }}</span>
+    {% endif %}
+
+    {% if livro.lido %}
+
+      <div class="livro-lido-linha linha-livro-info">
+        <span class="meus-livros-lido"><u>Lido</u></span>
+        <span class="meus-livros-data-leitura">Data: {{ livro.data_leitura }}</span>
       </div>
+      
+      <div class="flex-flow-row linha-livro-info">
+        {% if livro.classificacao %}
+        <div class="livro-classificacao">
+          Classificação: {{ livro.classificacao }}
+        </div>
+        {% endif %}
+
+        {% if livro.leria_de_novo %}
+          <span class="meus-livros-leria-de-novo">| Leria de novo</span>
+        {% endif %}
+      </div>
+      
+    {% endif %}
+
+    {% if livro.planejamento is None and not livro.lendo %}
+
+    <div>
+
+      {% if caller == "meus_livros" %}
+        <form action="{% url 'bibm:acrescentar_no_planejamento_meus_livros' %}" method="post">
+      {% else %}
+        <form action="{% url 'bibm:acrescentar_no_planejamento'%}" method="post">
+      {% endif %}
+
+        {% csrf_token %}
+        {% if filtro %}
+          <input type="hidden" name="filtro" value="{{filtro}}">
+        {% endif %}
+        <input type="hidden" name="livro_id" value={{ livro.id }}>
+        <button type="submit" class="btn-medio {{classe_btn}}">Acrescentar no planejamento</button>
+      </form>
+
+    </div>
+
+    {% elif livro.planejamento is not None and not livro.lendo %}
+
+    <span class="ja-no-planejamento linha-livro-info">
+      <u>No planejamento</u>
+    </span>
+    
+    {% else %}
+
+    <span class="ja-no-planejamento linha-livro-info">
+      --- Lendo ---
+    </span>
+
+    {% endif %}
+
+    {% if livro.endereco %}
+      <span class="linha-livro-info">Endereço: {{livro.endereco}}</span>
+    {% endif %}
+
+    <span  class="linha-livro-info">Data de Compra: {{livro.data_compra}}</span>
+
+    <div class="flex-flow-row espaco-top-2rem">
+      <a class="btn-editar" method="GET" href="{% url 'bibm:editar_um_livro' livro.id %}">
+        <img 
+          src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+          alt="Editar este livro"
+          title="Editar este livro"
+        >
+      </a>
+      <form method="POST" href="{% url 'bibm:deletar_um_livro' %}"
+        onclick="return confirm('Você confirma a exclusão deste livro?')">
+        {% csrf_token %}
+        <input type="hidden" name="livro_id" value="{{livro.id}}">
+        <img 
+          src="{% static 'bibm/img/trash-solid.svg' %}" 
+          alt="Deletar este livro"
+          title="Deletar este livro"
+          class="btn-excluir"
+        >
+      </form>
+    </div>
+
+  </div>
+
+</div>

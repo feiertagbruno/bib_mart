@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
-from .forms import AnotacaoForm, LivroForm, ClassificacaoForm
-from django.http import HttpResponseRedirect
+from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.utils import timezone
 import locale
@@ -46,10 +46,10 @@ def context_add_um_livro():
 
         context = {
             "autores": autores,
-            "add_um_livro": True,
             "generos":generos,
             "enderecos":enderecos,
             "regioes": regioes,
+            "add_um_livro":True,
         }
         return context
 
@@ -81,10 +81,17 @@ def acrescentar_plan(livro_id):
     livro.planejamento = proximo_planejamento
     livro.save()
 
+def zerar_session(request):
+    info_livro = request.session.get("info_livro")
+    if info_livro:
+        del(request.session["info_livro"])
+    return request
+
 # Create your views here.
 
 
 def home(request):
+    request = zerar_session(request)
     context = context_home()
     return render(request, "bibm/pages/meumeu.html", context)
 
@@ -335,39 +342,46 @@ def editar_planejamento(request, filtro):
     return render(request, "bibm/pages/editarPlanejamento.html", context)
 
 
-def subir_plan(request, livro_id):
+def subir_plan(request):
+    if request.method == "POST":
+        livro_id = request.POST.get("livro_id")
+        filtro = request.POST.get("filtro")
 
-    livro = Livro.objects.get(id=livro_id)
-    if livro.planejamento > 1:
-        livro_acima = Livro.objects.filter(planejamento=livro.planejamento - 1).first()
-        livro_acima.planejamento = None
-        livro_acima.save()
+        livro = Livro.objects.get(id=livro_id)
+        if livro.planejamento > 1:
+            livro_acima = Livro.objects.filter(planejamento=livro.planejamento - 1).first()
+            livro_acima.planejamento = None
+            livro_acima.save()
 
-        livro.planejamento -= 1
-        livro.save()
+            livro.planejamento -= 1
+            livro.save()
 
-        livro_acima.planejamento = livro.planejamento + 1
-        livro_acima.save()
+            livro_acima.planejamento = livro.planejamento + 1
+            livro_acima.save()
 
-    return HttpResponseRedirect(reverse("bibm:editar_planejamento"))
+    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro":filtro}))
 
 
-def descer_plan(request, livro_id):
-    livro = Livro.objects.get(id=livro_id)
-    maior_planejamento = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
+def descer_plan(request):
+    if request.method == "POST":
+        livro_id = request.POST.get("livro_id")
+        filtro = request.POST.get("filtro")
 
-    if livro.planejamento < maior_planejamento:
-        livro_abaixo = Livro.objects.filter(planejamento=livro.planejamento + 1).first()
-        livro_abaixo.planejamento = None
-        livro_abaixo.save()
+        livro = Livro.objects.get(id=livro_id)
+        maior_planejamento = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
 
-        livro.planejamento += 1
-        livro.save()
+        if livro.planejamento < maior_planejamento:
+            livro_abaixo = Livro.objects.filter(planejamento=livro.planejamento + 1).first()
+            livro_abaixo.planejamento = None
+            livro_abaixo.save()
 
-        livro_abaixo.planejamento = livro.planejamento - 1
-        livro_abaixo.save()
+            livro.planejamento += 1
+            livro.save()
 
-    return HttpResponseRedirect(reverse("bibm:editar_planejamento"))
+            livro_abaixo.planejamento = livro.planejamento - 1
+            livro_abaixo.save()
+
+    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro":filtro}))
 
 def pular_este(request):
     if request.method == "POST":
@@ -445,36 +459,90 @@ def add_um_livro(request):
     if request.method == "POST":
         form = LivroForm(request.POST)
         if form.is_valid():
-            livro = form.save(commit=False)
-            ...
+            form.save()
+            messages.success(request,"Livro salvo com sucesso.")
         else:
-            for er in form.errors:
+            for er in form.errors.items():
                 messages.error(request, er)
+    
+    info_livro = request.session.get("info_livro")
+    if info_livro:
+        del(request.session["info_livro"])
 
-    form = LivroForm()
+    form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
+
     if form:
         context.update({"form":form})
         
     return render(request, "bibm/pages/addUmLivro.html", context)
 
-def add_livro_autor(request):
-    termo_busca = request.GET.get("q","")
-    if termo_busca != "":
-        autores = Autor.objects.filter(Q(
-            Q(prim_nome__icontains = termo_busca) |
-            Q(ult_nome__icontains = termo_busca) |
-            Q(nacionalidade__icontains = termo_busca) |
-            Q(regiao__regiao__icontains = termo_busca) |
-            Q(comentario__icontains = termo_busca)
-        )).order_by("prim_nome")
-    else:
-        autores = Autor.objects.all().order_by("prim_nome")
-    
+def editar_um_livro(request, livro_id):
+
+    livro = Livro.objects.filter(id=livro_id).first()
+
+    form = LivroForm(instance=livro)
+    if form.instance.data_compra:
+        form.initial["data_compra"] = form.initial["data_compra"].strftime("%Y-%m-%d")
+    if form.instance.data_leitura:
+        form.initial["data_leitura"] = form.initial["data_leitura"].strftime("%Y-%m-%d")
+
     context = {
-        "autores":autores
+        "form": form,
+        "livro_id":livro_id,
+        "editar_um_livro":True,
     }
-    return render(request, "bibm/addLivroAutor.html", context)
+
+    context.update({
+        **context_add_um_livro()
+    })
+    return render(request,"bibm/pages/addUmLivro.html", context)
+
+def editar_um_livro_save(request):
+    
+    livro_id = request.POST.get("livro_id")
+
+    livro = Livro.objects.filter(id=livro_id).first()
+    livro_lido = livro.lido
+
+    form = LivroForm(instance=livro, data=request.POST)
+    if form.is_valid():
+        livro_form = form.save(commit=False)
+        if livro_lido and not livro_form.lido:
+            livro_form.classificacao = None
+            livro_form.data_leitura = None
+            livro_form.leria_de_novo = False
+        livro_form.save()
+        messages.success(request, "Livro alterado com sucesso.")
+    
+    return HttpResponseRedirect(reverse("bibm:home"))
+
+def deletar_um_livro(request):
+    ...
+
+def add_um_autor_livro(request):
+    if request.method == "POST":
+        request.session["info_livro"] = request.POST
+        
+        form = AutorForm()
+
+        return render(request, "bibm/pages/addUmAutor.html", {"form": form})
+    else:
+        return Http404
+
+def add_um_autor_livro_save(request):
+    if request.method == "POST":
+        info_livro = request.session.get("info_livro")
+        
+        form = AutorForm(data = request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Autor salvo.")
+        
+        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+    else:
+        return Http404
 
 def acrescentar_no_planejamento(request):
     filtro = request.POST.get("filtro")
@@ -485,12 +553,20 @@ def acrescentar_no_planejamento(request):
 
 def acrescentar_no_planejamento_meus_livros(request):
     livro_id = request.POST.get("livro_id")
+    filtro = request.POST.get("filtro")
     acrescentar_plan(livro_id)
-    return HttpResponseRedirect(reverse("bibm:meus_livros"))
+    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
 
 def chamar_html_teste(request):
-    form = LivroForm()
-    context = {
-        "form":form
-    }
+    if request.method == "GET":
+        form = LivroForm()
+        context = {
+            "form":form
+        }
+    elif request.method == "POST":
+        POST = request.POST
+        form = LivroForm(POST)
+        if form.is_valid():
+            livro = form.save(commit=False)
+            ...
     return render(request,"bibm/testes.html", context)
