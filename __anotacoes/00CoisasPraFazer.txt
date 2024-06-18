@@ -5,4 +5,4 @@ ajeitar a mensagem de erro que retorna no addUmLivro, alias ajeitar o css de tod
 em adicionar um livro, colocar uma mensagem sugerindo que a pessoa adicione o novo autor se a consulta retornar vazia
 
 Pra amanhã:
-  Colocar o botão de adicionar nos demais campos, Região, Endereço e Gênero
+  passar o autor adicionado para o add_um_livro pela session para já voltar carregado o autor adicionado

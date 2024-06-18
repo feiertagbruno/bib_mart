@@ -186,7 +186,7 @@ class AutorForm(forms.ModelForm):
                 attrs={
                     "class":"caixa-texto-comentario",
                     "id":"comentario_autor",
-                    "placeholder": "Digite aqui seu comentário sobre este autor.",
+                    "placeholder": "Digite aqui seu comentário sobre este autor. Campo não obrigatório.",
                     "autocomplete": "off",
                 }
             ),
@@ -195,3 +195,25 @@ class AutorForm(forms.ModelForm):
     def clean(self):
         cleaned_fields = super().clean()
         cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
+
+class RegiaoForm(forms.ModelForm):
+    class Meta:
+        model = Regiao
+        fields = ["regiao", "comentario"]
+        widgets = {
+            "regiao": forms.TextInput(
+                attrs={
+                    "placeholder": "Digite aqui a região a ser adicionada.",
+                    "class": "autor-input",
+                    "autocomplete":"off",
+                }
+            ),
+            "comentario":forms.Textarea(
+                attrs={
+                    "class":"caixa-texto-comentario",
+                    "id":"comentario_regiao",
+                    "placeholder": "Digite aqui seu comentário sobre esta região. Campo não obrigatório.",
+                    "autocomplete": "off",
+                }
+            ),
+        }

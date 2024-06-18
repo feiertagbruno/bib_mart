@@ -5,9 +5,14 @@ const autor_input = document.querySelector("#autor-input")
 const botao_abrir_select = document.querySelector("#abrir-select-autor")
 const autor_id = document.querySelector("#autor_id_field")
 const btn_add_um_autor_livro = document.querySelector("#add_um_autor_livro")
+const autor_salvo = document.querySelector("#autor_salvo")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 
+	if (autor_salvo.value) {
+		autor_id.value = autor_salvo.value
+	}
+	
 	if (autor_id.value) {
 		for (let aut of autores) {
 			if (aut.value == autor_id.value) {

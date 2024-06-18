@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
-from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm
+from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -549,13 +549,40 @@ def add_um_autor_livro(request):
 
 def add_um_autor_livro_save(request):
     if request.method == "POST":
-        info_livro = request.session.get("info_livro")
         
         form = AutorForm(data = request.POST)
 
         if form.is_valid():
-            form.save()
+            autor_salvo = form.save()
+            autor_salvo = autor_salvo.id
             messages.success(request,"Autor salvo.")
+        
+        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+    else:
+        return Http404
+    
+def add_uma_regiao_livro(request):
+    if request.method == "POST":
+        request.session["info_livro"] = request.POST
+        
+        form = RegiaoForm()
+
+        context = {
+            "form":form,
+        }
+
+        return render(request, "bibm/pages/addUmaRegiao.html", context)
+    else:
+        return Http404
+
+def add_uma_regiao_livro_save(request):
+    if request.method == "POST":
+        
+        form = RegiaoForm(data = request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Região salva.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:

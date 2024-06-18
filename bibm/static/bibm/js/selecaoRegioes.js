@@ -4,6 +4,7 @@ let lista_regioes = [];
 const regiao_input = document.querySelector("#regiao-input");
 const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao");
 const regiao_id = document.querySelector("#regiao_id_field");
+const btn_add_uma_regiao_livro = document.querySelector("#add_uma_regiao_livro")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 	if (regiao_id.value) {
@@ -125,6 +126,23 @@ document.addEventListener("DOMContentLoaded", function(dom) {
         event.preventDefault();
     }
 	});
+
+	btn_add_uma_regiao_livro.addEventListener("click", function(e) {
+		form.action = form.action + "adicionarumaregiao/"
+		form.setAttribute("novalidate", "novalidate")
+	})
+
+	regiao_input.addEventListener("focus", function(e) {
+		btn_add_uma_regiao_livro.style.display = "block"
+	})
+	
+	regiao_input.addEventListener("blur", function(e) {
+		if (!btn_add_uma_regiao_livro.contains(e.target)) {
+			setTimeout(() => {
+				btn_add_uma_regiao_livro.style.display = "none"
+			}, 300);
+		}
+	})
 
 	
 })
