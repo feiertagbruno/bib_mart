@@ -1,5 +1,6 @@
 from django import forms
 from bibm.models import Anotacao, Livro, Endereco, Regiao, Autor, Genero
+from utils.functions import is_integer
 
 class AnotacaoForm(forms.ModelForm):
     
@@ -110,10 +111,14 @@ class LivroForm(forms.ModelForm):
 
     def clean(self):
         cleaned_fields = super().clean()
-        cleaned_fields["autor"] = Autor.objects.filter(id=self.data["autor"]).first()
-        cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
-        cleaned_fields["genero"] = Genero.objects.filter(id=self.data["genero"]).first()
-        cleaned_fields["endereco"] = Endereco.objects.filter(id=self.data["endereco"]).first()
+        if is_integer(self.data["autor"]):
+            cleaned_fields["autor"] = Autor.objects.filter(id=self.data["autor"]).first()
+        if is_integer(self.data["regiao"]):
+            cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
+        if is_integer(self.data["genero"]):
+            cleaned_fields["genero"] = Genero.objects.filter(id=self.data["genero"]).first()
+        if is_integer(self.data["endereco"]):
+            cleaned_fields["endereco"] = Endereco.objects.filter(id=self.data["endereco"]).first()
 
 class ClassificacaoForm(forms.Form):
     classificacao = forms.ChoiceField(

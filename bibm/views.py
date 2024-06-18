@@ -474,16 +474,26 @@ def add_um_livro(request):
         else:
             for er in form.errors.items():
                 messages.error(request, er)
+            request.session["info_livro"] = request.POST
+            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     
     info_livro = request.session.get("info_livro")
     if info_livro:
         del(request.session["info_livro"])
 
+    autor_salvo = request.session.get("autor_salvo")
+    if autor_salvo:
+        del(request.session["autor_salvo"])
+    
     form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
 
     if form:
-        context.update({"form":form, "add_um_livro":True})
+        context.update({
+            "form":form, 
+            "add_um_livro":True,
+            "autor_salvo": autor_salvo,
+        })
         
     return render(request, "bibm/pages/addUmLivro.html", context)
 
@@ -554,7 +564,7 @@ def add_um_autor_livro_save(request):
 
         if form.is_valid():
             autor_salvo = form.save()
-            autor_salvo = autor_salvo.id
+            request.session["autor_salvo"] = autor_salvo.id
             messages.success(request,"Autor salvo.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
