@@ -1,9 +1,9 @@
-const select_opc_reg = document.querySelector("#regioes-opcoes")
-const regioes = select_opc_reg.options
-let lista_regioes = []
-const regiao_input = document.querySelector("#regiao-input")
-const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao")
-const regiao_id = document.querySelector("#regiao_id_field")
+const select_opc_reg = document.querySelector("#regioes-opcoes");
+const regioes = select_opc_reg.options;
+let lista_regioes = [];
+const regiao_input = document.querySelector("#regiao-input");
+const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao");
+const regiao_id = document.querySelector("#regiao_id_field");
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 	if (regiao_id.value) {
@@ -115,7 +115,17 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc_reg.style.display = "none"
 		}
 	})
-	
+		
+	select_opc_reg.addEventListener('wheel', function(event) {
+    const maxScrollTop = this.scrollHeight - this.clientHeight;
+    if (
+        (event.deltaY > 0 && this.scrollTop >= maxScrollTop) ||
+        (event.deltaY < 0 && this.scrollTop <= 0)
+    ) {
+        event.preventDefault();
+    }
+	});
+
 	
 })
 

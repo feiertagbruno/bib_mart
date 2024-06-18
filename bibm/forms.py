@@ -142,6 +142,15 @@ class ClassificacaoForm(forms.Form):
     )
 
 class AutorForm(forms.ModelForm):
+
+    regiao = forms.IntegerField(
+        widget=forms.HiddenInput(
+            attrs={
+                "id":"regiao_id_field"
+            }
+        )
+    )
+    
     class Meta:
         model = Autor
         fields = [
@@ -173,4 +182,16 @@ class AutorForm(forms.ModelForm):
                     "autocomplete": "off",
                 }
             ),
+            "comentario":forms.Textarea(
+                attrs={
+                    "class":"caixa-texto-comentario",
+                    "id":"comentario_autor",
+                    "placeholder": "Digite aqui seu comentário sobre este autor.",
+                    "autocomplete": "off",
+                }
+            ),
         }
+
+    def clean(self):
+        cleaned_fields = super().clean()
+        cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()

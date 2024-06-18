@@ -50,7 +50,6 @@ input[type="date"] {
 }
 
 input[type="checkbox"] {
-	background: red;
 	inline-size: none;
 	border: none;
 }

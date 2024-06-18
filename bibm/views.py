@@ -31,26 +31,36 @@ def context_home():
 
     return context
 
-def context_add_um_livro():
-        autores = list(Autor.objects.annotate(
-                nome=Concat("prim_nome", Value(" "), "ult_nome")
-            ).values_list("id", "nome")
-        )
-        generos = list(Genero.objects.all().values_list("id","genero"))
-        enderecos = list(
-            Endereco.objects.annotate(
-                nome=Concat("codigo", Value(" "), "descricao")
-            ).values_list("id", "nome")
-        )
-        regioes = Regiao.objects.all().values_list("id", "regiao")
+def context_add_um_livro(
+        autores=True,
+        generos=True,
+        enderecos=True,
+        regioes=True
+    ):
+        context = {}
+        if autores:
+            autores = list(Autor.objects.annotate(
+                    nome=Concat("prim_nome", Value(" "), "ult_nome")
+                ).values_list("id", "nome")
+            )
+            context.update({"autores":autores})
 
-        context = {
-            "autores": autores,
-            "generos":generos,
-            "enderecos":enderecos,
-            "regioes": regioes,
-            "add_um_livro":True,
-        }
+        if generos:
+            generos = list(Genero.objects.all().values_list("id","genero"))
+            context.update({"generos":generos})
+
+        if enderecos:
+            enderecos = list(
+                Endereco.objects.annotate(
+                    nome=Concat("codigo", Value(" "), "descricao")
+                ).values_list("id", "nome")
+            )
+            context.update({"enderecos":enderecos})
+
+        if regioes:
+            regioes = Regiao.objects.all().values_list("id", "regiao")
+            context.update({"regioes":regioes})
+
         return context
 
 def livros_planejamento():
@@ -473,7 +483,7 @@ def add_um_livro(request):
     context = context_add_um_livro()
 
     if form:
-        context.update({"form":form})
+        context.update({"form":form, "add_um_livro":True})
         
     return render(request, "bibm/pages/addUmLivro.html", context)
 
@@ -490,6 +500,7 @@ def editar_um_livro(request, livro_id):
     context = {
         "form": form,
         "livro_id":livro_id,
+        "add_um_livro": True,
         "editar_um_livro":True,
     }
 
@@ -526,7 +537,13 @@ def add_um_autor_livro(request):
         
         form = AutorForm()
 
-        return render(request, "bibm/pages/addUmAutor.html", {"form": form})
+        context = {
+            "form":form,
+            **context_add_um_livro(autores=False,generos=False,enderecos=False),
+            "add_um_autor_livro":True,
+        }
+
+        return render(request, "bibm/pages/addUmAutor.html", context)
     else:
         return Http404
 

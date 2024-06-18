@@ -3,3 +3,6 @@ no modo celular, o texto em baixo da aplicação, está cobrindo o conteúdo (es
 ajeitar a mensagem de erro que retorna no addUmLivro, alias ajeitar o css de todas as mensagens, tornar elas mais chamativas
 
 em adicionar um livro, colocar uma mensagem sugerindo que a pessoa adicione o novo autor se a consulta retornar vazia
+
+Pra amanhã:
+  Colocar o botão de adicionar nos demais campos, Região, Endereço e Gênero

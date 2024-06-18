@@ -115,5 +115,16 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc_end.style.display = "none"
 		}
 	})
+		
+	select_opc_end.addEventListener('wheel', function(event) {
+    const maxScrollTop = this.scrollHeight - this.clientHeight;
+    if (
+        (event.deltaY > 0 && this.scrollTop >= maxScrollTop) ||
+        (event.deltaY < 0 && this.scrollTop <= 0)
+    ) {
+        event.preventDefault();
+    }
+	});
+
 })
 

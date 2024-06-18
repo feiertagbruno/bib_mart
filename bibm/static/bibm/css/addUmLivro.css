@@ -17,13 +17,13 @@
 }
 
 .input-container {
-    position: relative;
+	position: relative;
 	display: flex;
 	width: var(--recuo-padrao);
-    border: 2px solid var(--cor-da-borda);
+	border: 2px solid var(--cor-da-borda);
 	min-width: 19.5rem;
-    width: 80%;
-    border-radius: 20px;
+	width: 80%;
+	border-radius: 20px;
 	background: rgba(255, 255, 255, .5);
 }
 
@@ -56,6 +56,7 @@
 	padding: 0 1rem;
 	font-size: inherit;
 	font-family: inherit;
+	overflow-y: auto;
 }
 
 .titulo-add-um-livro {
@@ -78,8 +79,8 @@
 	flex-flow: column;
 	width: calc(98%/2);
 	min-width: 25rem;
-	place-items: center;
-	place-content: center;
+	/* place-items: center;
+	place-content: center; */
 }
 
 .campo-tres-campos {
@@ -103,4 +104,21 @@
 	display: flex;
 	padding: 1rem;
 	place-content: center;
+}
+
+.caixa-texto-comentario-box {
+	position: relative;
+	background: rgba(255, 255, 255, .3);
+	border: solid 5px var(--cor-da-borda);
+	width: 65%;
+	height: 10rem;
+	border-radius: 5px;
+	margin: 2rem 0;
+	padding: .5rem 1rem;
+}
+
+.caixa-texto-comentario {
+	resize: none;
+	width: 100%;
+	height: 100%;
 }

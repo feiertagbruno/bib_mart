@@ -1,4 +1,5 @@
 {% extends "bibm/estru.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -18,17 +19,46 @@
         <div class="input-container" id="ult_nome_field">{{form.ult_nome}}</div>
 
         <div class="div-dois-campos">
+
           {% comment %} NACIONALIDADE {% endcomment %}
           <div class="campo-dois-campos">
             <label class="label-add-um-livro" for="nacionalidade_field">Nacionalidade:</label>
             <div class="input-container input-container-menor" id="nacionalidade_field">{{form.nacionalidade}}</div>
           </div>
+
           <div class="campo-dois-campos">
-            {% comment %} FAZER A REGIÃO AQUI {% endcomment %}
+            {% comment %} REGIÃO {% endcomment %}
+            <label class="label-add-um-livro" for="regiao-input">Região:</label>
+            <div class="input-container input-container-menor">
+              {{form.regiao}}
+              <input 
+                type="text" 
+                name="regiao_name" 
+                id="regiao-input" 
+                class="autor-input" 
+                placeholder="Digite para buscar a região."
+                autocomplete="off"
+              >
+              <span id="abrir-select-regiao" class="abrir-select">
+                <img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
+              </span>
+            </div>
+
+            <select name="regioes" id="regioes-opcoes" class="autores-opcoes" size="5">
+              {% for regiao_id, regiao_nome in regioes %}
+              <option class="opc-autor" value="{{regiao_id}}">{{regiao_nome}}</option>
+              {% endfor %}
+            </select>
+
           </div>
+
         </div>
 
-        <button class="btn-medio btn-azul" type="submit">Adicionar Autor</button>
+				<div class="caixa-texto-comentario-box">
+					{{ form.comentario }}
+				</div>
+
+        <button class="btn-medio btn-azul" type="submit">Adicionar</button>
     </form>
 
   </div>
