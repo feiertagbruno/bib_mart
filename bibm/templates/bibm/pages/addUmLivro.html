@@ -67,7 +67,7 @@
 				{% endfor %}
 			</select>
 
-			{% comment %} BOTÃO ADICIONAR UM AUTOR {% endcomment %}
+			{% comment %} BOTÃO ADICIONAR UMA REGIÃO {% endcomment %}
 			<button type="submit" id="add_uma_regiao_livro" class="btn-pequeno btn-azul invisivel">Adicionar uma Região</button>
 
 			{% comment %} GENERO {% endcomment %}
@@ -93,6 +93,8 @@
 						<option class="opc-autor" value="{{genero_id}}">{{genero_nome}}</option>
 						{% endfor %}
 					</select>
+					{% comment %} BOTÃO ADICIONAR UM GÊNERO {% endcomment %}
+					<button type="submit" id="add_um_genero_livro" class="btn-pequeno btn-azul invisivel">Adicionar um Gênero</button>
 				</div>
 			{% comment %} TEMA {% endcomment %}
 			<div class="campo-dois-campos">
@@ -155,6 +157,7 @@
 		</form>
 	</div>
 	<input type="hidden" name="autor_salvo" id="autor_salvo" value="{{autor_salvo}}">
-
+	<input type="hidden" name="regiao_salva" id="regiao_salva" value="{{regiao_salva}}">
+	<input type="hidden" name="genero_salvo" id="genero_salvo" value="{{genero_salvo}}">
 	
 {% endblock content %}

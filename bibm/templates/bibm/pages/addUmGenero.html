@@ -5,13 +5,13 @@
 
   <div class="autor-box">
 
-    <span class="titulo-add-um-livro">Adicionar Região</span>
+    <span class="titulo-add-um-livro">Adicionar Gênero</span>
 
-    <form action="{% url "bibm:add_uma_regiao_livro_save" %}" method="post" class="autor-box-form">
+    <form action="{% url "bibm:add_um_genero_livro_save" %}" method="post" class="autor-box-form">
         {% csrf_token %}
 
-        <label class="label-add-um-livro" for="regiao_field">Nome da Região:</label>
-        <div class="input-container" id="regiao_field">{{form.regiao}}</div>
+        <label class="label-add-um-livro" for="genero_field">Gênero:</label>
+        <div class="input-container" id="genero_field">{{form.genero}}</div>
 
 				<div class="caixa-texto-comentario-box">
 					{{ form.comentario }}

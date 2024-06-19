@@ -5,8 +5,16 @@ const regiao_input = document.querySelector("#regiao-input");
 const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao");
 const regiao_id = document.querySelector("#regiao_id_field");
 const btn_add_uma_regiao_livro = document.querySelector("#add_uma_regiao_livro")
+const regiao_salva = document.querySelector("#regiao_salva")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
+	
+	if (regiao_salva) {
+		if (regiao_salva.value) {
+			regiao_id.value = regiao_salva.value
+		}
+	}
+
 	if (regiao_id.value) {
 		for (let reg of regioes) {
 			if (reg.value == regiao_id.value) {
@@ -127,23 +135,28 @@ document.addEventListener("DOMContentLoaded", function(dom) {
     }
 	});
 
-	btn_add_uma_regiao_livro.addEventListener("click", function(e) {
-		form.action = form.action + "adicionarumaregiao/"
-		form.setAttribute("novalidate", "novalidate")
-	})
+	if (btn_add_uma_regiao_livro) {
+		btn_add_uma_regiao_livro.addEventListener("click", function(e) {
+			form.action = form.action + "adicionarumaregiao/"
+			form.setAttribute("novalidate", "novalidate")
+		})
+	}
 
-	regiao_input.addEventListener("focus", function(e) {
-		btn_add_uma_regiao_livro.style.display = "block"
-	})
-	
-	regiao_input.addEventListener("blur", function(e) {
-		if (!btn_add_uma_regiao_livro.contains(e.target)) {
-			setTimeout(() => {
-				btn_add_uma_regiao_livro.style.display = "none"
-			}, 300);
-		}
-	})
+	if (btn_add_uma_regiao_livro) {
+		regiao_input.addEventListener("focus", function(e) {
+			btn_add_uma_regiao_livro.style.display = "block"
+		})
+	}
 
+	if (btn_add_uma_regiao_livro) {
+		regiao_input.addEventListener("blur", function(e) {
+			if (!btn_add_uma_regiao_livro.contains(e.target)) {
+				setTimeout(() => {
+					btn_add_uma_regiao_livro.style.display = "none"
+				}, 300);
+			}
+		})
+	}
 	
 })
 

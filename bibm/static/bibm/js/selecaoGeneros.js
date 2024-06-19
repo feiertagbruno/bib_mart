@@ -4,8 +4,17 @@ let lista_generos = []
 const genero_input = document.querySelector("#genero-input")
 const botao_abrir_select_gen = document.querySelector("#abrir-select-genero")
 const genero_id = document.querySelector("#genero_id_field")
+const btn_add_um_genero_livro = document.querySelector("#add_um_genero_livro")
+const genero_salvo = document.querySelector("#genero_salvo")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
+	
+	if (genero_salvo) {
+		if (genero_salvo.value) {
+			genero_id.value = genero_salvo.value
+		}
+}
+
 	if (genero_id.value) {
 		for (let gen of generos) {
 			if (gen.value == genero_id.value) {
@@ -126,5 +135,22 @@ document.addEventListener("DOMContentLoaded", function(dom) {
     }
 	});
 		
+	btn_add_um_genero_livro.addEventListener("click", function(e) {
+		form.action = form.action + "adicionarumgenero/"
+		form.setAttribute("novalidate", "novalidate")
+	})
+
+	genero_input.addEventListener("focus", function(e) {
+		btn_add_um_genero_livro.style.display = "block"
+	})
+	
+	genero_input.addEventListener("blur", function(e) {
+		if (!btn_add_um_genero_livro.contains(e.target)) {
+			setTimeout(() => {
+				btn_add_um_genero_livro.style.display = "none"
+			}, 300);
+		}
+	})
+
 })
 

@@ -222,3 +222,28 @@ class RegiaoForm(forms.ModelForm):
                 }
             ),
         }
+
+class GeneroForm(forms.ModelForm):
+    class Meta:
+        model = Genero
+        fields = [
+            "genero",
+            "comentario"
+        ]
+        widgets = {
+            "genero": forms.TextInput(
+                attrs={
+                    "placeholder": "Digite aqui o gênero a ser adicionado.",
+                    "class": "autor-input",
+                    "autocomplete":"off",
+                }
+            ),
+            "comentario":forms.Textarea(
+                attrs={
+                    "class":"caixa-texto-comentario",
+                    "id":"comentario_genero",
+                    "placeholder": "Digite aqui seu comentário sobre este gênero. Campo não obrigatório.",
+                    "autocomplete": "off",
+                }
+            ),
+        }

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
-from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm
+from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm, GeneroForm
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -485,6 +485,14 @@ def add_um_livro(request):
     if autor_salvo:
         del(request.session["autor_salvo"])
     
+    regiao_salva = request.session.get("regiao_salva")
+    if regiao_salva:
+        del(request.session["regiao_salva"])
+
+    genero_salvo = request.session.get("genero_salvo")
+    if genero_salvo:
+        del(request.session["genero_salvo"])
+    
     form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
 
@@ -493,6 +501,8 @@ def add_um_livro(request):
             "form":form, 
             "add_um_livro":True,
             "autor_salvo": autor_salvo,
+            "regiao_salva": regiao_salva,
+            "genero_salvo": genero_salvo,
         })
         
     return render(request, "bibm/pages/addUmLivro.html", context)
@@ -565,6 +575,7 @@ def add_um_autor_livro_save(request):
         if form.is_valid():
             autor_salvo = form.save()
             request.session["autor_salvo"] = autor_salvo.id
+            request.session["regiao_salva"] = autor_salvo.regiao.id
             messages.success(request,"Autor salvo.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
@@ -591,8 +602,37 @@ def add_uma_regiao_livro_save(request):
         form = RegiaoForm(data = request.POST)
 
         if form.is_valid():
-            form.save()
+            regiao_salva = form.save()
+            request.session["regiao_salva"] = regiao_salva.id
             messages.success(request,"Região salva.")
+        
+        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+    else:
+        return Http404
+    
+def add_um_genero_livro(request):
+    if request.method == "POST":
+        request.session["info_livro"] = request.POST
+        
+        form = GeneroForm()
+
+        context = {
+            "form":form,
+        }
+
+        return render(request, "bibm/pages/addUmGenero.html", context)
+    else:
+        return Http404
+
+def add_um_genero_livro_save(request):
+    if request.method == "POST":
+        
+        form = GeneroForm(data = request.POST)
+
+        if form.is_valid():
+            genero_salvo = form.save()
+            request.session["genero_salvo"] = genero_salvo.id
+            messages.success(request,"Gênero salvo.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
