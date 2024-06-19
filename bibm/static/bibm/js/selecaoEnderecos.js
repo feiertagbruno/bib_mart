@@ -4,8 +4,17 @@ let lista_enderecos = []
 const endereco_input = document.querySelector("#endereco-input")
 const botao_abrir_select_end = document.querySelector("#abrir-select-endereco")
 const endereco_id = document.querySelector("#endereco_id_field")
+const btn_add_um_endereco_livro = document.querySelector("#add_um_endereco_livro")
+const endereco_salvo = document.querySelector("#endereco_salvo")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
+
+	if (endereco_salvo) {
+		if (endereco_salvo.value) {
+			genero_id.value = endereco_salvo.value
+		}
+	}
+
 	if (endereco_id.value) {
 		for (let end of enderecos) {
 			if (end.value == endereco_id.value) {
@@ -125,6 +134,35 @@ document.addEventListener("DOMContentLoaded", function(dom) {
         event.preventDefault();
     }
 	});
+
+	btn_add_um_endereco_livro.addEventListener("click", function(e) {
+		form.action = form.action + "adicionarumendereco/"
+		form.setAttribute("novalidate", "novalidate")
+	})
+		
+	btn_add_um_endereco_livro.addEventListener("blur", function(e) {
+		setTimeout(() => {
+				if (!elemento_em_foco.contains(endereco_input)) {
+				btn_add_um_endereco_livro.style.display = "none"
+			}
+		}, 300);
+	})
+
+	endereco_input.addEventListener("focus", function(e) {
+		btn_add_um_endereco_livro.style.display = "block"
+	})
+	
+	endereco_input.addEventListener("blur", function(e) {
+		setTimeout(() => {
+				if (!elemento_em_foco.contains(btn_add_um_endereco_livro)) {
+				btn_add_um_endereco_livro.style.display = "none"
+			}
+		}, 300);
+	})
+		
+	document.addEventListener("focusin", function(e) {
+		elemento_em_foco = e.target
+	})
 
 })
 

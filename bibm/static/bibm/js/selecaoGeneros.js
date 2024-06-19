@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 		if (genero_salvo.value) {
 			genero_id.value = genero_salvo.value
 		}
-}
+	}
 
 	if (genero_id.value) {
 		for (let gen of generos) {
@@ -139,17 +139,29 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 		form.action = form.action + "adicionarumgenero/"
 		form.setAttribute("novalidate", "novalidate")
 	})
+		
+	btn_add_um_genero_livro.addEventListener("blur", function(e) {
+		setTimeout(() => {
+			if (!elemento_em_foco.contains(genero_input)) {
+				btn_add_um_genero_livro.style.display = "none"
+			}
+		}, 300);
+	})
 
 	genero_input.addEventListener("focus", function(e) {
 		btn_add_um_genero_livro.style.display = "block"
 	})
 	
 	genero_input.addEventListener("blur", function(e) {
-		if (!btn_add_um_genero_livro.contains(e.target)) {
-			setTimeout(() => {
+		setTimeout(() => {
+			if (!elemento_em_foco.contains(btn_add_um_genero_livro)) {
 				btn_add_um_genero_livro.style.display = "none"
-			}, 300);
-		}
+			}
+		}, 300);
+	})
+			
+	document.addEventListener("focusin", function(e) {
+		elemento_em_foco = e.target
 	})
 
 })

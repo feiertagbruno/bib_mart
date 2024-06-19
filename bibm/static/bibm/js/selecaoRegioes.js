@@ -150,13 +150,27 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 
 	if (btn_add_uma_regiao_livro) {
 		regiao_input.addEventListener("blur", function(e) {
-			if (!btn_add_uma_regiao_livro.contains(e.target)) {
-				setTimeout(() => {
+			setTimeout(() => {
+				if (!elemento_em_foco.contains(btn_add_uma_regiao_livro)) {
 					btn_add_uma_regiao_livro.style.display = "none"
-				}, 300);
-			}
+				}
+			}, 300);
 		})
 	}
+				
+	if (btn_add_uma_regiao_livro) {
+		btn_add_uma_regiao_livro.addEventListener("blur", function(e) {
+			setTimeout(() => {
+				if (!elemento_em_foco.contains(regiao_input)) {
+					btn_add_uma_regiao_livro.style.display = "none"
+				}
+			}, 300);
+		})
+	}
+				
+	document.addEventListener("focusin", function(e) {
+		elemento_em_foco = e.target
+	})
 	
 })
 

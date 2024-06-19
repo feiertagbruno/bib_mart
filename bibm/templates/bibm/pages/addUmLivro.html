@@ -147,6 +147,8 @@
 						<option class="opc-autor" value="{{endereco_id}}">{{endereco_nome}}</option>
 						{% endfor %}
 					</select>
+					{% comment %} BOTÃO ADICIONAR UM ENDEREÇO {% endcomment %}
+					<button type="submit" id="add_um_endereco_livro" class="btn-pequeno btn-azul invisivel">Adicionar um Endereço</button>
 				</div>
 				<div class="campo-dois-campos">
 					<label class="label-add-um-livro" for="data_compra">Data de compra:</label>
@@ -159,5 +161,6 @@
 	<input type="hidden" name="autor_salvo" id="autor_salvo" value="{{autor_salvo}}">
 	<input type="hidden" name="regiao_salva" id="regiao_salva" value="{{regiao_salva}}">
 	<input type="hidden" name="genero_salvo" id="genero_salvo" value="{{genero_salvo}}">
+	<input type="hidden" name="endereco_salvo" id="endereco_salvo" value="{{endereco_salvo}}">
 	
 {% endblock content %}

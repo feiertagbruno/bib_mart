@@ -247,3 +247,27 @@ class GeneroForm(forms.ModelForm):
                 }
             ),
         }
+
+class EnderecoForm(forms.ModelForm):
+    class Meta:
+        model = Endereco
+        fields = [
+            "codigo",
+            "descricao",
+        ]
+        widgets = {
+            "codigo": forms.TextInput(
+                attrs={
+                    "placeholder": "O código deve ter 3 letras e 2 números. Ex.: ABC12",
+                    "class": "autor-input",
+                    "autocomplete":"off",
+                }
+            ),
+            "descricao": forms.TextInput(
+                attrs={
+                    "placeholder": "Digite aqui uma descrição para o código. Campo não obrigatório.",
+                    "class": "autor-input",
+                    "autocomplete":"off",
+                }
+            ),
+        }

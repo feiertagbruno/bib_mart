@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
-from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm, GeneroForm
+from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -493,6 +493,10 @@ def add_um_livro(request):
     if genero_salvo:
         del(request.session["genero_salvo"])
     
+    endereco_salvo = request.session.get("endereco_salvo")
+    if endereco_salvo:
+        del(request.session["endereco_salvo"])
+    
     form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
 
@@ -503,6 +507,7 @@ def add_um_livro(request):
             "autor_salvo": autor_salvo,
             "regiao_salva": regiao_salva,
             "genero_salvo": genero_salvo,
+            "endereco_salvo": endereco_salvo,
         })
         
     return render(request, "bibm/pages/addUmLivro.html", context)
@@ -632,6 +637,34 @@ def add_um_genero_livro_save(request):
         if form.is_valid():
             genero_salvo = form.save()
             request.session["genero_salvo"] = genero_salvo.id
+            messages.success(request,"Gênero salvo.")
+        
+        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+    else:
+        return Http404
+    
+def add_um_endereco_livro(request):
+    if request.method == "POST":
+        request.session["info_livro"] = request.POST
+        
+        form = EnderecoForm()
+
+        context = {
+            "form":form,
+        }
+
+        return render(request, "bibm/pages/addUmEndereco.html", context)
+    else:
+        return Http404
+
+def add_um_endereco_livro_save(request):
+    if request.method == "POST":
+        
+        form = EnderecoForm(data = request.POST)
+
+        if form.is_valid():
+            endereco_salvo = form.save()
+            request.session["endereco_salvo"] = endereco_salvo.id
             messages.success(request,"Gênero salvo.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))

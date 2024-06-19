@@ -39,10 +39,11 @@ body {
 
 input[type="text"], textarea,
 input[type="date"] {
+	position: relative;
 	outline: none;
 	background: none;
 	border: none;
-	width: inherit;
+	width: calc(100% - 4.5rem);
 	height: inherit;
 	font-family: inherit;
 	/* font-size: inherit; */

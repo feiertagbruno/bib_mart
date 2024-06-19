@@ -122,24 +122,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc.style.display = "none"
 		}
 	})
-
-	btn_add_um_autor_livro.addEventListener("click", function(e) {
-		form.action = form.action + "adicionarumautor/"
-		form.setAttribute("novalidate", "novalidate")
-	})
-
-	autor_input.addEventListener("focus", function(e) {
-		btn_add_um_autor_livro.style.display = "block"
-	})
-	
-	autor_input.addEventListener("blur", function(e) {
-		if (!btn_add_um_autor_livro.contains(e.target)) {
-			setTimeout(() => {
-				btn_add_um_autor_livro.style.display = "none"
-			}, 300);
-		}
-	})
-	
+		
 	select_opc.addEventListener('wheel', function(event) {
     const maxScrollTop = this.scrollHeight - this.clientHeight;
     if (
@@ -149,6 +132,35 @@ document.addEventListener("DOMContentLoaded", function(dom) {
         event.preventDefault();
     }
 	});
+
+	btn_add_um_autor_livro.addEventListener("click", function(e) {
+		form.action = form.action + "adicionarumautor/"
+		form.setAttribute("novalidate", "novalidate")
+	})
+
+	btn_add_um_autor_livro.addEventListener("blur", function(e) {
+		setTimeout(() => {
+				if (!elemento_em_foco.contains(autor_input)) {
+				btn_add_um_autor_livro.style.display = "none"
+			}
+		}, 300);
+	})
+
+	autor_input.addEventListener("focus", function(e) {
+		btn_add_um_autor_livro.style.display = "block"
+	})
 	
+	autor_input.addEventListener("blur", function(e) {
+		setTimeout(() => {
+				if (!elemento_em_foco.contains(btn_add_um_autor_livro)) {
+				btn_add_um_autor_livro.style.display = "none"
+			}
+		}, 300);
+	})
+	
+	document.addEventListener("focusin", function(e) {
+		elemento_em_foco = e.target
+	})
+
 })
 
