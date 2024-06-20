@@ -6,6 +6,7 @@ const botao_abrir_select = document.querySelector("#abrir-select-autor")
 const autor_id = document.querySelector("#autor_id_field")
 const btn_add_um_autor_livro = document.querySelector("#add_um_autor_livro")
 const autor_salvo = document.querySelector("#autor_salvo")
+const mensagem_autor = document.querySelector("#mensagem-autor")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 	if (autor_salvo) {
@@ -46,9 +47,17 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc.style.display = filtro.length ? "block" : "none"
 			if (filtro.length) {
 				select_opc.selectedIndex = 0
+				mensagem_autor.textContent = ""
 			} else {
 				select_opc.style.display = "none"
+				autor_id.value = null
+				if (autor_input.value) {
+					mensagem_autor.textContent = "Busca vazia, considere adicionar um novo autor."
+				} else {
+					mensagem_autor.textContent = ""
+				}
 			}
+
 		} else {
 			select_opc.style.display = "none"
 			for (let item of lista_autores) {
@@ -59,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				eventoFocusDoSelect()
 			}
 		}
+
 	})
 	
 	autor_input.addEventListener("keydown", function(e) {
@@ -68,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				autor_input.value = select_opc.options[select_opc.selectedIndex].text
 				autor_id.value = select_opc.options[select_opc.selectedIndex].value
 				select_opc.style.display = "none"
+				btn_add_um_autor_livro.style.display = "none"
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -121,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			autor_input.value = e.target.text
 			autor_id.value = e.target.value
 			select_opc.style.display = "none"
+			btn_add_um_autor_livro.style.display = "none"
 		}
 	})
 		
@@ -141,8 +153,12 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 
 	btn_add_um_autor_livro.addEventListener("blur", function(e) {
 		setTimeout(() => {
-				if (!elemento_em_foco.contains(autor_input)) {
+				if (
+					!elemento_em_foco.contains(autor_input) && 
+					!elemento_em_foco.contains(select_opc)
+			) {
 				btn_add_um_autor_livro.style.display = "none"
+				titulo_input.focus()
 			}
 		}, 300);
 	})
@@ -153,8 +169,24 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	
 	autor_input.addEventListener("blur", function(e) {
 		setTimeout(() => {
-				if (!elemento_em_foco.contains(btn_add_um_autor_livro)) {
+				if (
+					!elemento_em_foco.contains(btn_add_um_autor_livro) &&
+					!elemento_em_foco.contains(select_opc)
+				) {
 				btn_add_um_autor_livro.style.display = "none"
+				titulo_input.focus()
+			}
+		}, 300);
+	})
+
+	select_opc.addEventListener("blur", function(e) {
+		setTimeout(() => {
+				if (
+					!elemento_em_foco.contains(btn_add_um_autor_livro) &&
+					!elemento_em_foco.contains(autor_input)
+				) {
+				btn_add_um_autor_livro.style.display = "none"
+				titulo_input.focus()
 			}
 		}, 300);
 	})
