@@ -665,7 +665,7 @@ def add_um_endereco_livro_save(request):
         if form.is_valid():
             endereco_salvo = form.save()
             request.session["endereco_salvo"] = endereco_salvo.id
-            messages.success(request,"Gênero salvo.")
+            messages.success(request,"Endereço salvo.")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:

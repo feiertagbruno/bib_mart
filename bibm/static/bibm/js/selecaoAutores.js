@@ -8,9 +8,10 @@ const btn_add_um_autor_livro = document.querySelector("#add_um_autor_livro")
 const autor_salvo = document.querySelector("#autor_salvo")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
-
-	if (autor_salvo.value) {
-		autor_id.value = autor_salvo.value
+	if (autor_salvo) {
+		if (autor_salvo.value) {
+			autor_id.value = autor_salvo.value
+		}
 	}
 	
 	if (autor_id.value) {

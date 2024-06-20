@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 
 	if (endereco_salvo) {
 		if (endereco_salvo.value) {
-			genero_id.value = endereco_salvo.value
+			endereco_id.value = endereco_salvo.value
 		}
 	}
 

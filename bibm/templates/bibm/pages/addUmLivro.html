@@ -158,9 +158,17 @@
 			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem" id="btn_adicionar">Adicionar</button>
 		</form>
 	</div>
+	{% if autor_salvo %}
 	<input type="hidden" name="autor_salvo" id="autor_salvo" value="{{autor_salvo}}">
+	{% endif %}
+	{% if regiao_salva %}
 	<input type="hidden" name="regiao_salva" id="regiao_salva" value="{{regiao_salva}}">
+	{% endif %}
+	{% if genero_salvo %}
 	<input type="hidden" name="genero_salvo" id="genero_salvo" value="{{genero_salvo}}">
+	{% endif %}
+	{% if endereco_salvo %}
 	<input type="hidden" name="endereco_salvo" id="endereco_salvo" value="{{endereco_salvo}}">
+	{% endif %}
 	
 {% endblock content %}
