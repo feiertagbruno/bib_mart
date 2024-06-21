@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 					!elemento_em_foco.contains(select_opc)
 			) {
 				btn_add_um_autor_livro.style.display = "none"
-				titulo_input.focus()
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 					!elemento_em_foco.contains(select_opc)
 				) {
 				btn_add_um_autor_livro.style.display = "none"
-				titulo_input.focus()
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 					!elemento_em_foco.contains(autor_input)
 				) {
 				btn_add_um_autor_livro.style.display = "none"
-				titulo_input.focus()
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
