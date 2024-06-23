@@ -6,9 +6,9 @@ const botao_abrir_select_end = document.querySelector("#abrir-select-endereco")
 const endereco_id = document.querySelector("#endereco_id_field")
 const btn_add_um_endereco_livro = document.querySelector("#add_um_endereco_livro")
 const endereco_salvo = document.querySelector("#endereco_salvo")
+const mensagem_endereco = document.querySelector("#mensagem-endereco")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
-
 	if (endereco_salvo) {
 		if (endereco_salvo.value) {
 			endereco_id.value = endereco_salvo.value
@@ -47,8 +47,15 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc_end.style.display = filtro.length ? "block" : "none"
 			if (filtro.length) {
 				select_opc_end.selectedIndex = 0
+				mensagem_endereco.textContent = ""
 			} else {
 				select_opc_end.style.display = "none"
+				endereco_id.value = null
+				if (endereco_input.value) {
+					mensagem_endereco.textContent = "Busca sem resultados."
+				} else {
+					mensagem_endereco.textContent = ""
+				}
 			}
 		} else {
 			select_opc_end.style.display = "none"
@@ -69,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				endereco_input.value = select_opc_end.options[select_opc_end.selectedIndex].text
 				endereco_id.value = select_opc_end.options[select_opc_end.selectedIndex].value
 				select_opc_end.style.display = "none"
+				btn_add_um_endereco_livro.style.display = "none"
+				mensagem_endereco.textContent = ""
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				% select_opc_end.options.length
 			}
 		}
-		if (e.key === "Backspace") {
+		if (e.key === "Backspace" || e.key ==="Delete") {
 			endereco_id.value = null
 		}
 	})
@@ -122,6 +131,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			endereco_input.value = e.target.text
 			endereco_id.value = e.target.value
 			select_opc_end.style.display = "none"
+			btn_add_um_endereco_livro.style.display = "none"
+			mensagem_endereco.textContent = ""
 		}
 	})
 		
@@ -142,8 +153,13 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 		
 	btn_add_um_endereco_livro.addEventListener("blur", function(e) {
 		setTimeout(() => {
-				if (!elemento_em_foco.contains(endereco_input)) {
+				if (
+					!elemento_em_foco.contains(endereco_input) && 
+					!elemento_em_foco.contains(select_opc_end)
+				) {
 				btn_add_um_endereco_livro.style.display = "none"
+				if (!endereco_id.value) {mensagem_endereco.textContent = "Nenhum endereço selecionado."}
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
@@ -154,15 +170,33 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	
 	endereco_input.addEventListener("blur", function(e) {
 		setTimeout(() => {
-				if (!elemento_em_foco.contains(btn_add_um_endereco_livro)) {
+				if (
+					!elemento_em_foco.contains(btn_add_um_endereco_livro) &&
+					!elemento_em_foco.contains(select_opc_end)
+				) {
 				btn_add_um_endereco_livro.style.display = "none"
+				if (!endereco_id.value) {mensagem_endereco.textContent = "Nenhum endereço selecionado."}
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
 		
-	document.addEventListener("focusin", function(e) {
-		elemento_em_foco = e.target
+	select_opc_end.addEventListener("blur", function(e) {
+		setTimeout(() => {
+			if (
+				!elemento_em_foco.contains(btn_add_um_endereco_livro) &&
+				!elemento_em_foco.contains(endereco_input)
+			) {
+				btn_add_um_endereco_livro.style.display = "none"
+				if (!endereco_id.value) {mensagem_endereco.textContent = "Nenhum endereço selecionado."}
+				elemento_em_foco.focus()
+			}
+		}, 300);
 	})
+
+	// document.addEventListener("focusin", function(e) {
+	// 	elemento_em_foco = e.target
+	// })
 
 })
 

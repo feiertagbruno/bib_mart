@@ -1,0 +1,11 @@
+{% for letra in ordem_alfabetica_lista %}
+
+  {% if caller == "meus_livros" %}
+  <a href="{% url 'bibm:meus_livros' letra %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+  {% else  %}
+  <a href="{% url 'bibm:editar_planejamento' letra %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+  {% endif %}
+    {{letra}}
+  </a>
+
+{% endfor %}

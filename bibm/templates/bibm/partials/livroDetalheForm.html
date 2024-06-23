@@ -92,16 +92,21 @@
           title="Editar este livro"
         >
       </a>
-      <form method="POST" href="{% url 'bibm:deletar_um_livro' %}"
+      <form method="POST" action="{% url 'bibm:deletar_um_livro' %}"
         onclick="return confirm('Você confirma a exclusão deste livro?')">
         {% csrf_token %}
         <input type="hidden" name="livro_id" value="{{livro.id}}">
-        <img 
+        {% if filtro %}
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        {% endif %}
+        <button type="submit">
+          <img 
           src="{% static 'bibm/img/trash-solid.svg' %}" 
           alt="Deletar este livro"
           title="Deletar este livro"
           class="btn-excluir"
-        >
+          >
+        </button>
       </form>
     </div>
 

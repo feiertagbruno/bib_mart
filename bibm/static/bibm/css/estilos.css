@@ -77,70 +77,6 @@ a {
 	color: inherit;
 }
 
-/* GENERICOS */
-
-.main-bg {
-	background-image: url("..\\img\\subtle-prism.svg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
-	background-position: center;
-	padding: 0;
-	margin: 0;
-  }
-  
-  .madimi-one-regular {
-	  font-family: "Madimi One", sans-serif;
-	  font-weight: 400;
-	  font-style: normal;
-	  color: rgba(0, 0, 24, 0.85);
-	  margin: 0;
-	  padding: 0;
-  }
-  
-  .maxwidth {
-	padding: 0 5vw;
-	margin: 0 auto;
-	position: relative;
-}
-
-.section {
-	min-height: 100vh;
-	position:relative;
-	padding: 0;
-	margin: 0;
-	
-  }
-
-  .invisivel {
-	display: none;
-}
-
-.espaco-top-2rem {
-	margin-top: 2rem;
-}
-
-.espaco-bottom-2rem {
-	margin-bottom: 2rem;
-}
-
-.espaco-top-bottom-4rem {
-	margin-top: 4rem;
-	margin-bottom: 3rem;
-}
-
-.flex-flow-row {
-	display: flex;
-	flex-flow: row;
-	gap: 1rem;
-}
-
-.texto-centralizado {
-	display: flex;
-	justify-content: center;
-}
-/* FIM GENERICOS */
-
 /* BOTÕES */
 
 
@@ -575,6 +511,12 @@ a {
     padding-right: 3rem;
 }
 
+.titulo-erros {
+	color: brown;
+	padding-bottom: .5rem;
+	text-align: center;
+}
+
 .message {
 	padding-bottom: .5rem;
 	text-align: center;
@@ -583,13 +525,13 @@ a {
 .message-error {
     border: 1px solid var(--color-error-dark);
     background: var(--color-error-light);
-    color: var(--color-error-dark);
+    color: brown;
 }
 
 .message-success {
     border: 1px solid var(--color-success-dark);
     background: var(--color-success-light);
-    color: var(--color-success-dark);
+    color: darkgreen;
 }
 
 .message-warning {
@@ -691,6 +633,12 @@ a {
 	padding-bottom: 1rem;
 	width: inherit;
 	height: fit-content;
+}
+
+.ordem-alfabetica {
+	gap: 1rem;
+	padding-left: 2rem;
+	transition: all 300ms ease-in-out;
 }
 
 .decoracao-linha-filtros-abaixo {

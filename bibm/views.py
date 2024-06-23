@@ -10,6 +10,7 @@ from django.db.models import Max
 from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
+from django.core.exceptions import ValidationError
 
 
 def context_home():
@@ -181,6 +182,8 @@ def delete_anotacao(request, livro_id, anotacao_id):
 def meus_livros(request, filtro):
     termo_busca = request.GET.get("q", "").strip()
     classe_btn = "btn-azul"
+    ordem_alfabetica_lista = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
+                              "q","r","s","t","u","v","w","x","y","z","0-9..."]
     filtros = {
         "todos": "Todos", 
         "naolidos": "Não lidos", 
@@ -196,6 +199,23 @@ def meus_livros(request, filtro):
             meus_livros = Livro.objects.filter(lido=True)
         elif filtro == "lidoeleriadenovo":
             meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True)
+        elif len(filtro) == 1:
+            if filtro.lower() == "a":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
+            elif filtro.lower() == "e":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
+            elif filtro.lower() == "i":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
+            elif filtro.lower() == "o":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
+            elif filtro.lower() == "u":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
+            elif filtro.lower() == "c":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[cCçÇ]")
+            else:
+                meus_livros = Livro.objects.filter(titulo__istartswith=filtro)
+        elif filtro == "0-9...":
+            meus_livros = Livro.objects.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
     else:
         meus_livros = Livro.objects.filter(Q(
         Q(titulo__icontains = termo_busca) |
@@ -206,6 +226,7 @@ def meus_livros(request, filtro):
         Q(endereco__codigo__icontains = termo_busca) |
         Q(regiao__regiao__icontains = termo_busca)
         )).order_by("titulo")
+        filtro = ""
 
     context = {
         "meus_livros": meus_livros,
@@ -213,6 +234,7 @@ def meus_livros(request, filtro):
         "filtro": filtro,
         "filtros": filtros,
         "classe_btn": classe_btn,
+        "ordem_alfabetica_lista": ordem_alfabetica_lista,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -310,6 +332,8 @@ def editar_planejamento(request, filtro):
         "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
+    ordem_alfabetica_lista = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
+                              "q","r","s","t","u","v","w","x","y","z","0-9..."]
     classe_btn = "btn-vermelho"
 
     livros_plan = livros_planejamento()
@@ -317,14 +341,30 @@ def editar_planejamento(request, filtro):
 
     if termo_busca == "":
         if filtro == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False, planejamento=None)
+            meus_livros = Livro.objects.filter(lido=False)
         elif filtro == "todos":
-            meus_livros = Livro.objects.filter(planejamento=None)
+            meus_livros = Livro.objects.all()
         elif filtro == "lidos":
-            meus_livros = Livro.objects.filter(lido=True, planejamento=None)
+            meus_livros = Livro.objects.filter(lido=True)
         elif filtro == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True, planejamento=None)
-
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True)
+        elif len(filtro) == 1:
+            if filtro.lower() == "a":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
+            elif filtro.lower() == "e":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
+            elif filtro.lower() == "i":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
+            elif filtro.lower() == "o":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
+            elif filtro.lower() == "u":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
+            elif filtro.lower() == "c":
+                meus_livros = Livro.objects.filter(titulo__regex=r"^[cCçÇ]")
+            else:
+                meus_livros = Livro.objects.filter(titulo__istartswith=filtro)
+        elif filtro == "0-9...":
+            meus_livros = Livro.objects.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
     else:
         meus_livros = Livro.objects.filter(Q(
             Q(
@@ -338,6 +378,7 @@ def editar_planejamento(request, filtro):
                 Q(regiao__regiao__icontains = termo_busca)
             )
         ))
+        filtro = ""
 
     context = {
         "livros_plan": livros_plan,
@@ -348,6 +389,7 @@ def editar_planejamento(request, filtro):
         "filtros": filtros,
         "caller":"editar_planejamento",
         "classe_btn": classe_btn,
+        "ordem_alfabetica_lista": ordem_alfabetica_lista,
     }
     return render(request, "bibm/pages/editarPlanejamento.html", context)
 
@@ -469,11 +511,12 @@ def add_um_livro(request):
     if request.method == "POST":
         form = LivroForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request,"Livro salvo com sucesso.")
+            livro_salvo = form.save()
+            if livro_salvo:
+                messages.success(request,"Livro salvo com sucesso.")
         else:
             for er in form.errors.items():
-                messages.error(request, er)
+                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
             request.session["info_livro"] = request.POST
             return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     
@@ -554,7 +597,21 @@ def editar_um_livro_save(request):
     return HttpResponseRedirect(reverse("bibm:home"))
 
 def deletar_um_livro(request):
-    ...
+    if request.method == "POST":
+        filtro = request.POST.get("filtro")
+        livro_id = request.POST.get("livro_id")
+        if livro_id:
+            livro = Livro.objects.filter(id=livro_id).first()
+            if livro:
+                livro.delete()
+
+        if livro.id == None and livro != None:
+            messages.info(request, "Livro deletado com sucesso.")
+        else:
+            raise ValidationError("Houve um erro durante a deleção.")
+    else:
+        messages.error(request, "O livro não foi deletado")
+    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
 
 def add_um_autor_livro(request):
     if request.method == "POST":

@@ -1,6 +1,7 @@
 from django import forms
 from bibm.models import Anotacao, Livro, Endereco, Regiao, Autor, Genero
 from utils.functions import is_integer
+from django.core.exceptions import ValidationError
 
 class AnotacaoForm(forms.ModelForm):
     
@@ -10,6 +11,13 @@ class AnotacaoForm(forms.ModelForm):
             "livro",
             "anotacao",
         ]
+        widgets = {
+            "anotacao": forms.Textarea(
+                attrs={
+                    "class": "anotacao-field"
+                }
+            )
+        }
 
 class LivroForm(forms.ModelForm):
     autor = forms.IntegerField(
@@ -17,28 +25,44 @@ class LivroForm(forms.ModelForm):
             attrs={
                 "id":"autor_id_field"
             }
-        )
+        ),
+        required=True,
+        error_messages={
+            "required": "Nenhum autor válido foi selecionado."
+        }
     )
     genero = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
                 "id":"genero_id_field"
             }
-        )
+        ),
+        required=True,
+        error_messages={
+            "required": "Nenhum gênero válido foi selecionado."
+        }
     )
     endereco = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
                 "id":"endereco_id_field"
             }
-        )
+        ),
+        required=True,
+        error_messages={
+            "required": "Nenhum endereço válido foi selecionado."
+        }
     )
     regiao = forms.IntegerField(
         widget=forms.HiddenInput(
             attrs={
                 "id":"regiao_id_field"
             }
-        )
+        ),
+        required=True,
+        error_messages={
+            "required": "Nenhuma região válida foi selecionada."
+        }
     )
     class Meta:
         model = Livro
@@ -271,3 +295,7 @@ class EnderecoForm(forms.ModelForm):
                 }
             ),
         }
+
+    def clean(self):
+        cleaned_fields = super().clean()
+        cleaned_fields["codigo"] = cleaned_fields["codigo"].upper()

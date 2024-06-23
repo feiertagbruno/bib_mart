@@ -6,9 +6,9 @@ const botao_abrir_select_gen = document.querySelector("#abrir-select-genero")
 const genero_id = document.querySelector("#genero_id_field")
 const btn_add_um_genero_livro = document.querySelector("#add_um_genero_livro")
 const genero_salvo = document.querySelector("#genero_salvo")
+const mensagem_genero = document.querySelector("#mensagem-genero")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
-	
 	if (genero_salvo) {
 		if (genero_salvo.value) {
 			genero_id.value = genero_salvo.value
@@ -47,8 +47,15 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc_gen.style.display = filtro.length ? "block" : "none"
 			if (filtro.length) {
 				select_opc_gen.selectedIndex = 0
+				mensagem_genero.textContent = ""
 			} else {
 				select_opc_gen.style.display = "none"
+				genero_id.value = null
+				if (genero_input.value) {
+					mensagem_genero.textContent = "Busca sem resultados."
+				} else {
+					mensagem_genero.textContent = ""
+				}
 			}
 		} else {
 			select_opc_gen.style.display = "none"
@@ -69,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				genero_input.value = select_opc_gen.options[select_opc_gen.selectedIndex].text
 				genero_id.value = select_opc_gen.options[select_opc_gen.selectedIndex].value
 				select_opc_gen.style.display = "none"
+				btn_add_um_genero_livro.style.display = "none"
+				mensagem_genero.textContent = ""
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				% select_opc_gen.options.length
 			}
 		}
-		if (e.key === "Backspace") {
+		if (e.key === "Backspace" || e.key ==="Delete") {
 			genero_id.value = null
 		}
 	})
@@ -122,6 +131,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			genero_input.value = e.target.text
 			genero_id.value = e.target.value
 			select_opc_gen.style.display = "none"
+			btn_add_um_genero_livro.style.display = "none"
+			mensagem_genero.textContent = ""
 		}
 	})
 		
@@ -142,8 +153,13 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 		
 	btn_add_um_genero_livro.addEventListener("blur", function(e) {
 		setTimeout(() => {
-			if (!elemento_em_foco.contains(genero_input)) {
+			if (
+				!elemento_em_foco.contains(genero_input) &&
+				!elemento_em_foco.contains(select_opc_gen)
+			) {
 				btn_add_um_genero_livro.style.display = "none"
+				if (!genero_id.value) {mensagem_genero.textContent = "Nenhum gênero selecionado."}
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
@@ -154,15 +170,33 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	
 	genero_input.addEventListener("blur", function(e) {
 		setTimeout(() => {
-			if (!elemento_em_foco.contains(btn_add_um_genero_livro)) {
+			if (
+				!elemento_em_foco.contains(btn_add_um_genero_livro) &&
+				!elemento_em_foco.contains(select_opc_gen)
+			) {
 				btn_add_um_genero_livro.style.display = "none"
+				if (!genero_id.value) {mensagem_genero.textContent = "Nenhum gênero selecionado."}
+				elemento_em_foco.focus()
 			}
 		}, 300);
 	})
-			
-	document.addEventListener("focusin", function(e) {
-		elemento_em_foco = e.target
-	})
+	
+select_opc_gen.addEventListener("blur", function(e) {
+	setTimeout(() => {
+		if (
+			!elemento_em_foco.contains(btn_add_um_genero_livro) &&
+			!elemento_em_foco.contains(genero_input)
+		) {
+			btn_add_um_genero_livro.style.display = "none"
+			if (!genero_id.value) {mensagem_genero.textContent = "Nenhum gênero selecionado."}
+			elemento_em_foco.focus()
+		}
+	}, 300);
+})
+
+	// document.addEventListener("focusin", function(e) {
+	// 	elemento_em_foco = e.target
+	// })
 
 })
 

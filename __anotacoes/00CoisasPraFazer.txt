@@ -1,8 +1,3 @@
 no modo celular, o texto em baixo da aplicação, está cobrindo o conteúdo (estudar para aumentar o espaço embaixo)
 
-ajeitar a mensagem de erro que retorna no addUmLivro, alias ajeitar o css de todas as mensagens, tornar elas mais chamativas
-
-em adicionar um livro, colocar uma mensagem sugerindo que a pessoa adicione o novo autor se a consulta retornar vazia
-
-Pra amanhã:
-  passar o autor adicionado para o add_um_livro pela session para já voltar carregado o autor adicionado
+não deixar adicionar autores com o mesmo nome

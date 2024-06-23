@@ -6,9 +6,9 @@ const botao_abrir_select_reg = document.querySelector("#abrir-select-regiao");
 const regiao_id = document.querySelector("#regiao_id_field");
 const btn_add_uma_regiao_livro = document.querySelector("#add_uma_regiao_livro")
 const regiao_salva = document.querySelector("#regiao_salva")
+const mensagem_regiao = document.querySelector("#mensagem-regiao")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
-	
 	if (regiao_salva) {
 		if (regiao_salva.value) {
 			regiao_id.value = regiao_salva.value
@@ -47,8 +47,15 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc_reg.style.display = filtro.length ? "block" : "none"
 			if (filtro.length) {
 				select_opc_reg.selectedIndex = 0
+				mensagem_regiao.textContent = ""
 			} else {
 				select_opc_reg.style.display = "none"
+				regiao_id.value = null
+				if (regiao_input.value) {
+					mensagem_regiao.textContent = "Busca sem resultados. Considere adicionar uma nova região."
+				} else {
+					mensagem_regiao.textContent = ""
+				}
 			}
 		} else {
 			select_opc_reg.style.display = "none"
@@ -69,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				regiao_input.value = select_opc_reg.options[select_opc_reg.selectedIndex].text
 				regiao_id.value = select_opc_reg.options[select_opc_reg.selectedIndex].value
 				select_opc_reg.style.display = "none"
+				btn_add_uma_regiao_livro.style.display = "none"
+				mensagem_genero.textContent = ""
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				% select_opc_reg.options.length
 			}
 		}
-		if (e.key === "Backspace") {
+		if (e.key === "Backspace" || e.key ==="Delete") {
 			regiao_id.value = null
 		}
 	})
@@ -122,6 +131,8 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			regiao_input.value = e.target.text
 			regiao_id.value = e.target.value
 			select_opc_reg.style.display = "none"
+			btn_add_uma_regiao_livro.style.display = "none"
+			mensagem_genero.textContent = ""
 		}
 	})
 		
@@ -143,6 +154,21 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	}
 
 	if (btn_add_uma_regiao_livro) {
+		btn_add_uma_regiao_livro.addEventListener("blur", function(e) {
+			setTimeout(() => {
+				if (
+					!elemento_em_foco.contains(regiao_input) &&
+					!elemento_em_foco.contains(select_opc_reg)
+				) {
+					btn_add_uma_regiao_livro.style.display = "none"
+					if (!regiao_id.value) {mensagem_regiao.textContent = "Nenhuma região selecionada."}
+					elemento_em_foco.focus()
+				}
+			},300);
+		})
+	}
+
+	if (btn_add_uma_regiao_livro) {
 		regiao_input.addEventListener("focus", function(e) {
 			btn_add_uma_regiao_livro.style.display = "block"
 		})
@@ -151,23 +177,33 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	if (btn_add_uma_regiao_livro) {
 		regiao_input.addEventListener("blur", function(e) {
 			setTimeout(() => {
-				if (!elemento_em_foco.contains(btn_add_uma_regiao_livro)) {
+				if (
+					!elemento_em_foco.contains(btn_add_uma_regiao_livro) &&
+					!elemento_em_foco.contains(select_opc_reg)
+				) {
 					btn_add_uma_regiao_livro.style.display = "none"
+					if (!regiao_id.value) {mensagem_regiao.textContent = "Nenhuma região selecionada."}
+					elemento_em_foco.focus()
 				}
 			}, 300);
 		})
 	}
 				
 	if (btn_add_uma_regiao_livro) {
-		btn_add_uma_regiao_livro.addEventListener("blur", function(e) {
+		select_opc_reg.addEventListener("blur", function(e) {
 			setTimeout(() => {
-				if (!elemento_em_foco.contains(regiao_input)) {
+				if (
+					!elemento_em_foco.contains(btn_add_uma_regiao_livro) &&
+					!elemento_em_foco.contains(regiao_input)
+				) {
 					btn_add_uma_regiao_livro.style.display = "none"
+					if (!regiao_id.value) {mensagem_regiao.textContent = "Nenhuma região selecionada."}
+					elemento_em_foco.focus()
 				}
 			}, 300);
 		})
 	}
-				
+
 	document.addEventListener("focusin", function(e) {
 		elemento_em_foco = e.target
 	})

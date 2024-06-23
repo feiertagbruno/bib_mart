@@ -123,6 +123,10 @@
 	height: 100%;
 }
 
-.mensagem-autor {
+.mensagem-vermelha {
 	color: brown;
+}
+
+.box-se-lido {
+	display: none;
 }

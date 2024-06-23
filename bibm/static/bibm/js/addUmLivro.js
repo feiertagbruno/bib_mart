@@ -36,4 +36,13 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		form.removeAttribute("novalidate")
 	})
 
+	btn_adicionar.addEventListener("keydown", function(e) {
+		btn_adicionar.click()
+	})
+
+	document.addEventListener("keydown", function(e) {
+		if (e.key === "Enter") {
+			e.preventDefault()
+		}
+	})
 })
