@@ -1,0 +1,50 @@
+.container-mapa-box {
+	position: relative;
+	display: flex;
+	flex-flow: row wrap;
+	width: var(--recuo-padrao);
+	margin: 0 auto;
+	justify-content: center;
+}
+
+.endereco-box {
+	position: relative;
+	display: flex;
+	flex-flow: column;
+	text-align: center;
+	padding: 2rem;
+	width: 40%;
+}
+
+.endereco-titulo-box {
+	display: flex;
+	justify-content: left;
+}
+
+.endereco-titulo {
+	font-size: calc(1.8rem + 1vw);
+}
+
+.endereco-livros {
+  display: list-item;
+  list-style-type: disc;
+}
+
+.endereco-livro-titulo {
+	display: flex;
+  flex-flow: column;
+  justify-content: left;
+  text-align: left;
+}
+
+.endereco-descricao-box {
+	display: flex;
+	position: relative;
+	justify-content: left;
+	top: -.8rem;
+}
+
+.endereco-descricao {
+	font-size: calc(1rem + .5vw);
+	color: rgba(50, 50, 50, .5);
+}

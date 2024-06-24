@@ -10,10 +10,12 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="{% static 'bibm/css/estilos.css' %}">
+	<link rel="stylesheet" href="{% static 'bibm/css/searchBox.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/addUmLivro.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/livroDetalheForm.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/anotacoes.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/botoes.css' %}">
+	<link rel="stylesheet" href="{% static 'bibm/css/mapaDaBibli.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/genericos.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/media.css' %}">
 </head>
@@ -56,6 +58,9 @@
 	{% endif %}
 	{% if add_um_autor_livro %}
 	<script src="{% static 'bibm/js/selecaoRegioes.js' %}"></script>
+	{% endif %}
+	{% if mapa_da_bibli %}
+	<script src="{% static "bibm/js/mapaDaBibli.js" %}"></script>
 	{% endif %}
 </body>
 

@@ -20,7 +20,6 @@ urlpatterns = [
     path("descerplan/", views.descer_plan, name="descer_plan"),
 	path("pulareste/", views.pular_este, name="pular_este"),
 	path("removerdoplanejamento/", views.remover_do_planejamento, name="remover_do_planejamento"),
-	path("mapadabibli/", views.mapa_da_bibli, name="mapa_da_bibli"),
 	path("adicionarumlivro/", views.add_um_livro, name="add_um_livro"),
     path("adicionarumlivro/adicionarumautor/", views.add_um_autor_livro, name="add_um_autor_livro"),
     path("adicionarumlivro/adicionarumautor/save/", views.add_um_autor_livro_save, name="add_um_autor_livro_save"),
@@ -35,5 +34,7 @@ urlpatterns = [
     path("deletarumlivro/", views.deletar_um_livro, name="deletar_um_livro"),
 	path("acrescentarnoplanejamento/", views.acrescentar_no_planejamento, name="acrescentar_no_planejamento"),
 	path("acrescentarnoplanejamentomeuslivros/", views.acrescentar_no_planejamento_meus_livros, name="acrescentar_no_planejamento_meus_livros"),
+    path("mapadabibli/enderecar/", views.enderecar_livro, name="enderecar_livro"),
+	path("mapadabibli/", views.mapa_da_bibli, name="mapa_da_bibli"),
 	path("testes/", views.chamar_html_teste, name="testes"),
 ]

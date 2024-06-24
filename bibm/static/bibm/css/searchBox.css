@@ -1,0 +1,72 @@
+.container-search-box-mapa {
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+}
+
+.search-form-mapa {
+  border: 2px solid var(--cor-da-borda);
+  min-width: 19.5rem;
+  width: 20vw;
+  border-radius: 20px;
+  position: relative;
+  transition: all 300ms ease-in-out;
+}
+
+.container-search-box {
+	margin: 0 auto;
+	margin-bottom: 2rem;
+	width: var(--recuo-padrao);
+}
+
+.search-form {
+	border: 2px solid var(--cor-da-borda);
+	min-width: 19.5rem;
+	width: 20vw;
+	border-radius: 20px;
+	position: relative;
+	transition: all 300ms ease-in-out;
+}
+
+.search-form:focus-within {
+	border-color: var(--color-primary);
+	background: rgba(255, 255, 255, .3);
+	width: 60vw;
+}
+
+.caixa-de-pesquisa:focus-within {
+	border-color: var(--color-primary);
+	background: rgba(255, 255, 255, .3);
+}
+
+.search-input,
+.search-button {
+	border: none;
+	background: none;
+	outline: none;
+	padding: 1rem;
+	transition: all 300ms ease-in-out;
+	font-family: inherit;
+}
+
+.search-button img {
+	width: 2rem;
+}
+
+.search-button {
+	position: absolute;
+	top: -.2rem;
+	right: 0;
+}
+
+.search-button:focus {
+	outline: 2px solid var(--color-primary);
+	background: rgba(0, 0, 0, 5%);
+}
+
+.search-input {
+	width: 100%;
+	padding-right: 3rem;
+}

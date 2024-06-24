@@ -21,12 +21,18 @@
 				<span class="endereco-descricao">{{ tupla.0 }}</span>
 			</div>
 			{% endif %}
-			{% for livro in tupla.1 %}
+			{% for livro_id, livro_titulo in tupla.1 %}
 			<div class="endereco-livros">
-				<span class="endereco-livro-titulo opc-infla">{{ livro }}</span>
+				<input type="hidden" name="livro_id" id="livro_id" value="{{livro_id}}">
+				<span class="endereco-livro-titulo btn-azul" draggable="true">{{ livro_titulo }}</span>
 			</div>
 			{% endfor %}
 		</div>
 		{% endfor %}
 	</div>
+	<form id="form_enderecar" action="{% url 'bibm:enderecar_livro' %}" method="post" class="display: none;">
+		{% csrf_token %}
+		<input type="hidden" name="livro_id_form" id="livro_id_form">
+		<input type="hidden" name="endereco_id_form" id="endereco_id_form">
+	</form>
 {% endblock %}

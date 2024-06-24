@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
-from .forms import AnotacaoForm, LivroForm, ClassificacaoForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
-from django.http import HttpResponseRedirect, Http404
+from bibm.models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
+from bibm.forms import AnotacaoForm, LivroForm, ClassificacaoForm
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 import locale
@@ -10,7 +10,6 @@ from django.db.models import Max
 from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
-from django.core.exceptions import ValidationError
 
 
 def context_home():
@@ -93,9 +92,16 @@ def acrescentar_plan(livro_id):
     livro.save()
 
 def zerar_session(request):
-    info_livro = request.session.get("info_livro")
-    if info_livro:
+    if request.session.get("info_livro"):
         del(request.session["info_livro"])
+    if request.session.get("autor_salvo"):
+        del(request.session["autor_salvo"])
+    if request.session.get("regiao_salva"):
+        del(request.session["regiao_salva"])
+    if request.session.get("genero_salvo"):
+        del(request.session["genero_salvo"])
+    if request.session.get("endereco_salvo"):
+        del(request.session["endereco_salvo"])
     return request
 
 # Create your views here.
@@ -473,260 +479,6 @@ def remover_do_planejamento(request):
     return HttpResponseRedirect(
         reverse("bibm:editar_planejamento", kwargs={"filtro":filtro})
     )
-
-def mapa_da_bibli(request):
-
-    search_term = request.GET.get("q","")
-    if search_term != "":
-        enderecos = Endereco.objects.filter(Q(
-            Q(codigo__icontains=search_term) |
-            Q(descricao__icontains=search_term)
-        ))
-    else:
-        enderecos = Endereco.objects.all()
-    
-    context = {"enderecos":{}}
-    if len(enderecos) > 0:
-        for endereco in enderecos:
-            livro_lista = []
-            livros_endereco = Livro.objects.filter(endereco__codigo = endereco.codigo)
-            for livro in livros_endereco:
-                livro_lista.append(livro.titulo)
-            context["enderecos"][endereco.codigo] = (endereco.descricao,livro_lista)
-
-    if search_term == "" or search_term.lower() in "sem endereço":
-        livro_lista = []
-        livros_endereco = Livro.objects.filter(endereco = None)
-        for livro in livros_endereco:
-            livro_lista.append(livro.titulo)
-        context["enderecos"]["Sem endereço"] = (None,livro_lista)
-
-    if not context["enderecos"]:
-        messages.info(request,"Sua busca retornou sem resultados.")
-        context = {"enderecos":{}}
-
-    return render(request, "bibm/mapaDaBibli.html",context)
-
-def add_um_livro(request):
-    if request.method == "POST":
-        form = LivroForm(request.POST)
-        if form.is_valid():
-            livro_salvo = form.save()
-            if livro_salvo:
-                messages.success(request,"Livro salvo com sucesso.")
-        else:
-            for er in form.errors.items():
-                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
-            request.session["info_livro"] = request.POST
-            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
-    
-    info_livro = request.session.get("info_livro")
-    if info_livro:
-        del(request.session["info_livro"])
-
-    autor_salvo = request.session.get("autor_salvo")
-    if autor_salvo:
-        del(request.session["autor_salvo"])
-    
-    regiao_salva = request.session.get("regiao_salva")
-    if regiao_salva:
-        del(request.session["regiao_salva"])
-
-    genero_salvo = request.session.get("genero_salvo")
-    if genero_salvo:
-        del(request.session["genero_salvo"])
-    
-    endereco_salvo = request.session.get("endereco_salvo")
-    if endereco_salvo:
-        del(request.session["endereco_salvo"])
-    
-    form = LivroForm(initial=info_livro)
-    context = context_add_um_livro()
-
-    if form:
-        context.update({
-            "form":form, 
-            "add_um_livro":True,
-            "autor_salvo": autor_salvo,
-            "regiao_salva": regiao_salva,
-            "genero_salvo": genero_salvo,
-            "endereco_salvo": endereco_salvo,
-        })
-        
-    return render(request, "bibm/pages/addUmLivro.html", context)
-
-def editar_um_livro(request, livro_id):
-
-    livro = Livro.objects.filter(id=livro_id).first()
-
-    form = LivroForm(instance=livro)
-    if form.instance.data_compra:
-        form.initial["data_compra"] = form.initial["data_compra"].strftime("%Y-%m-%d")
-    if form.instance.data_leitura:
-        form.initial["data_leitura"] = form.initial["data_leitura"].strftime("%Y-%m-%d")
-
-    context = {
-        "form": form,
-        "livro_id":livro_id,
-        "add_um_livro": True,
-        "editar_um_livro":True,
-    }
-
-    context.update({
-        **context_add_um_livro()
-    })
-    return render(request,"bibm/pages/addUmLivro.html", context)
-
-def editar_um_livro_save(request):
-    
-    livro_id = request.POST.get("livro_id")
-
-    livro = Livro.objects.filter(id=livro_id).first()
-    livro_lido = livro.lido
-
-    form = LivroForm(instance=livro, data=request.POST)
-    if form.is_valid():
-        livro_form = form.save(commit=False)
-        if livro_lido and not livro_form.lido:
-            livro_form.classificacao = None
-            livro_form.data_leitura = None
-            livro_form.leria_de_novo = False
-        livro_form.save()
-        messages.success(request, "Livro alterado com sucesso.")
-    
-    return HttpResponseRedirect(reverse("bibm:home"))
-
-def deletar_um_livro(request):
-    if request.method == "POST":
-        filtro = request.POST.get("filtro")
-        livro_id = request.POST.get("livro_id")
-        if livro_id:
-            livro = Livro.objects.filter(id=livro_id).first()
-            if livro:
-                livro.delete()
-
-        if livro.id == None and livro != None:
-            messages.info(request, "Livro deletado com sucesso.")
-        else:
-            raise ValidationError("Houve um erro durante a deleção.")
-    else:
-        messages.error(request, "O livro não foi deletado")
-    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
-
-def add_um_autor_livro(request):
-    if request.method == "POST":
-        request.session["info_livro"] = request.POST
-        
-        form = AutorForm()
-
-        context = {
-            "form":form,
-            **context_add_um_livro(autores=False,generos=False,enderecos=False),
-            "add_um_autor_livro":True,
-        }
-
-        return render(request, "bibm/pages/addUmAutor.html", context)
-    else:
-        return Http404
-
-def add_um_autor_livro_save(request):
-    if request.method == "POST":
-        
-        form = AutorForm(data = request.POST)
-
-        if form.is_valid():
-            autor_salvo = form.save()
-            request.session["autor_salvo"] = autor_salvo.id
-            request.session["regiao_salva"] = autor_salvo.regiao.id
-            messages.success(request,"Autor salvo.")
-        
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
-    else:
-        return Http404
-    
-def add_uma_regiao_livro(request):
-    if request.method == "POST":
-        request.session["info_livro"] = request.POST
-        
-        form = RegiaoForm()
-
-        context = {
-            "form":form,
-        }
-
-        return render(request, "bibm/pages/addUmaRegiao.html", context)
-    else:
-        return Http404
-
-def add_uma_regiao_livro_save(request):
-    if request.method == "POST":
-        
-        form = RegiaoForm(data = request.POST)
-
-        if form.is_valid():
-            regiao_salva = form.save()
-            request.session["regiao_salva"] = regiao_salva.id
-            messages.success(request,"Região salva.")
-        
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
-    else:
-        return Http404
-    
-def add_um_genero_livro(request):
-    if request.method == "POST":
-        request.session["info_livro"] = request.POST
-        
-        form = GeneroForm()
-
-        context = {
-            "form":form,
-        }
-
-        return render(request, "bibm/pages/addUmGenero.html", context)
-    else:
-        return Http404
-
-def add_um_genero_livro_save(request):
-    if request.method == "POST":
-        
-        form = GeneroForm(data = request.POST)
-
-        if form.is_valid():
-            genero_salvo = form.save()
-            request.session["genero_salvo"] = genero_salvo.id
-            messages.success(request,"Gênero salvo.")
-        
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
-    else:
-        return Http404
-    
-def add_um_endereco_livro(request):
-    if request.method == "POST":
-        request.session["info_livro"] = request.POST
-        
-        form = EnderecoForm()
-
-        context = {
-            "form":form,
-        }
-
-        return render(request, "bibm/pages/addUmEndereco.html", context)
-    else:
-        return Http404
-
-def add_um_endereco_livro_save(request):
-    if request.method == "POST":
-        
-        form = EnderecoForm(data = request.POST)
-
-        if form.is_valid():
-            endereco_salvo = form.save()
-            request.session["endereco_salvo"] = endereco_salvo.id
-            messages.success(request,"Endereço salvo.")
-        
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
-    else:
-        return Http404
 
 def acrescentar_no_planejamento(request):
     filtro = request.POST.get("filtro")
