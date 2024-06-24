@@ -21,14 +21,14 @@ def mapa_da_bibli(request):
             livros_endereco = Livro.objects.filter(endereco__codigo = endereco.codigo)
             for livro in livros_endereco:
                 livro_lista.append((livro.id, livro.titulo))
-            enderecos_dict[endereco.codigo] = (endereco.descricao,livro_lista)
+            enderecos_dict[endereco.codigo] = ((endereco.id, endereco.descricao),livro_lista)
 
     if search_term == "" or search_term.lower() in "sem endereço":
         livro_lista = []
         livros_endereco = Livro.objects.filter(endereco = None)
         for livro in livros_endereco:
             livro_lista.append((livro.id, livro.titulo))
-        enderecos_dict["Sem endereço"] = (None,livro_lista)
+        enderecos_dict["Sem endereço"] = ((None ,None),livro_lista)
 
     if not enderecos_dict:
         messages.info(request,"Sua busca retornou sem resultados.")

@@ -15,16 +15,18 @@
 		<div class="endereco-box">
 			<div class="endereco-titulo-box">
 				<span class="endereco-titulo">{{ endereco }}</span>
+				<input type="hidden" name="endereco_id" id="endereco_id" value="{{tupla.0.0}}">
 			</div>
 			{% if tupla.0 %}
 			<div class="endereco-descricao-box">
-				<span class="endereco-descricao">{{ tupla.0 }}</span>
+				<span class="endereco-descricao">{{ tupla.0.1 }}</span>
 			</div>
 			{% endif %}
 			{% for livro_id, livro_titulo in tupla.1 %}
-			<div class="endereco-livros">
+			<div class="endereco-livros" draggable="true">
+				<input type="hidden" name="endereco_id" id="endereco_id" value="{{tupla.0.0}}">
 				<input type="hidden" name="livro_id" id="livro_id" value="{{livro_id}}">
-				<span class="endereco-livro-titulo btn-azul" draggable="true">{{ livro_titulo }}</span>
+				<span class="endereco-livro-titulo btn-azul">{{ livro_titulo }}</span>
 			</div>
 			{% endfor %}
 		</div>
