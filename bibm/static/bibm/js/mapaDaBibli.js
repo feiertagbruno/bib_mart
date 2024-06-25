@@ -1,7 +1,6 @@
 function adicionaEventos() {
   const livros_mapa = document.querySelectorAll(".endereco-livros")
   const enderecos_mapa = document.querySelectorAll(".endereco-box")
-  var endereco_id_mapa
 
   livros_mapa.forEach(livro_mapa => {
     livro_mapa.addEventListener("dragstart", eventoArrastar)
@@ -14,21 +13,32 @@ function adicionaEventos() {
 }
 
 function eventoArrastar(e) {
-  const livro_id_mapa = e.target.querySelector("#livro_id").value
-  e.dataTransfer.setData("text/plain", livro_id_mapa)
-  e.dataTransfer.effectAllowed = "move";
+  if (e.target.classList[0] === "endereco-livros") {
+    const livro_id_mapa = e.target.querySelector("#livro_id").value
+    e.dataTransfer.setData("text/plain", livro_id_mapa)
+    e.dataTransfer.effectAllowed = "move";
+  }
 }
 
 function eventoDragover(e) {
   e.preventDefault()
-  endereco_id_mapa = e.target.querySelector("#endereco_id").value
   e.dataTransfer.dropEffect = "move";
 }
 
 function eventoDrop(e) {
   e.preventDefault()
-  livro_id = e.dataTransfer.getData("text/plain")
-  console.log(endereco_id_mapa)
+  if (
+    e.target.classList[0] === "endereco-livro-titulo" ||
+    e.target.classList[0] === "endereco-descricao" ||
+    e.target.classList[0] === "endereco-titulo"
+  ) {
+    const livro_id = e.dataTransfer.getData("text/plain")
+    const endereco_id = e.target.parentElement.parentElement.querySelector("#endereco_id").value
+    const form_enderecar = document.querySelector("#form_enderecar")
+    form_enderecar.querySelector("#livro_id_form").value = livro_id
+    form_enderecar.querySelector("#endereco_id_form").value = endereco_id
+    form_enderecar.submit()
+  }
 }
 
 document.addEventListener("DOMContentLoaded", adicionaEventos)

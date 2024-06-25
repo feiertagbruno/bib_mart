@@ -24,7 +24,6 @@
 			{% endif %}
 			{% for livro_id, livro_titulo in tupla.1 %}
 			<div class="endereco-livros" draggable="true">
-				<input type="hidden" name="endereco_id" id="endereco_id" value="{{tupla.0.0}}">
 				<input type="hidden" name="livro_id" id="livro_id" value="{{livro_id}}">
 				<span class="endereco-livro-titulo btn-azul">{{ livro_titulo }}</span>
 			</div>
