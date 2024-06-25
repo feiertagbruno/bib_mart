@@ -1,3 +1,7 @@
 no modo celular, o texto em baixo da aplicação, está cobrindo o conteúdo (estudar para aumentar o espaço embaixo)
 
 não deixar adicionar autores com o mesmo nome
+
+Habilitar conseguir clicar na tecla enter em cima dos botões de adicionar autores e os outros dentro do addUmLivro
+
+colocar o adicionar Região dentro do Adicionar Autor

@@ -1,7 +1,6 @@
 const box_se_lido = document.querySelector("#box-se-lido")
 const checkBox_lido = document.querySelector("#checkbox-lido")
 const btn_adicionar = document.querySelector("#btn_adicionar")
-const form = document.querySelector(".autor-box-form")
 const titulo_input = document.querySelector("#id_titulo")
 const tema_input = document.querySelector("#id_tema")
 const data_compra_input = document.querySelector("#data_compra")

@@ -43,14 +43,19 @@
                 <img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
               </span>
             </div>
-
             <select name="regioes" id="regioes-opcoes" class="autores-opcoes" size="5">
               {% for regiao_id, regiao_nome in regioes %}
               <option class="opc-autor" value="{{regiao_id}}">{{regiao_nome}}</option>
               {% endfor %}
             </select>
 
-          </div>
+            {% comment %} MENSAGEM REGIÃO {% endcomment %}
+            <span class="mensagem-vermelha" id="mensagem-regiao"></span>
+
+            {% comment %} BOTÃO ADICIONAR UMA REGIÃO {% endcomment %}
+            <button type="submit" id="add_uma_regiao_livro" class="btn-pequeno btn-azul invisivel">Adicionar uma Região</button>
+
+    </div>
 
         </div>
 
@@ -63,4 +68,8 @@
 
   </div>
 
+	{% if regiao_salva %}
+	<input type="hidden" name="regiao_salva" id="regiao_salva" value="{{regiao_salva}}">
+	{% endif %}
+  
 {% endblock content %}

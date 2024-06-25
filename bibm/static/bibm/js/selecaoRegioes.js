@@ -7,6 +7,7 @@ const regiao_id = document.querySelector("#regiao_id_field");
 const btn_add_uma_regiao_livro = document.querySelector("#add_uma_regiao_livro")
 const regiao_salva = document.querySelector("#regiao_salva")
 const mensagem_regiao = document.querySelector("#mensagem-regiao")
+const form = document.querySelector(".autor-box-form")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 	if (regiao_salva) {
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				regiao_id.value = select_opc_reg.options[select_opc_reg.selectedIndex].value
 				select_opc_reg.style.display = "none"
 				btn_add_uma_regiao_livro.style.display = "none"
-				mensagem_genero.textContent = ""
+				mensagem_regiao.textContent = ""
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -132,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			regiao_id.value = e.target.value
 			select_opc_reg.style.display = "none"
 			btn_add_uma_regiao_livro.style.display = "none"
-			mensagem_genero.textContent = ""
+			mensagem_regiao.textContent = ""
 		}
 	})
 		
@@ -148,7 +149,11 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 
 	if (btn_add_uma_regiao_livro) {
 		btn_add_uma_regiao_livro.addEventListener("click", function(e) {
-			form.action = form.action + "adicionarumaregiao/"
+			if (form.action.slice(-18) === "/adicionarumlivro/") {
+				form.action = form.action + "adicionarumaregiao/"
+			} else if (form.action.slice(-23) === "/adicionarumautor/save/") {
+				form.action = form.action.substring(0, form.action.length - 22) + "adicionarumaregiao/"
+			}
 			form.setAttribute("novalidate", "novalidate")
 		})
 	}
