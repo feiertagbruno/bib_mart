@@ -102,6 +102,8 @@ def zerar_session(request):
         del(request.session["genero_salvo"])
     if request.session.get("endereco_salvo"):
         del(request.session["endereco_salvo"])
+    if request.session.get("caller"):
+        del(request.session["caller"])
     return request
 
 # Create your views here.

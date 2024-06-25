@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.shortcuts import render
 from .views_all import context_add_um_livro
 from django.core.exceptions import ValidationError
+import json
 
 def add_um_livro(request):
     if request.method == "POST":
@@ -151,6 +152,7 @@ def add_um_autor_livro_save(request):
     
 def add_uma_regiao_livro(request):
     if request.method == "POST":
+
         request.session["info_livro"] = request.POST
         
         form = RegiaoForm()
