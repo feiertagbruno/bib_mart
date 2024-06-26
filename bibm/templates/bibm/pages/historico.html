@@ -1,0 +1,22 @@
+{% extends "bibm/estru.html" %}
+
+{% block content %}
+
+  <span class="titulo-historico">Histórico</span>
+
+  <div class="historico-box">
+    {% for historico in historicos %}
+
+      <div class="historico-div">
+        <div class="titulo-corpo-padrao">{{historico.livro}}</div>
+        <div>{{historico.data_ini}}</div>
+        <div>{{historico.data_fim}}</div>
+        <div>{{historico.terminou}}</div>
+      </div>
+
+    {% empty %}
+      Sem resultados.
+    {% endfor %}
+  </div>
+
+{% endblock content %}

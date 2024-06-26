@@ -76,7 +76,7 @@ class Livro(models.Model):
     planejamento = models.PositiveIntegerField(unique=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.id) + " - " + str(self.titulo)
+        return str(self.titulo)
     
 class Historico(models.Model):
     # Livro, Data Inicio, Data Fim, Terminou

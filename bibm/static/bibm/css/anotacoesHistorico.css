@@ -1,0 +1,14 @@
+.titulo-historico {
+  display: block;
+  text-align: center;
+  padding-bottom: 3rem;
+	font-size: calc(2rem + 1.2vw);
+}
+
+.historico-box {
+  text-align: center;
+}
+
+.historico-div {
+  padding: 2rem;
+}

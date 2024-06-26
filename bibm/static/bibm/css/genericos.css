@@ -60,4 +60,7 @@
 	display: flex;
 	justify-content: center;
 }
-/* FIM GENERICOS */
+
+.titulo-corpo-padrao {
+	font-size: calc(1.5rem + 1.2vw);
+}

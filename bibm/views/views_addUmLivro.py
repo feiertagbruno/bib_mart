@@ -119,25 +119,22 @@ def deletar_um_livro(request):
     return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
 
 def add_um_autor_livro(request):
-    if request.method == "POST":
-        request.session["info_livro"] = request.POST
-        
-        regiao_salva = request.session.get("regiao_salva")
-        if regiao_salva:
-            del(request.session["regiao_salva"])
+    request.session["info_livro"] = request.POST
+    
+    regiao_salva = request.session.get("regiao_salva")
+    if regiao_salva:
+        del(request.session["regiao_salva"])
 
-        form = AutorForm()
+    form = AutorForm()
 
-        context = {
-            "form":form,
-            **context_add_um_livro(autores=False,generos=False,enderecos=False),
-            "add_um_autor_livro":True,
-            "regiao_salva": regiao_salva,
-        }
+    context = {
+        "form":form,
+        **context_add_um_livro(autores=False,generos=False,enderecos=False),
+        "add_um_autor_livro":True,
+        "regiao_salva": regiao_salva,
+    }
 
-        return render(request, "bibm/pages/addUmAutor.html", context)
-    else:
-        return Http404
+    return render(request, "bibm/pages/addUmAutor.html", context)
 
 def add_um_autor_livro_save(request):
     if request.method == "POST":
