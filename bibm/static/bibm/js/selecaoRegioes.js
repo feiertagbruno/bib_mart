@@ -8,6 +8,7 @@ const btn_add_uma_regiao_livro = document.querySelector("#add_uma_regiao_livro")
 const regiao_salva = document.querySelector("#regiao_salva")
 const mensagem_regiao = document.querySelector("#mensagem-regiao")
 const form = document.querySelector(".autor-box-form")
+const caller_regiao = document.querySelector("#caller_regiao")
 
 document.addEventListener("DOMContentLoaded", function(dom) {
 	if (regiao_salva) {
@@ -152,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			if (form.action.slice(-18) === "/adicionarumlivro/") {
 				form.action = form.action + "adicionarumaregiao/"
 			} else if (form.action.slice(-23) === "/adicionarumautor/save/") {
+				caller_regiao.value = "add_um_autor"
 				form.action = form.action.substring(0, form.action.length - 22) + "adicionarumaregiao/"
 			}
 			form.setAttribute("novalidate", "novalidate")

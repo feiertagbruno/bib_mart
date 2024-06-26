@@ -9,7 +9,7 @@ def validacao_endereco(regiao):
 
 # Create your models here.
 class Regiao(models.Model):
-    regiao = models.CharField(max_length=65, unique=True)
+    regiao = models.CharField(max_length=65, unique=True, verbose_name="região")
     comentario = models.TextField(blank=True, null=True)
 
     class Meta:

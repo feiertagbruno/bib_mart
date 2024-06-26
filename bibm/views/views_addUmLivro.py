@@ -94,6 +94,10 @@ def editar_um_livro_save(request):
             livro_form.leria_de_novo = False
         livro_form.save()
         messages.success(request, "Livro alterado com sucesso.")
+    else:
+        for er in form.errors.items():
+            messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+
     
     return HttpResponseRedirect(reverse("bibm:home"))
 
@@ -145,6 +149,9 @@ def add_um_autor_livro_save(request):
             request.session["autor_salvo"] = autor_salvo.id
             request.session["regiao_salva"] = autor_salvo.regiao.id
             messages.success(request,"Autor salvo.")
+        else:
+            for er in form.errors.items():
+                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
@@ -154,6 +161,7 @@ def add_uma_regiao_livro(request):
     if request.method == "POST":
 
         request.session["info_livro"] = request.POST
+        request.session["caller_regiao"] = request.POST.get("caller_regiao")
         
         form = RegiaoForm()
 
@@ -168,14 +176,25 @@ def add_uma_regiao_livro(request):
 def add_uma_regiao_livro_save(request):
     if request.method == "POST":
         
+        caller_regiao = request.session.get("caller_regiao", None)
+        if caller_regiao:
+            del(request.session["caller_regiao"])
+
         form = RegiaoForm(data = request.POST)
 
         if form.is_valid():
             regiao_salva = form.save()
             request.session["regiao_salva"] = regiao_salva.id
             messages.success(request,"Região salva.")
+        else:
+            for er in form.errors.items():
+                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+
         
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+        if caller_regiao == "add_um_autor":
+            return HttpResponseRedirect(reverse("bibm:add_um_autor_livro"))
+        else:
+            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
         return Http404
     
@@ -202,6 +221,9 @@ def add_um_genero_livro_save(request):
             genero_salvo = form.save()
             request.session["genero_salvo"] = genero_salvo.id
             messages.success(request,"Gênero salvo.")
+        else:
+            for er in form.errors.items():
+                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
@@ -230,6 +252,9 @@ def add_um_endereco_livro_save(request):
             endereco_salvo = form.save()
             request.session["endereco_salvo"] = endereco_salvo.id
             messages.success(request,"Endereço salvo.")
+        else:
+            for er in form.errors.items():
+                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
         
         return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:

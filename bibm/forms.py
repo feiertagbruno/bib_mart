@@ -235,7 +235,7 @@ class RegiaoForm(forms.ModelForm):
                     "placeholder": "Digite aqui a região a ser adicionada.",
                     "class": "autor-input",
                     "autocomplete":"off",
-                }
+                },
             ),
             "comentario":forms.Textarea(
                 attrs={
@@ -245,6 +245,11 @@ class RegiaoForm(forms.ModelForm):
                     "autocomplete": "off",
                 }
             ),
+        }
+        error_messages = {
+            "regiao": {
+                "unique": "Esta região já existe. A região não foi adicionada."
+            }
         }
 
 class GeneroForm(forms.ModelForm):
