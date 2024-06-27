@@ -84,6 +84,8 @@ class Historico(models.Model):
     data_ini = models.DateTimeField()
     data_fim = models.DateTimeField(blank=True,null=True)
     terminou = models.BooleanField(default=False)
+    notas = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),(6,"6"),(7,"7"),(8,"8"),(9,"9"),(10,"10")]
+    classificacao = models.IntegerField(choices=notas, blank=True, null=True)
     def __str__(self):
         return str(self.id) + " - " + str(self.livro.titulo)
 

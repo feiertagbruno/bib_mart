@@ -1,17 +1,51 @@
 {% extends "bibm/estru.html" %}
+{% load static %}
 
 {% block content %}
 
+  <div class="container-search-box-mapa espaco-top-bottom-4rem">
+    <form action="{% url 'bibm:historico' %}" class="search-form-mapa caixa-de-pesquisa">
+      <input type="search" class="search-input" name="q" value="{{ search_term }}" />
+      <button type="submit" class="search-button lupa">
+				<img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" />
+		</button>
+    </form>
+  </div>
+
   <span class="titulo-historico">Histórico</span>
+
+  <div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
 
   <div class="historico-box">
     {% for historico in historicos %}
 
       <div class="historico-div">
-        <div class="titulo-corpo-padrao">{{historico.livro}}</div>
-        <div>{{historico.data_ini}}</div>
-        <div>{{historico.data_fim}}</div>
-        <div>{{historico.terminou}}</div>
+        <div class="titulo-corpo-padrao">
+          {{historico.livro}}
+          <div class="linha-divisoria-box">
+            <div class="ldiv linha-divisoria-esquerda"></div>
+            <div class="ldiv linha-divisoria-meio"></div>
+            <div class="ldiv linha-divisoria-direita"></div>
+          </div>
+        </div>
+        {% if historico.data_fim %}
+          {% if historico.terminou %}
+            <div>Leitura concluída</div>
+            {% if historico.classificacao %}
+            <div>Classificação: {{historico.classificacao}}</div>
+            {% endif %}
+          {% else %}
+            Leitura não concluída
+          {% endif %}
+          <div>Data da devolução: {{historico.data_fim}}</div>
+        {% else %}
+          Lendo
+        {% endif %}
+        <div>Data de início: {{historico.data_ini}}</div>
       </div>
 
     {% empty %}

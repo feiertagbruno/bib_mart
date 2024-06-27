@@ -6,7 +6,12 @@ def minhas_anotacoes(request):
 
 def historico(request):
 
-  historicos = Historico.objects.all().order_by("-id")
+  search_term = request.GET.get("q","").strip()
+  
+  if search_term:
+    historicos = Historico.objects.filter(livro__titulo__icontains=search_term)
+  else:
+    historicos = Historico.objects.all().order_by("-id")
 
   context = {
     "historicos": historicos

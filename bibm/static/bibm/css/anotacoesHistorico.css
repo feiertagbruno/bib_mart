@@ -1,14 +1,51 @@
 .titulo-historico {
   display: block;
   text-align: center;
-  padding-bottom: 3rem;
-	font-size: calc(2rem + 1.2vw);
+	font-size: calc(2rem + 2vw);
 }
 
 .historico-box {
+  display: flex;
+  flex-flow: column;
   text-align: center;
+  place-items: center;
 }
 
 .historico-div {
+  display: flex;
+  flex-flow: column;
   padding: 2rem;
+  gap: 1rem;
+  width: fit-content;
+}
+
+.linha-divisoria-box {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  place-items: center;
+  justify-content: center;
+
+}
+
+.ldiv {
+  content: "";
+  display: flex;
+  background-color: gray;
+  height: 2px;
+}
+
+.linha-divisoria-esquerda {
+  width: 20%;
+	background: linear-gradient(to left,gray, rgba(128,128,128,0));
+}
+
+.linha-divisoria-meio {
+  background-color: gray;
+  width: 40%;
+}
+
+.linha-divisoria-direita {
+  width: 20%;
+	background: linear-gradient(to right,gray, rgba(128,128,128,0));
 }

@@ -292,6 +292,7 @@ def devolver_sim(request):
         if historico != None:
             historico.data_fim = timezone.localtime(timezone.now())
             historico.terminou = True
+            historico.classificacao = classificacao
             historico.save()
 
         historico = Historico.objects.filter(Q(livro=livro), Q(data_fim=None)).order_by("-id")

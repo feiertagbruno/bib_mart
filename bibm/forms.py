@@ -159,7 +159,8 @@ class ClassificacaoForm(forms.Form):
             (9,"9"),
             (10,"10"),
         ],
-        label="Classificação"
+        label="Classificação",
+        required=False
         )
     leria_de_novo = forms.BooleanField(
         label="Leria de novo?",
@@ -167,7 +168,8 @@ class ClassificacaoForm(forms.Form):
         widget=forms.CheckboxInput(attrs={
                 "class": "btn-leria-de-novo"
             }
-        )
+        ),
+        required=False
     )
 
 class AutorForm(forms.ModelForm):
