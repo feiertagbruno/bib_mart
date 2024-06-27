@@ -1,7 +1,12 @@
 {% extends "bibm/estru.html" %}
 
 {% block content %}
-
+  <div class="container-search-box">
+    <form action="{% url 'bibm:minhas_anotacoes' 'lidos' %}" class="search-form caixa-de-pesquisa">
+      <input type="search" class="search-input" name="q" value="{{ search_term }}" />
+      <button type="submit" class="search-button lupa"><img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" /></button>
+    </form>
+  </div>
   minhas anotações
 
 {% endblock content %}

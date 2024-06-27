@@ -36,7 +36,7 @@ urlpatterns = [
 	path("acrescentarnoplanejamentomeuslivros/", views.acrescentar_no_planejamento_meus_livros, name="acrescentar_no_planejamento_meus_livros"),
     path("mapadabibli/enderecar/", views.enderecar_livro, name="enderecar_livro"),
 	path("mapadabibli/", views.mapa_da_bibli, name="mapa_da_bibli"),
-    path("minhasanotacoes/", views.minhas_anotacoes, name="minhas_anotacoes"),
+    path("minhasanotacoes/<filtro>/", views.minhas_anotacoes, name="minhas_anotacoes"),
     path("historico/", views.historico, name="historico"),
 	path("testes/", views.chamar_html_teste, name="testes"),
 ]

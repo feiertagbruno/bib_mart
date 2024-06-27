@@ -1,11 +1,21 @@
 {% for letra in ordem_alfabetica_lista %}
 
   {% if caller == "meus_livros" %}
-  <a href="{% url 'bibm:meus_livros' letra %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+
+    {% with concat=filtro|add:letra %}
+      <a href="{% url 'bibm:meus_livros' concat %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+    {% endwith %}
+
   {% else  %}
-  <a href="{% url 'bibm:editar_planejamento' letra %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+
+    {% with concat=filtro|add:letra %}
+      <a href="{% url 'bibm:editar_planejamento' concat %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+    {% endwith %}
+
   {% endif %}
-    {{letra}}
-  </a>
+
+        {{letra}}
+        
+      </a>
 
 {% endfor %}

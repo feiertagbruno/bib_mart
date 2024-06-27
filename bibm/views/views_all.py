@@ -199,31 +199,41 @@ def meus_livros(request, filtro):
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
     if termo_busca == "":
-        if filtro == "todos":
+        if filtro[:5] == "todos":
             meus_livros = Livro.objects.all().order_by("titulo")
-        if filtro == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False)
-        elif filtro == "lidos":
-            meus_livros = Livro.objects.filter(lido=True)
-        elif filtro == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True)
-        elif len(filtro) == 1:
-            if filtro.lower() == "a":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-            elif filtro.lower() == "e":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-            elif filtro.lower() == "i":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-            elif filtro.lower() == "o":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-            elif filtro.lower() == "u":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-            elif filtro.lower() == "c":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[cCçÇ]")
+            filtro_letra = filtro[5:]
+            filtro = "todos"
+        if filtro[:8] == "naolidos":
+            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            filtro_letra = filtro[8:]
+            filtro = "naolidos"
+        elif filtro[:5] == "lidos":
+            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            filtro_letra = filtro[5:]
+            filtro = "lidos"
+        elif filtro[:16] == "lidoeleriadenovo":
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
+            filtro_letra = filtro[16:]
+            filtro = "lidoeleriadenovo"
+
+        if len(filtro_letra) == 1:
+            if filtro_letra.lower() == "a":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
+            elif filtro_letra.lower() == "e":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
+            elif filtro_letra.lower() == "i":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
+            elif filtro_letra.lower() == "o":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
+            elif filtro_letra.lower() == "u":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
+            elif filtro_letra.lower() == "c":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
             else:
-                meus_livros = Livro.objects.filter(titulo__istartswith=filtro)
-        elif filtro == "0-9...":
-            meus_livros = Livro.objects.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+                meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
+        elif filtro_letra == "0-9...":
+            meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+            
     else:
         meus_livros = Livro.objects.filter(Q(
         Q(titulo__icontains = termo_busca) |
@@ -349,31 +359,40 @@ def editar_planejamento(request, filtro):
     ultimo_plan = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
 
     if termo_busca == "":
-        if filtro == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False)
-        elif filtro == "todos":
-            meus_livros = Livro.objects.all()
-        elif filtro == "lidos":
-            meus_livros = Livro.objects.filter(lido=True)
-        elif filtro == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True)
-        elif len(filtro) == 1:
-            if filtro.lower() == "a":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-            elif filtro.lower() == "e":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-            elif filtro.lower() == "i":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-            elif filtro.lower() == "o":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-            elif filtro.lower() == "u":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-            elif filtro.lower() == "c":
-                meus_livros = Livro.objects.filter(titulo__regex=r"^[cCçÇ]")
+        if filtro[:5] == "todos":
+            meus_livros = Livro.objects.all().order_by("titulo")
+            filtro_letra = filtro[5:]
+            filtro = "todos"
+        if filtro[:8] == "naolidos":
+            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            filtro_letra = filtro[8:]
+            filtro = "naolidos"
+        elif filtro[:5] == "lidos":
+            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            filtro_letra = filtro[5:]
+            filtro = "lidos"
+        elif filtro[:16] == "lidoeleriadenovo":
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
+            filtro_letra = filtro[16:]
+            filtro = "lidoeleriadenovo"
+
+        if len(filtro_letra) == 1:
+            if filtro_letra.lower() == "a":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
+            elif filtro_letra.lower() == "e":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
+            elif filtro_letra.lower() == "i":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
+            elif filtro_letra.lower() == "o":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
+            elif filtro_letra.lower() == "u":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
+            elif filtro_letra.lower() == "c":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
             else:
-                meus_livros = Livro.objects.filter(titulo__istartswith=filtro)
-        elif filtro == "0-9...":
-            meus_livros = Livro.objects.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+                meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
+        elif filtro_letra == "0-9...":
+            meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
     else:
         meus_livros = Livro.objects.filter(Q(
             Q(
