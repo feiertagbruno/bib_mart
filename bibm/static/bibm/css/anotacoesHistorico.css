@@ -49,3 +49,21 @@
   width: 20%;
 	background: linear-gradient(to right,gray, rgba(128,128,128,0));
 }
+
+.anotacoes-livro-box {
+  padding: 4rem;
+}
+
+.anotacoes-individuais-box {
+  display: flex;
+  flex-flow: column;
+}
+
+.anotacao-individual {
+  padding: 1rem;
+}
+
+.anotacao-data {
+	font-size: calc(1.2rem + 0.4vw);
+  padding-bottom: .5rem;
+}

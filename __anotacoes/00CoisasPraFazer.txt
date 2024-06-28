@@ -3,5 +3,11 @@ no modo celular, o texto em baixo da aplicação, está cobrindo o conteúdo (es
 não deixar adicionar autores com o mesmo nome
 
 Habilitar conseguir clicar na tecla enter em cima dos botões de adicionar autores e os outros dentro do addUmLivro
+	isso é dentro dos javascripts de cada um, acho que é no evento keydown do document
 
-colocar o adicionar Região dentro do Adicionar Autor
+colocar um limpar filtros dentro do filtros
+
+apagar a opção de clicar para as letras do filtro, só tirar a tag <a> da letra
+
+colocar em baixo do titulo do livro em minhas anotações um botão "editar anotações" que encaminha para a
+url de anotação por id do livro. e também colocar nela um botão para voltar para o "Minhas anotações".

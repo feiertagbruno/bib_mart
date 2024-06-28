@@ -253,6 +253,7 @@ def meus_livros(request, filtro):
         "filtros": filtros,
         "classe_btn": classe_btn,
         "ordem_alfabetica_lista": ordem_alfabetica_lista,
+        "filtro_letra": filtro_letra,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -418,6 +419,7 @@ def editar_planejamento(request, filtro):
         "caller":"editar_planejamento",
         "classe_btn": classe_btn,
         "ordem_alfabetica_lista": ordem_alfabetica_lista,
+        "filtro_letra": filtro_letra,
     }
     return render(request, "bibm/pages/editarPlanejamento.html", context)
 

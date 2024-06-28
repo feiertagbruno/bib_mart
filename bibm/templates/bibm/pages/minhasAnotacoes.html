@@ -1,4 +1,5 @@
 {% extends "bibm/estru.html" %}
+{% load static %}
 
 {% block content %}
   <div class="container-search-box">
@@ -7,6 +8,28 @@
       <button type="submit" class="search-button lupa"><img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" /></button>
     </form>
   </div>
-  minhas anotações
+
+  {% include "bibm/partials/botoesFiltro.html" %}
+
+  {% for anot_livro, anotacoes in anotacoes_livros %}
+    
+    <div class="anotacoes-livro-box">
+      <div class="titulo-corpo-padrao">{{anot_livro.titulo}}</div>
+
+      <div class="anotacoes-individuais-box">
+        {% for anotacao in anotacoes %}
+          <div class="anotacao-individual">
+            <div class="anotacao-data">{{anotacao.data_inclusao}}</div>
+            <div class="anotacao-anotacao">{{anotacao.anotacao}}</div>
+          </div>
+        {% empty %}
+          Sem anotações.
+        {% endfor %}
+      </div>
+    </div>
+  
+  {% empty %}
+    Sem resultados
+  {% endfor %}
 
 {% endblock content %}

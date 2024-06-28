@@ -137,3 +137,11 @@
 	width: calc(75%);
 	height: inherit;
 }
+
+.cor-azul {
+	color: rgba(5, 96, 170, 0.7);
+}
+
+.cor-vermelho {
+	color: brown;
+}
