@@ -59,6 +59,8 @@ def add_um_livro(request):
 def editar_um_livro(request, livro_id):
 
     livro = Livro.objects.filter(id=livro_id).first()
+    caller = request.GET.get("caller")
+    filtro = request.GET.get("filtro")
 
     form = LivroForm(instance=livro)
     if form.instance.data_compra:
@@ -71,6 +73,8 @@ def editar_um_livro(request, livro_id):
         "livro_id":livro_id,
         "add_um_livro": True,
         "editar_um_livro":True,
+        "caller":caller,
+        "filtro":filtro,
     }
 
     context.update({
@@ -81,6 +85,8 @@ def editar_um_livro(request, livro_id):
 def editar_um_livro_save(request):
     
     livro_id = request.POST.get("livro_id")
+    caller = request.POST.get("caller")
+    filtro = request.POST.get("filtro")
 
     livro = Livro.objects.filter(id=livro_id).first()
     livro_lido = livro.lido
@@ -98,8 +104,10 @@ def editar_um_livro_save(request):
         for er in form.errors.items():
             messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
 
-    
-    return HttpResponseRedirect(reverse("bibm:home"))
+    if caller == "meus_livros":
+        return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro": filtro}))
+    elif caller == "editar_planejamento":
+        return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro": filtro}))
 
 def deletar_um_livro(request):
     if request.method == "POST":
@@ -139,6 +147,7 @@ def add_um_autor_livro(request):
 def add_um_autor_livro_save(request):
     if request.method == "POST":
         
+        caller = request.POST.get("caller", None)
         form = AutorForm(data = request.POST)
 
         if form.is_valid():
@@ -229,11 +238,13 @@ def add_um_genero_livro_save(request):
 def add_um_endereco_livro(request):
     if request.method == "POST":
         request.session["info_livro"] = request.POST
+        caller = request.POST.get("caller", None)
         
         form = EnderecoForm()
 
         context = {
             "form":form,
+            "caller":caller,
         }
 
         return render(request, "bibm/pages/addUmEndereco.html", context)
@@ -243,6 +254,7 @@ def add_um_endereco_livro(request):
 def add_um_endereco_livro_save(request):
     if request.method == "POST":
         
+        caller= request.POST.get("caller", None)
         form = EnderecoForm(data = request.POST)
 
         if form.is_valid():
@@ -253,6 +265,9 @@ def add_um_endereco_livro_save(request):
             for er in form.errors.items():
                 messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
         
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+        if caller == "mapa_da_bibli":
+            return HttpResponseRedirect(reverse("bibm:mapa_da_bibli"))
+        else:
+            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
         return Http404

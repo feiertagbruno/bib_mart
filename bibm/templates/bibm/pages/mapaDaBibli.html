@@ -7,19 +7,76 @@
       <input type="search" class="search-input" name="q" value="{{ search_term }}" />
       <button type="submit" class="search-button lupa">
 				<img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" />
-		</button>
+			</button>
     </form>
   </div>
+	<div class="titulo-corpo-padrao texto-centralizado">Mapa da Bibli</div>
+
+	<div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
+
+	<form action="{% url "bibm:add_um_endereco_livro" %}" method="post" class="texto-centralizado">
+		{% csrf_token %}
+		{% with caller="mapa_da_bibli" %}
+		<input type="hidden" name="caller" value={{caller}}>
+		{% endwith %}
+		<button type="submit" class="btn-pequeno btn-verde">Adicionar um endereço</button>
+	</form>
+
 	<div class="container-mapa-box">
 		{% for endereco, tupla in enderecos.items %}
 		<div class="endereco-box">
+
+			<div class="flex-flow-row espaco-top-2rem">
 			<div class="endereco-titulo-box">
 				<span class="endereco-titulo">{{ endereco }}</span>
 				<input type="hidden" name="endereco_id" id="endereco_id" value="{{tupla.0.0}}">
+
+				{% if tupla.0.0 %}
+				{% comment %} BOTÃO EDITAR {% endcomment %}
+					<form method="GET" action="{% url 'bibm:editar_endereco' tupla.0.0 %}">
+						<input type="hidden" name="caller" value="{{caller}}">
+						<button type="submit">
+							<img 
+								src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+								alt="Editar este livro"
+								title="Editar este livro"
+								class="btn-editar"
+							>
+						</button>
+					</form>
+
+					{% comment %} BOTÃO DELETAR {% endcomment %}
+					<form method="POST" action="{% url 'bibm:deletar_endereco' %}"
+						onclick="return confirm('Você confirma a exclusão deste endereço?')">
+						{% csrf_token %}
+						<input type="hidden" name="endereco_id" value="{{tupla.0.0}}">
+						<button type="submit">
+							<img 
+							src="{% static 'bibm/img/trash-solid.svg' %}" 
+							alt="Deletar este livro"
+							title="Deletar este livro"
+							class="btn-excluir"
+							>
+						</button>
+					</form>
+					{% endif %}
+				</div>
+				
 			</div>
+
 			{% if tupla.0 %}
 			<div class="endereco-descricao-box">
-				<span class="endereco-descricao">{{ tupla.0.1 }}</span>
+				<span class="endereco-descricao">
+					{% if tupla.0.1 is None %}
+					-
+					{% else %}
+						{{ tupla.0.1 }}
+					{% endif %}
+				</span>
 			</div>
 			{% endif %}
 			{% for livro_id, livro_titulo in tupla.1 %}

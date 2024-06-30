@@ -10,6 +10,10 @@
 			<form action="{% url "bibm:add_um_livro" %}" method="post" class="autor-box-form">
 			{% endif %}
 			{% csrf_token %}
+			{% if filtro %}
+			<input type="hidden" name="filtro" value ="{{filtro}}">
+			{% endif %}
+			<input type="hidden" name="caller" value="{{caller}}">
 			<input type="hidden" name="livro_id" value="{{livro_id}}">
 			{{form.planejamento}}
 			

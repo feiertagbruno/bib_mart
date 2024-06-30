@@ -84,14 +84,24 @@
 
     <span  class="linha-livro-info">Data de Compra: {{livro.data_compra}}</span>
 
+    {% comment %} BOTÃO EDITAR {% endcomment %}
     <div class="flex-flow-row espaco-top-2rem">
-      <a class="btn-editar" method="GET" href="{% url 'bibm:editar_um_livro' livro.id %}">
-        <img 
-          src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
-          alt="Editar este livro"
-          title="Editar este livro"
-        >
-      </a>
+      <form method="GET" action="{% url 'bibm:editar_um_livro' livro.id %}">
+        <input type="hidden" name="caller" value="{{caller}}">
+        {% if filtro %}
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        {% endif %}
+        <button type="submit">
+          <img 
+            src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+            alt="Editar este livro"
+            title="Editar este livro"
+            class="btn-editar"
+          >
+        </button>
+      </form>
+
+      {% comment %} BOTÃO DELETAR {% endcomment %}
       <form method="POST" action="{% url 'bibm:deletar_um_livro' %}"
         onclick="return confirm('Você confirma a exclusão deste livro?')">
         {% csrf_token %}

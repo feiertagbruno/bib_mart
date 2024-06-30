@@ -14,7 +14,7 @@ class AnotacaoForm(forms.ModelForm):
         widgets = {
             "anotacao": forms.Textarea(
                 attrs={
-                    "class": "anotacao-field"
+                    "class": "caixa-texto-comentario anotacao-field"
                 }
             )
         }

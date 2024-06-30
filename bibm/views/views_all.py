@@ -244,7 +244,7 @@ def meus_livros(request, filtro):
         Q(endereco__codigo__icontains = termo_busca) |
         Q(regiao__regiao__icontains = termo_busca)
         )).order_by("titulo")
-        filtro = ""
+        filtro = filtro_letra = ""
 
     context = {
         "meus_livros": meus_livros,
@@ -407,7 +407,7 @@ def editar_planejamento(request, filtro):
                 Q(regiao__regiao__icontains = termo_busca)
             )
         ))
-        filtro = ""
+        filtro = filtro_letra = ""
 
     context = {
         "livros_plan": livros_plan,

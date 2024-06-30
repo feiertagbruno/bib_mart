@@ -50,6 +50,10 @@
 	background: linear-gradient(to right,gray, rgba(128,128,128,0));
 }
 
+.titulo-livro-anotacoes {
+	font-size: calc(1.8rem + 0.8vw);
+}
+
 .anotacoes-livro-box {
   padding: 4rem;
 }

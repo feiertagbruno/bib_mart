@@ -53,6 +53,12 @@ class Autor(models.Model):
 
     class Meta:
         verbose_name_plural = "autores"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["prim_nome","ult_nome"],
+                name="autor_unique"
+            )
+        ]
     
     def __str__(self):
         return str(self.id) + " - " + str(self.prim_nome) + " " + str(self.ult_nome)

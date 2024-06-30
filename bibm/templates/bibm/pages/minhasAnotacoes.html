@@ -14,7 +14,11 @@
   {% for anot_livro, anotacoes in anotacoes_livros %}
     
     <div class="anotacoes-livro-box">
-      <div class="titulo-corpo-padrao">{{anot_livro.titulo}}</div>
+      <div class="titulo-livro-anotacoes">{{anot_livro.titulo}}</div>
+
+      <form action="{% url "bibm:add_anotacao" anot_livro.id %}" method="get">
+        <button type="submit" class="btn-pequeno btn-verde">Editar anotações</button>
+      </form>
 
       <div class="anotacoes-individuais-box">
         {% for anotacao in anotacoes %}

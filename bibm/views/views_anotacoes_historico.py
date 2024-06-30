@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from bibm.models import Livro, Anotacao, Historico
-from django.db.models import Q
+from django.db.models import Q, Max
 
 def minhas_anotacoes(request, filtro):
 
@@ -8,26 +8,34 @@ def minhas_anotacoes(request, filtro):
     ordem_alfabetica_lista = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
                               "q","r","s","t","u","v","w","x","y","z","0-9..."]
     filtros = {
+        "lidos": "Lidos", 
         "todos": "Todos", 
         "naolidos": "Não lidos", 
-        "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().order_by("titulo")
+            meus_livros = Livro.objects.all().annotate(
+                ultima_anotacao=Max("anotacao__data_inclusao")
+            ).order_by("-ultima_anotacao")
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=False).annotate(
+                ultima_anotacao=Max("anotacao__data_inclusao")
+            ).order_by("-ultima_anotacao")
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True).annotate(
+                ultima_anotacao=Max("anotacao__data_inclusao")
+            ).order_by("-ultima_anotacao")
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).annotate(
+                ultima_anotacao=Max("anotacao__data_inclusao")
+            ).order_by("-ultima_anotacao")
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
 
@@ -61,7 +69,7 @@ def minhas_anotacoes(request, filtro):
                 Q(regiao__regiao__icontains = termo_busca)
             )
         ))
-        filtro = ""
+        filtro = filtro_letra = ""
 
     anotacoes = []
     for livro in meus_livros:
