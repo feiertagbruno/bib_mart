@@ -10,16 +10,68 @@ def mapa_da_bibli(request):
 
     search_term = request.GET.get("q","")
     if search_term != "":
-        enderecos = Endereco.objects.filter(Q(
-            Q(codigo__icontains=search_term) |
-            Q(descricao__icontains=search_term) |
-            Q(
-                codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+        guia = request.session.get("guia",0)
+        if guia == 0:
+            try:
+                enderecos = Endereco.objects.filter(Q(
+                    Q(codigo__icontains=search_term) |
+                    Q(descricao__icontains=search_term) |
+                    Q(
+                        codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+                    )
+                ))
+            except AttributeError:
+                enderecos = Endereco.objects.none()
+
+            if enderecos.exists():
+                enderecos_list = list(enderecos.values_list("id", flat=True))
+                enderecos_string = ""
+                
+                for end in enderecos_list:
+                    if not enderecos_string:
+                        enderecos_string = str(end)
+                    else:
+                        enderecos_string += "|" + str(end)
+                request.session["enderecos"] = enderecos_string
+                guia += 1
+                request.session["guia"] = guia
+
+            if request.session.get("sem_endereco"):
+                search_term = "sem endereço"
+                del(request.session["sem_endereco"])
+                if request.session.get("guia"):
+                    del(request.session["guia"])
+                if request.session.get("enderecos"):
+                    del(request.session["enderecos"])
+                
+        elif guia == 1:
+            enderecos_string = request.session["enderecos"]
+            enderecos_list = enderecos_string.split("|")
+            try:
+                enderecos = Endereco.objects.filter(Q(
+                    Q(codigo__icontains=search_term) |
+                    Q(descricao__icontains=search_term) |
+                    Q(
+                        codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+                    )
+                ))
+            except AttributeError:
+                enderecos = Endereco.objects.none()
+            if enderecos.exists():
+                del(request.session["guia"])
+                del(request.session["enderecos"])
+            enderecos = enderecos.union(
+                Endereco.objects.filter(id__in=enderecos_list)
             )
-        ))
         
     else:
         enderecos = Endereco.objects.all()
+        if request.session.get("guia", None):
+            del(request.session["guia"])
+        if request.session.get("enderecos", None):
+            del(request.session["enderecos"])
+        if request.session.get("sem_endereco", None):
+            del(request.session["sem_endereco"])
     
     enderecos_dict = {}
     if enderecos.exists():
@@ -36,6 +88,10 @@ def mapa_da_bibli(request):
         for livro in livros_endereco:
             livro_lista.append((livro.id, livro.titulo))
         enderecos_dict["Sem endereço"] = ((None ,None),livro_lista)
+        # fazer isso para tratar a pesquisa de endereço que não retorna os sem endereço
+        if search_term.lower() in "sem endereço" and search_term != "":
+            if guia == 0:
+                request.session["sem_endereco"] = True
 
     if not enderecos_dict:
         messages.info(request,"Sua busca retornou sem resultados.")
