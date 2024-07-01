@@ -12,8 +12,12 @@ def mapa_da_bibli(request):
     if search_term != "":
         enderecos = Endereco.objects.filter(Q(
             Q(codigo__icontains=search_term) |
-            Q(descricao__icontains=search_term)
+            Q(descricao__icontains=search_term) |
+            Q(
+                codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+            )
         ))
+        
     else:
         enderecos = Endereco.objects.all()
     
@@ -64,6 +68,7 @@ def editar_endereco(request, endereco_id):
     context = {
         "form": form,
         "caller": caller,
+        "endereco_id": endereco_id,
     }
 
     return render(request, "bibm/pages/addUmEndereco.html", context)

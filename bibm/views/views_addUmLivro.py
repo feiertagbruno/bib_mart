@@ -1,5 +1,5 @@
 from bibm.forms import LivroForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
-from bibm.models import Livro
+from bibm.models import Livro, Endereco
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
@@ -255,7 +255,14 @@ def add_um_endereco_livro_save(request):
     if request.method == "POST":
         
         caller= request.POST.get("caller", None)
-        form = EnderecoForm(data = request.POST)
+        endereco_id = request.POST.get("endereco_id")
+        if endereco_id:
+            form = EnderecoForm(
+                instance = Endereco.objects.get(id=endereco_id),
+                data = request.POST
+            )
+        else:
+            form = EnderecoForm(data = request.POST)
 
         if form.is_valid():
             endereco_salvo = form.save()
