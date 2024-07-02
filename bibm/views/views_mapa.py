@@ -5,19 +5,28 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from bibm.forms import EnderecoForm
+import re
 
 def mapa_da_bibli(request):
 
     search_term = request.GET.get("q","")
-    if search_term != "":
+    if search_term != "" or request.session.get("enderecos"):
         guia = request.session.get("guia",0)
         if guia == 0:
+
+            codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
+
+            if codigo_endereco_livro:
+                codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+            else:
+                codigo_endereco_livro = ""
+
             try:
                 enderecos = Endereco.objects.filter(Q(
                     Q(codigo__icontains=search_term) |
                     Q(descricao__icontains=search_term) |
                     Q(
-                        codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+                        codigo = codigo_endereco_livro
                     )
                 ))
             except AttributeError:
@@ -47,12 +56,20 @@ def mapa_da_bibli(request):
         elif guia == 1:
             enderecos_string = request.session["enderecos"]
             enderecos_list = enderecos_string.split("|")
+
+            codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
+            
+            if codigo_endereco_livro:
+                codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+            else:
+                codigo_endereco_livro = ""
+            
             try:
                 enderecos = Endereco.objects.filter(Q(
                     Q(codigo__icontains=search_term) |
                     Q(descricao__icontains=search_term) |
                     Q(
-                        codigo = Livro.objects.filter(titulo__icontains = search_term).first().endereco.codigo
+                        codigo = codigo_endereco_livro
                     )
                 ))
             except AttributeError:
@@ -114,6 +131,9 @@ def enderecar_livro(request):
         else:
             livro.endereco = None
         livro.save()
+
+
+
     return HttpResponseRedirect(reverse("bibm:mapa_da_bibli"))
 
 def editar_endereco(request, endereco_id):
