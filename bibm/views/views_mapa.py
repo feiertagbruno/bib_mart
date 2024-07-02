@@ -10,14 +10,20 @@ import re
 def mapa_da_bibli(request):
 
     search_term = request.GET.get("q","")
-    if search_term != "" or request.session.get("enderecos"):
+    if search_term != "":
         guia = request.session.get("guia",0)
         if guia == 0:
+            
+            if request.session.get("enderecos"):
+                del(request.session["enderecos"])
 
             codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
 
             if codigo_endereco_livro:
-                codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+                try:
+                    codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+                except AttributeError:
+                    codigo_endereco_livro = ""
             else:
                 codigo_endereco_livro = ""
 
@@ -50,8 +56,6 @@ def mapa_da_bibli(request):
                 del(request.session["sem_endereco"])
                 if request.session.get("guia"):
                     del(request.session["guia"])
-                if request.session.get("enderecos"):
-                    del(request.session["enderecos"])
                 
         elif guia == 1:
             enderecos_string = request.session["enderecos"]
@@ -60,7 +64,10 @@ def mapa_da_bibli(request):
             codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
             
             if codigo_endereco_livro:
-                codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+                try:
+                    codigo_endereco_livro = codigo_endereco_livro.endereco.codigo
+                except AttributeError:
+                    codigo_endereco_livro = ""
             else:
                 codigo_endereco_livro = ""
             
@@ -74,13 +81,41 @@ def mapa_da_bibli(request):
                 ))
             except AttributeError:
                 enderecos = Endereco.objects.none()
+
             if enderecos.exists():
                 del(request.session["guia"])
-                del(request.session["enderecos"])
+
             enderecos = enderecos.union(
                 Endereco.objects.filter(id__in=enderecos_list)
             )
+
+            if enderecos.exists():
+                enderecos_list = list(enderecos.values_list("id", flat=True))
+                enderecos_string = ""
+                
+                for end in enderecos_list:
+                    if not enderecos_string:
+                        enderecos_string = str(end)
+                    else:
+                        enderecos_string += "|" + str(end)
+
+                request.session["enderecos"] = enderecos_string
+
+    elif request.session.get("funcao_enderecar") and request.session.get("enderecos") != "|se":
+
+        enderecos_string = request.session["enderecos"]
+        l = len(enderecos_string) - 3
         
+        if enderecos_string.count("|se") == 0:
+            search_term = "escapa_sem_endereco"
+            enderecos_string = enderecos_string.replace("|se", "")
+            enderecos_list = enderecos_string.split("|")
+        else:
+            enderecos_list = enderecos_string[:l].split("|")
+
+        enderecos = Endereco.objects.filter(id__in=enderecos_list)
+        del(request.session["funcao_enderecar"])
+
     else:
         enderecos = Endereco.objects.all()
         if request.session.get("guia", None):
@@ -100,15 +135,25 @@ def mapa_da_bibli(request):
             enderecos_dict[endereco.codigo] = ((endereco.id, endereco.descricao),livro_lista)
 
     if search_term == "" or search_term.lower() in "sem endereço":
+
         livro_lista = []
         livros_endereco = Livro.objects.filter(endereco = None)
+
         for livro in livros_endereco:
             livro_lista.append((livro.id, livro.titulo))
+
         enderecos_dict["Sem endereço"] = ((None ,None),livro_lista)
+
         # fazer isso para tratar a pesquisa de endereço que não retorna os sem endereço
         if search_term.lower() in "sem endereço" and search_term != "":
             if guia == 0:
                 request.session["sem_endereco"] = True
+
+        if request.session.get("enderecos"):
+            if request.session["enderecos"][(len(request.session["enderecos"])-3):] != "|se":
+                request.session["enderecos"] = request.session["enderecos"] + "|se"
+        else:
+            request.session["enderecos"] = "|se"
 
     if not enderecos_dict:
         messages.info(request,"Sua busca retornou sem resultados.")
@@ -132,7 +177,9 @@ def enderecar_livro(request):
             livro.endereco = None
         livro.save()
 
-
+    request.session["funcao_enderecar"] = True
+    if request.session.get("guia"):
+        del(request.session["guia"])
 
     return HttpResponseRedirect(reverse("bibm:mapa_da_bibli"))
 
