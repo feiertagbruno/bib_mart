@@ -223,24 +223,24 @@ def meus_livros(request, filtro):
             meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
-
-        if len(filtro_letra) == 1:
-            if filtro_letra.lower() == "a":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-            elif filtro_letra.lower() == "e":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-            elif filtro_letra.lower() == "i":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-            elif filtro_letra.lower() == "o":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-            elif filtro_letra.lower() == "u":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-            elif filtro_letra.lower() == "c":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
-            else:
-                meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
-        elif filtro_letra == "0-9...":
-            meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+        if filtro_letra:
+            if len(filtro_letra) == 1:
+                if filtro_letra.lower() == "a":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
+                elif filtro_letra.lower() == "e":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
+                elif filtro_letra.lower() == "i":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
+                elif filtro_letra.lower() == "o":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
+                elif filtro_letra.lower() == "u":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
+                elif filtro_letra.lower() == "c":
+                    meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
+                else:
+                    meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
+            elif filtro_letra == "0-9...":
+                meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
             
     else:
         meus_livros = Livro.objects.filter(Q(
@@ -252,7 +252,7 @@ def meus_livros(request, filtro):
         Q(endereco__codigo__icontains = termo_busca) |
         Q(regiao__regiao__icontains = termo_busca)
         )).order_by("titulo")
-        filtro = filtro_letra = ""
+        filtro_letra = ""
 
     context = {
         "meus_livros": meus_livros,

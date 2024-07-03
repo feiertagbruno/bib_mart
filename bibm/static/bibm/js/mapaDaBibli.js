@@ -3,6 +3,14 @@ function adicionaEventos() {
   const enderecos_mapa = document.querySelectorAll(".endereco-box")
   var endereco_id_original
 
+  window.onload = function() {
+    var scrollPosition = localStorage.getItem('scrollPosition');
+    if (scrollPosition) {
+      window.scrollTo(0, parseInt(scrollPosition));
+      localStorage.removeItem('scrollPosition');
+    }
+  };
+
   livros_mapa.forEach(livro_mapa => {
     livro_mapa.addEventListener("dragstart", eventoArrastar)
   })
@@ -38,6 +46,7 @@ function eventoDrop(e) {
     const endereco_id = e.target.parentElement.parentElement.querySelector("#endereco_id").value
     const form_enderecar = document.querySelector("#form_enderecar")
     if (endereco_id_original != endereco_id) {
+      localStorage.setItem('scrollPosition', window.scrollY);
       form_enderecar.querySelector("#livro_id_form").value = livro_id
       form_enderecar.querySelector("#endereco_id_form").value = endereco_id
       form_enderecar.submit()

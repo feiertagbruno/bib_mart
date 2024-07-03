@@ -37,10 +37,10 @@ class LivroForm(forms.ModelForm):
                 "id":"genero_id_field"
             }
         ),
-        required=True,
-        error_messages={
-            "required": "Nenhum gênero válido foi selecionado."
-        }
+        required=False
+        # error_messages={
+        #     "required": "Nenhum gênero válido foi selecionado."
+        # }
     )
     endereco = forms.IntegerField(
         widget=forms.HiddenInput(
@@ -48,10 +48,10 @@ class LivroForm(forms.ModelForm):
                 "id":"endereco_id_field"
             }
         ),
-        required=True,
-        error_messages={
-            "required": "Nenhum endereço válido foi selecionado."
-        }
+        required=False
+        # error_messages={
+        #     "required": "Nenhum endereço válido foi selecionado."
+        # }
     )
     regiao = forms.IntegerField(
         widget=forms.HiddenInput(
@@ -59,10 +59,10 @@ class LivroForm(forms.ModelForm):
                 "id":"regiao_id_field"
             }
         ),
-        required=True,
-        error_messages={
-            "required": "Nenhuma região válida foi selecionada."
-        }
+        required=False
+        # error_messages={
+        #     "required": "Nenhuma região válida foi selecionada."
+        # }
     )
     class Meta:
         model = Livro
@@ -139,8 +139,12 @@ class LivroForm(forms.ModelForm):
             cleaned_fields["autor"] = Autor.objects.filter(id=self.data["autor"]).first()
         if is_integer(self.data["regiao"]):
             cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
+        else:
+            cleaned_fields["regiao"] = Regiao.objects.get(id=Livro._meta.get_field("regiao").default)
         if is_integer(self.data["genero"]):
             cleaned_fields["genero"] = Genero.objects.filter(id=self.data["genero"]).first()
+        else:
+            cleaned_fields["genero"] = Genero.objects.get(id=Livro._meta.get_field("genero").default)
         if is_integer(self.data["endereco"]):
             cleaned_fields["endereco"] = Endereco.objects.filter(id=self.data["endereco"]).first()
 
