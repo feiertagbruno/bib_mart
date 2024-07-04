@@ -41,6 +41,9 @@ def add_um_livro(request):
     if endereco_salvo:
         del(request.session["endereco_salvo"])
     
+    if request.session.get("caller_regiao"):
+        del(request.session["caller_regiao"])
+    
     form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
 
@@ -127,13 +130,24 @@ def deletar_um_livro(request):
     return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
 
 def add_um_autor_livro(request):
-    request.session["info_livro"] = request.POST
+
+    caller_regiao = request.session.get("caller_regiao", None)
+
+    info_autor = None
+
+    if not caller_regiao:
+        request.session["info_livro"] = request.POST
+    elif caller_regiao == "add_um_autor":
+        info_autor = request.session.get("info_autor", None)
     
     regiao_salva = request.session.get("regiao_salva")
     if regiao_salva:
         del(request.session["regiao_salva"])
 
-    form = AutorForm()
+    if info_autor:
+        form = AutorForm(initial=info_autor)
+    else:
+        form = AutorForm()
 
     context = {
         "form":form,
@@ -166,13 +180,19 @@ def add_um_autor_livro_save(request):
 def add_uma_regiao_livro(request):
     if request.method == "POST":
 
-        request.session["info_livro"] = request.POST
-        request.session["caller_regiao"] = request.POST.get("caller_regiao")
+        caller_regiao = request.POST.get("caller_regiao")
+        request.session["caller_regiao"] = caller_regiao
+
+        if caller_regiao == "add_um_livro":
+            request.session["info_livro"] = request.POST
+        elif caller_regiao == "add_um_autor":
+            request.session["info_autor"] = request.POST
         
         form = RegiaoForm()
 
         context = {
             "form":form,
+            "add_uma_regiao_livro":True,
         }
 
         return render(request, "bibm/pages/addUmaRegiao.html", context)
@@ -183,8 +203,6 @@ def add_uma_regiao_livro_save(request):
     if request.method == "POST":
         
         caller_regiao = request.session.get("caller_regiao", None)
-        if caller_regiao:
-            del(request.session["caller_regiao"])
 
         form = RegiaoForm(data = request.POST)
 
@@ -212,6 +230,7 @@ def add_um_genero_livro(request):
 
         context = {
             "form":form,
+            "add_um_genero_livro": True,
         }
 
         return render(request, "bibm/pages/addUmGenero.html", context)
@@ -245,6 +264,7 @@ def add_um_endereco_livro(request):
         context = {
             "form":form,
             "caller":caller,
+            "add_um_endereco_livro":True,
         }
 
         return render(request, "bibm/pages/addUmEndereco.html", context)

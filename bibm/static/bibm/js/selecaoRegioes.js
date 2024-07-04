@@ -151,6 +151,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	if (btn_add_uma_regiao_livro) {
 		btn_add_uma_regiao_livro.addEventListener("click", function(e) {
 			if (form.action.slice(-18) === "/adicionarumlivro/") {
+				caller_regiao.value = "add_um_livro"
 				form.action = form.action + "adicionarumaregiao/"
 			} else if (form.action.slice(-23) === "/adicionarumautor/save/") {
 				caller_regiao.value = "add_um_autor"

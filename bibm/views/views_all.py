@@ -112,6 +112,8 @@ def zerar_session(request):
         del(request.session["sem_endereco"])
     if request.session.get("funcao_enderecar"):
         del(request.session["funcao_enderecar"])
+    if request.session.get("caller_regiao"):
+        del(request.session["caller_regiao"])
     return request
 
 # Create your views here.

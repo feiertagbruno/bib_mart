@@ -201,6 +201,7 @@ class AutorForm(forms.ModelForm):
                     "class":"autor-input",
                     "placeholder": "Digite aqui a primeira parte do nome.",
                     "autocomplete": "off",
+                    "id": "prim_nome_autor"
                 }
             ),
             "ult_nome":forms.TextInput(
@@ -271,6 +272,7 @@ class GeneroForm(forms.ModelForm):
                     "placeholder": "Digite aqui o gênero a ser adicionado.",
                     "class": "autor-input",
                     "autocomplete":"off",
+                    "id":"genero_input_id",
                 }
             ),
             "comentario":forms.Textarea(

@@ -147,7 +147,6 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	});
 
 	btn_add_um_autor_livro.addEventListener("click", function(e) {
-		console.log("btn")
 		form.action = form.action + "adicionarumautor/"
 		form.setAttribute("novalidate", "novalidate")
 	})
