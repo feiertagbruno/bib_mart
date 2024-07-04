@@ -201,7 +201,7 @@ class AutorForm(forms.ModelForm):
                     "class":"autor-input",
                     "placeholder": "Digite aqui a primeira parte do nome.",
                     "autocomplete": "off",
-                    "id": "prim_nome_autor"
+                    "id": "prim_nome_autor",
                 }
             ),
             "ult_nome":forms.TextInput(
@@ -242,6 +242,7 @@ class RegiaoForm(forms.ModelForm):
                     "placeholder": "Digite aqui a região a ser adicionada.",
                     "class": "autor-input",
                     "autocomplete":"off",
+                    "id": "regiao_input_id",
                 },
             ),
             "comentario":forms.Textarea(
@@ -298,6 +299,7 @@ class EnderecoForm(forms.ModelForm):
                     "placeholder": "O código deve ter 3 letras e 2 números. Ex.: ABC12",
                     "class": "autor-input",
                     "autocomplete":"off",
+                    "id": "endereco_input_id",
                 }
             ),
             "descricao": forms.TextInput(
