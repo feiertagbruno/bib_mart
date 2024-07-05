@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 				select_opc.style.display = "none"
 				btn_add_um_autor_livro.style.display = "none"
 				mensagem_autor.textContent = ""
+				preencheRegiao(autor_id.value)
 			}
 		}
 		if (e.key === "ArrowDown") {
@@ -133,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 			select_opc.style.display = "none"
 			btn_add_um_autor_livro.style.display = "none"
 			mensagem_autor.textContent = ""
+			preencheRegiao(autor_id.value)
 		}
 	})
 		
@@ -198,5 +200,28 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 		elemento_em_foco = e.target
 	})
 
+	function preencheRegiao(id_autor) {
+		const relacao_autor_regiao = document.querySelector("#relacao_autor_regiao").value.split("|")
+
+		for (let rel of relacao_autor_regiao) {
+
+			const autor_regiao_list = rel.split("-")
+			const autor_id_relacao = autor_regiao_list[0]
+
+			if (autor_id_relacao == id_autor) {
+				const regiao_id_relacao = autor_regiao_list[1]
+				regiao_id.value = regiao_id_relacao
+
+				for (let reg of regioes) {
+
+					if (reg.value == regiao_id.value) {
+						regiao_input.value = reg.text
+						break
+					}
+				}
+				break
+			}
+		}
+	}
 })
 

@@ -1,0 +1,20 @@
+{% extends "bibm/estru.html" %}
+
+{% block content %}
+
+  <div class="titulo-grande-padrao">Autores</div>
+
+  <div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
+
+  {% for autor in autores %}
+
+    <span class="titulo-corpo-padrao">{{ autor.nome }}</span>
+
+  {% empty %}
+    Sem resultados
+  {% endfor %}
+{% endblock content %}

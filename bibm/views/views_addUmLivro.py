@@ -1,12 +1,12 @@
 from bibm.forms import LivroForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
-from bibm.models import Livro, Endereco
+from bibm.models import Livro, Endereco, Autor
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
 from .views_all import context_add_um_livro
 from django.core.exceptions import ValidationError
-import json
+from utils.functions import list_para_string
 
 def add_um_livro(request):
     if request.method == "POST":
@@ -44,6 +44,12 @@ def add_um_livro(request):
     if request.session.get("caller_regiao"):
         del(request.session["caller_regiao"])
     
+    relacao_autor_regiao = list_para_string(
+        Autor.objects.all().values_list("id", "regiao__id"),
+        "|",
+        "-"
+    )
+    
     form = LivroForm(initial=info_livro)
     context = context_add_um_livro()
 
@@ -55,6 +61,7 @@ def add_um_livro(request):
             "regiao_salva": regiao_salva,
             "genero_salvo": genero_salvo,
             "endereco_salvo": endereco_salvo,
+            "relacao_autor_regiao": relacao_autor_regiao,
         })
         
     return render(request, "bibm/pages/addUmLivro.html", context)

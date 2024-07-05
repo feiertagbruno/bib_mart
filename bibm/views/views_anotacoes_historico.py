@@ -27,7 +27,7 @@ def minhas_anotacoes(request, filtro):
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).annotate(
+            meus_livros = Livro.objects.filter(Q(Q(lido=True)|Q(lendo=True))).annotate(
                 ultima_anotacao=Max("anotacao__data_inclusao")
             ).order_by("-ultima_anotacao")
             filtro_letra = filtro[5:]

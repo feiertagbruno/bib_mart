@@ -40,5 +40,6 @@ urlpatterns = [
 	path("mapadabibli/", views.mapa_da_bibli, name="mapa_da_bibli"),
     path("minhasanotacoes/<filtro>/", views.minhas_anotacoes, name="minhas_anotacoes"),
     path("historico/", views.historico, name="historico"),
+    path("autores/", views.autores, name="autores"),
 	path("testes/", views.chamar_html_teste, name="testes"),
 ]
