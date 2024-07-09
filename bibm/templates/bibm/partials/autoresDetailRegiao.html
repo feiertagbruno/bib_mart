@@ -14,7 +14,13 @@
       </div>
 
       {% if autor.id == autor_id_livro %}
+
         {% include "bibm/partials/autoresDetailLivro.html" %}
+
+        {% if autor.comentario %}
+        <div class="autores-comentario">{{autor.comentario}}</div>
+        {% endif %}
+        
       {% endif %}
 
     {% endfor %}

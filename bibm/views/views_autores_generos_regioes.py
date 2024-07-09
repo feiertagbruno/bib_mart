@@ -6,6 +6,7 @@ from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letr
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.contrib import messages
+from bibm.views.views_all import zerar_session
 
 def autores(request, filtro):
 
@@ -40,8 +41,13 @@ def autores(request, filtro):
     caller = request.GET.get("caller")
     livros = None
     autor_id_livro = request.GET.get("autor_id")
+    if request.session.get("autor_id"):
+        if not autor_id_livro:
+            autor_id_livro = request.session.get("autor_id")
+        del(request.session["autor_id"])
+
     if autor_id_livro is not None: autor_id_livro = int(autor_id_livro)
-    if caller == "buscar_livros":
+    if caller == "buscar_livros" or autor_id_livro:
         livros = Livro.objects.filter(autor__id= autor_id_livro).values_list("titulo", flat=True).order_by("titulo")
 
     context = {
@@ -54,6 +60,9 @@ def autores(request, filtro):
         "livros": livros,
         "autor_id_livro": autor_id_livro,
     }
+
+    request = zerar_session(request)
+
     return render(request, "bibm/pages/autores.html", context)
 
 def deletar_autor(request):

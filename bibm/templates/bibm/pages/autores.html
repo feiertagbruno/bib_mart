@@ -28,6 +28,12 @@
         {% include "bibm/partials/autoresDetailRegiao.html" %}
       {% endif %}
 
+      <form action="{% url "bibm:add_um_autor_livro" %}" method="get">
+        <input type="hidden" name="caller" value="autores_add">
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        <button type="submit" class="btn-pequeno btn-verde">Adicionar um autor</button>
+      </form>
+
     </div>
   </div>
 

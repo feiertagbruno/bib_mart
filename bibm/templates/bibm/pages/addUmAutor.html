@@ -28,18 +28,18 @@
         <label class="label-add-um-livro" for="ult_nome_field">Sobrenome:</label>
         <div class="input-container" id="ult_nome_field">{{form.ult_nome}}</div>
 
-        <div class="div-dois-campos">
+        {% comment %} <div class="div-dois-campos"> {% endcomment %}
 
           {% comment %} NACIONALIDADE {% endcomment %}
-          <div class="campo-dois-campos">
+          {% comment %} <div class="campo-dois-campos">
             <label class="label-add-um-livro" for="nacionalidade_field">Nacionalidade:</label>
             <div class="input-container input-container-menor" id="nacionalidade_field">{{form.nacionalidade}}</div>
-          </div>
+          </div> {% endcomment %}
 
-          <div class="campo-dois-campos">
+          {% comment %} <div class="campo-dois-campos"> {% endcomment %}
             {% comment %} REGIÃO {% endcomment %}
             <label class="label-add-um-livro" for="regiao-input">Região:</label>
-            <div class="input-container input-container-menor">
+            <div class="input-container">
               {{form.regiao}}
               <input 
                 type="text" 
@@ -66,9 +66,9 @@
             <input type="hidden" name="caller_regiao" id="caller_regiao">
             <button type="submit" id="add_uma_regiao_livro" class="btn-pequeno btn-azul invisivel">Adicionar uma Região</button>
 
-    </div>
+    {% comment %} </div> {% endcomment %}
 
-        </div>
+        {% comment %} </div> {% endcomment %}
 
 				<div class="caixa-texto-comentario-box">
 					{{ form.comentario }}

@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", function(dom) {
       sessionStorage.removeItem('scrollPosition');  
     }  
   }; 
-  
-  history.scrollRestoration = "smooth";
 
   if (document.querySelector("#filtro").value === "regiao") {
     document.querySelector("#ordem-alfabetica").style.display = "none"
@@ -35,7 +33,10 @@ document.addEventListener("DOMContentLoaded", function(dom) {
   })
 
   document.addEventListener("click", function(e) {
-    if (e.target.className === "frase-acende-dourado paragrafo") {
+    if (
+      e.target.className === "frase-acende-dourado paragrafo" ||
+      e.target.className === "btn-editar-autor invisivel"
+    ) {
       sessionStorage.setItem('scrollPosition', JSON.stringify(window.scrollY));
     }
   })

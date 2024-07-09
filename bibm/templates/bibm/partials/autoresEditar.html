@@ -2,7 +2,7 @@
 
 {% comment %} BOTÃO EDITAR {% endcomment %}
     {% if autor.ult_nome != "." %}
-    <div class="flex-flow-row">
+    <div class="flex-flow-row fit-content">
       <form method="GET" action="{% url 'bibm:editar_autor' %}">
         <input type="hidden" name="caller" value="{{caller}}">
         {% if filtro %}
@@ -14,7 +14,11 @@
             src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
             alt="Editar este autor"
             title="Editar este autor"
+            {% if autor.id == autor_id_livro %}
+            class="btn-editar-autor"
+            {% else %}
             class="btn-editar-autor invisivel"
+            {% endif %}
             id="autores_btn_edicao"
           >
         </button>
@@ -33,7 +37,11 @@
           src="{% static 'bibm/img/trash-solid.svg' %}" 
           alt="Deletar este autor"
           title="Deletar este autor"
+          {% if autor.id == autor_id_livro %}
+          class="btn-deletar-autor"
+          {% else %}
           class="btn-deletar-autor invisivel"
+          {% endif %}
           id="autores_btn_edicao"
           >
         </button>

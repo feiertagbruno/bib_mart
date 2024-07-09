@@ -171,7 +171,7 @@
 	font-size: calc(1.8rem + .3vw);
 	transition: all 300ms ease-in-out;
 	width: fit-content;
-	padding: .5rem;
+	padding-top: .5rem;
 }
 
 .frase-acende-dourado:hover {
@@ -182,18 +182,21 @@
 .frase-estatica-dourada {
 	font-size: calc(1.8rem + .3vw);
 	width: fit-content;
-	padding: .5rem;
-	color: rgba(129, 175, 28, 0.7);
+	padding-top: .5rem;
+	color: rgba(128, 175, 28, 0.923);
+	width: fit-content;
 }
 
 .btn-editar-autor {
 	width: 2rem;
 	padding-top: 1rem;
+	padding-left: 1rem;
 	cursor: pointer;
 }
 
 .btn-deletar-autor {
 	width: 1.7rem;
 	padding-top: 1rem;
+	padding-left: 1rem;
 	cursor: pointer;
 }

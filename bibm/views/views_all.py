@@ -120,6 +120,8 @@ def zerar_session(request):
         del(request.session["autor_id"])
     if request.session.get("caller"):
         del(request.session["caller"])
+    if request.session.get("info_autor"):
+        del(request.session["info_autor"])
     return request
 
 # Create your views here.

@@ -2,18 +2,22 @@
   display: flex;
   flex-flow: column;
   width: fit-content;
+  margin: 0 auto;
+  min-width: 30vw;
 }
 
 .autores-page-div {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .linha-vertical {
   content: "";
-  background: gray;
   width: 2px;
+  background: gray;
 }
 
 .ordenar-por {
@@ -70,4 +74,25 @@
 
 .autores-titulo-livro {
   font-size: calc(1.4rem + .3vw);
+  width: fit-content;
+}
+
+.autores-regiao-abaixo-nome {
+  position: relative;
+  top: -0.2rem;
+  display: flex;
+  text-decoration: underline;
+  font-size: calc(1.25rem + .3vw);
+	color: rgba(80, 110, 16, 0.836);
+  width: fit-content;
+}
+
+.autores-comentario {
+  position: relative;
+  top: -0.4rem;
+  font-size: calc(1.25rem + .3vw);
+  color: rgba(0, 0, 0, 0.581);
+  padding: 0 4rem;
+	white-space: pre-wrap;
+  width: calc(100vw / 4);
 }

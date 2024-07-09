@@ -117,7 +117,7 @@ def mapa_da_bibli(request):
         del(request.session["funcao_enderecar"])
 
     else:
-        enderecos = Endereco.objects.all()
+        enderecos = Endereco.objects.all().order_by("codigo")
         if request.session.get("guia", None):
             del(request.session["guia"])
         if request.session.get("enderecos", None):

@@ -118,6 +118,8 @@ def editar_um_livro_save(request):
         return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro": filtro}))
     elif caller == "editar_planejamento":
         return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro": filtro}))
+    else:
+        return HttpResponseRedirect(reverse("bibm:home"))
 
 def deletar_um_livro(request):
     if request.method == "POST":
@@ -164,8 +166,10 @@ def add_um_autor_livro(request):
 
     if not caller_regiao and not caller:
         request.session["info_livro"] = request.POST
-    elif caller_regiao == "add_um_autor" and not caller:
+    elif caller_regiao == "add_um_autor" or caller == "autores_add":
         info_autor = request.session.get("info_autor", None)
+        if info_autor:
+            del(request.session["info_autor"])
     
     regiao_salva = request.session.get("regiao_salva")
     if regiao_salva:
@@ -197,10 +201,21 @@ def add_um_autor_livro_save(request):
 
         if caller == "autores":
             filtro = request.POST.get("filtro", None)
-            autor = Autor.objects.get(id=request.POST.get("autor_id", None))
+            autor_id = request.POST.get("autor_id", None)
+            if autor_id: request.session["autor_id"] = autor_id
+            autor = Autor.objects.get(id=autor_id)
             form = AutorForm(instance=autor, data=request.POST)
             if form.is_valid():
-                form.save()
+                form_save = form.save()
+                messages.success(request, "Edição de autor salva com sucesso.")
+            return HttpResponseRedirect(reverse("bibm:autores", kwargs={"filtro":filtro}))
+        elif caller == "autores_add":
+            filtro = request.POST.get("filtro", None)
+            form = AutorForm(data=request.POST)
+            if form.is_valid():
+                form_save = form.save()
+                if form_save.id:
+                    messages.success(request, "Autor salvo.")
             return HttpResponseRedirect(reverse("bibm:autores", kwargs={"filtro":filtro}))
         else:
             form = AutorForm(data = request.POST)
