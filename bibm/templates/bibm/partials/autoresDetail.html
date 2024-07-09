@@ -1,0 +1,15 @@
+{% for autor in autores %}
+
+  <div class="autores-linha-autor">
+
+    {% include "bibm/partials/autoresDetailNome.html" %}
+    {% include "bibm/partials/autoresEditar.html" %}
+
+  </div>
+  {% if autor.id == autor_id_livro %}
+    {% include "bibm/partials/autoresDetailLivro.html" %}
+  {% endif %}
+
+{% empty %}
+Sem resultados
+{% endfor %}

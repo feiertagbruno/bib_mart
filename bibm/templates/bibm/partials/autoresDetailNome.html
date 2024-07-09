@@ -1,0 +1,18 @@
+<form action="{% url "bibm:autores" filtro %}">
+
+  <input type="hidden" name="autor_id" value="{{autor.id}}">
+  <input type="hidden" name="caller" value="buscar_livros">
+
+  {% if autor.id == autor_id_livro %}
+  <button type="submit" class="frase-estatica-dourada paragrafo">
+    {% else %}
+  <button type="submit" class="frase-acende-dourado paragrafo">
+  {% endif %}
+    {% if autor.ult_nome == "." %}
+      Autor desconhecido
+    {% else %}
+      {{autor.nome}}
+    {% endif %}
+  </button>
+
+</form>

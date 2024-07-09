@@ -1,0 +1,73 @@
+.autores-block {
+  display: flex;
+  flex-flow: column;
+  width: fit-content;
+}
+
+.autores-page-div {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.linha-vertical {
+  content: "";
+  background: gray;
+  width: 2px;
+}
+
+.ordenar-por {
+  padding: .8rem;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.ordenar-por-box {
+  display: flex;
+  flex-flow: column;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.titulo-regiao-autores {
+  font-size: calc(2.2rem + .5vw);
+  text-decoration-line: underline;
+}
+
+.autores-por-regiao {
+  display: flex;
+  flex-flow: column;
+  padding-bottom: 1rem;
+}
+
+.titulo-autores {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  position: relative;
+}
+
+.modo-edicao-autores {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  width: 3rem;
+  cursor: pointer;
+}
+
+.autores-linha-autor {
+  display: flex;
+  flex-flow: row;
+}
+
+.autores-livros-box {
+  display: flex;
+  flex-flow: column;
+  padding-bottom: 1rem;
+}
+
+.autores-titulo-livro {
+  font-size: calc(1.4rem + .3vw);
+}

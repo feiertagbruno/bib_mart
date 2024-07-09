@@ -1,20 +1,34 @@
 {% extends "bibm/estru.html" %}
+{% load static %}
 
 {% block content %}
 
-  <div class="titulo-grande-padrao">Autores</div>
-
-  <div class="linha-divisoria-box">
-    <div class="ldiv linha-divisoria-esquerda"></div>
-    <div class="ldiv linha-divisoria-meio"></div>
-    <div class="ldiv linha-divisoria-direita"></div>
+  <div class="titulo-autores">
+    <span class="titulo-grande-padrao">Autores</span>
+    {% comment %} <div class="imagem-editar-autores"> {% endcomment %}
+    <img 
+    src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+    alt="Editar este livro"
+    title="Editar este livro"
+    class="modo-edicao-autores"
+    id="modo-edicao-autores"
+    >
+    {% comment %} </div> {% endcomment %}
   </div>
 
-  {% for autor in autores %}
+  {% include "bibm/partials/autoresOrdem.html" %}
 
-    <span class="titulo-corpo-padrao">{{ autor.nome }}</span>
+  <div class="autores-page-div">
+    <div class="linha-vertical"></div>
+    <div class="autores-block">
 
-  {% empty %}
-    Sem resultados
-  {% endfor %}
+      {% if filtro != "regiao" %}
+        {% include "bibm/partials/autoresDetail.html" %}
+      {% else %}
+        {% include "bibm/partials/autoresDetailRegiao.html" %}
+      {% endif %}
+
+    </div>
+  </div>
+
 {% endblock content %}

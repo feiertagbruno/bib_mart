@@ -1,0 +1,25 @@
+{% for regiao, auts in autores.items %}
+
+  <div class="titulo-regiao-autores">{{regiao}}</div>
+
+  <div class="autores-por-regiao">
+    
+      {% for autor in auts %}
+
+      <div class="autores-linha-autor">
+
+        {% include "bibm/partials/autoresDetailNome.html" %}
+        {% include "bibm/partials/autoresEditar.html" %}
+          
+      </div>
+
+      {% if autor.id == autor_id_livro %}
+        {% include "bibm/partials/autoresDetailLivro.html" %}
+      {% endif %}
+
+    {% endfor %}
+    </div>    
+
+{% empty %}
+  Sem resultados
+{% endfor %}

@@ -1,0 +1,13 @@
+<div class="autores-livros-box paragrafo">
+  {% for livro in livros %}
+
+    <span class="autores-titulo-livro paragrafo">
+      {{livro}}
+    </span>
+
+  {% empty %}
+  <span class="autores-titulo-livro paragrafo">
+    Sem livros
+  </span>
+  {% endfor %}
+</div>

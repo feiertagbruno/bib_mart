@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{% static 'bibm/css/botoes.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/mapaDaBibli.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/anotacoesHistorico.css' %}">
+	<link rel="stylesheet" href="{% static 'bibm/css/autores_regioes_generos.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/genericos.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/media.css' %}">
 </head>
@@ -65,6 +66,9 @@
 	{% endif %}
 	{% if mapa_da_bibli %}
 	<script src="{% static "bibm/js/mapaDaBibli.js" %}"></script>
+	{% endif %}
+	{% if caller == "autores" %}
+	<script src="{% static "bibm/js/autores.js" %}"></script>
 	{% endif %}
 </body>
 

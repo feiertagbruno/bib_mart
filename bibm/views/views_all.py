@@ -10,7 +10,7 @@ from django.db.models import Max
 from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
-
+from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True)
@@ -114,6 +114,12 @@ def zerar_session(request):
         del(request.session["funcao_enderecar"])
     if request.session.get("caller_regiao"):
         del(request.session["caller_regiao"])
+    if request.session.get("filtro"):
+        del(request.session["filtro"])
+    if request.session.get("autor_id"):
+        del(request.session["autor_id"])
+    if request.session.get("caller"):
+        del(request.session["caller"])
     return request
 
 # Create your views here.
@@ -200,8 +206,7 @@ def delete_anotacao(request, livro_id, anotacao_id):
 def meus_livros(request, filtro):
     termo_busca = request.GET.get("q", "").strip()
     classe_btn = "btn-azul"
-    ordem_alfabetica_lista = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
-                              "q","r","s","t","u","v","w","x","y","z","0-9..."]
+    ordem_alfabetica_lista = get_ordem_alfabetica_lista()
     filtros = {
         "todos": "Todos", 
         "naolidos": "Não lidos", 
@@ -226,24 +231,8 @@ def meus_livros(request, filtro):
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
         if filtro_letra:
-            if len(filtro_letra) == 1:
-                if filtro_letra.lower() == "a":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-                elif filtro_letra.lower() == "e":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-                elif filtro_letra.lower() == "i":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-                elif filtro_letra.lower() == "o":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-                elif filtro_letra.lower() == "u":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-                elif filtro_letra.lower() == "c":
-                    meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
-                else:
-                    meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
-            elif filtro_letra == "0-9...":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
-            
+            if len(filtro_letra) == 1 or filtro_letra == "0-9...":
+                meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")
     else:
         meus_livros = Livro.objects.filter(Q(
         Q(titulo__icontains = termo_busca) |
@@ -362,8 +351,7 @@ def editar_planejamento(request, filtro):
         "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
-    ordem_alfabetica_lista = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
-                              "q","r","s","t","u","v","w","x","y","z","0-9..."]
+    ordem_alfabetica_lista = get_ordem_alfabetica_lista()
     classe_btn = "btn-vermelho"
 
     livros_plan = livros_planejamento()
@@ -387,23 +375,8 @@ def editar_planejamento(request, filtro):
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
 
-        if len(filtro_letra) == 1:
-            if filtro_letra.lower() == "a":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-            elif filtro_letra.lower() == "e":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-            elif filtro_letra.lower() == "i":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-            elif filtro_letra.lower() == "o":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-            elif filtro_letra.lower() == "u":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-            elif filtro_letra.lower() == "c":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
-            else:
-                meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
-        elif filtro_letra == "0-9...":
-            meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+        if len(filtro_letra) == 1 or filtro_letra == "0-9...":
+            meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")
     else:
         meus_livros = Livro.objects.filter(Q(
             Q(

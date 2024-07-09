@@ -8,18 +8,18 @@
 	background-position: center;
 	padding: 0;
 	margin: 0;
-  }
-  
-  .madimi-one-regular {
-	  font-family: "Madimi One", sans-serif;
-	  font-weight: 400;
-	  font-style: normal;
-	  color: rgba(0, 0, 24, 0.85);
-	  margin: 0;
-	  padding: 0;
-  }
-  
-  .maxwidth {
+}
+
+.madimi-one-regular {
+	font-family: "Madimi One", sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	color: rgba(0, 0, 24, 0.85);
+	margin: 0;
+	padding: 0;
+}
+
+.maxwidth {
 	padding: 0 5vw;
 	margin: 0 auto;
 	position: relative;
@@ -27,13 +27,13 @@
 
 .section {
 	min-height: 100vh;
-	position:relative;
+	position: relative;
 	padding: 0;
 	margin: 0;
-	
-  }
 
-  .invisivel {
+}
+
+.invisivel {
 	display: none;
 }
 
@@ -68,7 +68,15 @@
 }
 
 .titulo-grande-padrao {
-  display: block;
-  text-align: center;
+	display: block;
+	text-align: center;
 	font-size: calc(2rem + 2vw);
+}
+
+.display-block {
+	display: block;
+}
+
+.paragrafo {
+	padding-left: 1.5rem;
 }

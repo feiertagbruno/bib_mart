@@ -5,6 +5,10 @@
 	"python.testing.pytestEnabled": true,
 	"python.testing.pytestArgs": [], // -x to bail
 	"python.defaultInterpreterPath": "venv/scripts",
+	"editor.tabSize": 2,
+	"[python]": {
+		"editor.tabSize": 4,
+	},
 	"[html]": {
 	  "editor.defaultFormatter": "vscode.html-language-features",
 	  "editor.quickSuggestions": {

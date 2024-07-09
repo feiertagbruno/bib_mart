@@ -1,0 +1,37 @@
+<div class="linha-divisoria-box">
+  <div class="ldiv linha-divisoria-esquerda"></div>
+  <div class="ldiv linha-divisoria-meio"></div>
+  <div class="ldiv linha-divisoria-direita"></div>
+</div>
+
+{% comment %} BOTOES DE FILTRO {% endcomment %}
+<div class="ordenar-por-box">
+  <div class="ordenar-por">
+
+    <span class="">
+      Ordenar por:
+    </span>
+    <input type="hidden" name="filtro" id="filtro" value="{{filtro}}">
+
+    {% for ord_chave, ord_valor in ordem_lista %}
+      {% if filtro == ord_chave %}
+        <a class="btn-verde-estatico" href="{% url "bibm:autores" ord_chave %}">{{ord_valor}}</a>
+      {% else %}
+        <a class="btn-medio btn-verde" href="{% url "bibm:autores" ord_chave %}">{{ ord_valor }}</a>
+      {% endif %}
+    {% endfor %}
+    
+  </div>
+  
+	<div id="ordem-alfabetica" class="ordenar-por filtros-linha ordem-alfabetica">
+    {% include "bibm/partials/ordemAlfabeticaFiltro.html" %}
+  </div>
+
+</div>
+
+
+<div class="linha-divisoria-box">
+  <div class="ldiv linha-divisoria-esquerda"></div>
+  <div class="ldiv linha-divisoria-meio"></div>
+  <div class="ldiv linha-divisoria-direita"></div>
+</div>

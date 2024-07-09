@@ -1,39 +1,22 @@
 {% for letra in ordem_alfabetica_lista %}
 
-  {% if caller == "meus_livros" %}
-
-    {% with concat=filtro|add:letra %}
+    {% with concat=filtro|add:letra  %}
       {% if filtro_letra == letra %}
-        <a href="{% url 'bibm:meus_livros' concat %}" class="cor-azul" title="Filtra livros iniciados em {{letra}}">
+        <a 
+          href="{% url 'bibm:'|add:caller concat %}" 
+          class="cor-azul" 
+          title="Filtra livros iniciados em {{letra}}"
+        >
       {% else %}
-        <a href="{% url 'bibm:meus_livros' concat %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
+        <a 
+          href="{% url 'bibm:'|add:caller concat %}" 
+          class="opc-infla" 
+          title="Filtra livros iniciados em {{letra}}"
+        >
       {% endif %}
     {% endwith %}
 
-  {% elif caller == "editar_planejamento" %}
-
-    {% with concat=filtro|add:letra %}
-      {% if filtro_letra == letra %}
-      <a href="{% url 'bibm:editar_planejamento' concat %}" class="cor-vermelho" title="Filtra livros iniciados em {{letra}}">
-        {% else %}
-      <a href="{% url 'bibm:editar_planejamento' concat %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
-      {% endif %}
-    {% endwith %}
-
-    {% elif caller == "minhas_anotacoes" %}
-
-    {% with concat=filtro|add:letra %}
-      {% if filtro_letra == letra %}
-      <a href="{% url 'bibm:minhas_anotacoes' concat %}" class="cor-azul" title="Filtra livros iniciados em {{letra}}">
-        {% else %}
-      <a href="{% url 'bibm:minhas_anotacoes' concat %}" class="opc-infla" title="Filtra livros iniciados em {{letra}}">
-      {% endif %}
-    {% endwith %}
-
-  {% endif %}
-
-        {{letra}}
-        
-      </a>
+          {{letra}}
+        </a>
 
 {% endfor %}

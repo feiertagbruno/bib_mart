@@ -1,0 +1,42 @@
+{% load static %}
+
+{% comment %} BOTÃO EDITAR {% endcomment %}
+    {% if autor.ult_nome != "." %}
+    <div class="flex-flow-row">
+      <form method="GET" action="{% url 'bibm:editar_autor' %}">
+        <input type="hidden" name="caller" value="{{caller}}">
+        {% if filtro %}
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        <input type="hidden" name="autor_id" value = "{{autor.id}}">
+        {% endif %}
+        <button type="submit">
+          <img 
+            src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+            alt="Editar este autor"
+            title="Editar este autor"
+            class="btn-editar-autor invisivel"
+            id="autores_btn_edicao"
+          >
+        </button>
+      </form>
+
+      {% comment %} BOTÃO DELETAR {% endcomment %}
+      <form method="POST" action="{% url 'bibm:deletar_autor' %}"
+        onclick="return confirm('Você confirma a exclusão deste autor?')">
+        {% csrf_token %}
+        <input type="hidden" name="autor_id" value = "{{autor.id}}">
+        {% if filtro %}
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        {% endif %}
+        <button type="submit">
+          <img 
+          src="{% static 'bibm/img/trash-solid.svg' %}" 
+          alt="Deletar este autor"
+          title="Deletar este autor"
+          class="btn-deletar-autor invisivel"
+          id="autores_btn_edicao"
+          >
+        </button>
+      </form>
+    </div>
+    {% endif %}

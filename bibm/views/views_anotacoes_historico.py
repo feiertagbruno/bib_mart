@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from bibm.models import Livro, Anotacao, Historico
 from django.db.models import Q, Max
+from utils.functions import get_queryset_filtro_letra
 
 def minhas_anotacoes(request, filtro):
 
@@ -39,23 +40,8 @@ def minhas_anotacoes(request, filtro):
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
 
-        if len(filtro_letra) == 1:
-            if filtro_letra.lower() == "a":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[AaÁáÀàÂâÃãÄäÅå]")
-            elif filtro_letra.lower() == "e":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[EeÈèÉéÊêËë]")
-            elif filtro_letra.lower() == "i":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[IiÌìÍíÎîÏï]")
-            elif filtro_letra.lower() == "o":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[OoÒòÓóÔôÕõÖö]")
-            elif filtro_letra.lower() == "u":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[UuÙùÚúÛûÜü]")
-            elif filtro_letra.lower() == "c":
-                meus_livros = meus_livros.filter(titulo__regex=r"^[cCçÇ]")
-            else:
-                meus_livros = meus_livros.filter(titulo__istartswith=filtro_letra)
-        elif filtro_letra == "0-9...":
-            meus_livros = meus_livros.filter(titulo__regex=r"^[^A-Za-zÀ-ÿ]")
+        if len(filtro_letra) == 1 or filtro_letra == "0-9...":
+            meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")
     else:
         meus_livros = Livro.objects.filter(Q(
             Q(
