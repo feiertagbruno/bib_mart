@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
+from django.db.models.functions import Lower
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True)
@@ -46,7 +47,7 @@ def context_add_um_livro(
             context.update({"autores":autores})
 
         if generos:
-            generos = list(Genero.objects.all().values_list("id","genero"))
+            generos = list(Genero.objects.exclude(id=1).values_list("id","genero"))
             context.update({"generos":generos})
 
         if enderecos:
@@ -58,7 +59,7 @@ def context_add_um_livro(
             context.update({"enderecos":enderecos})
 
         if regioes:
-            regioes = Regiao.objects.all().values_list("id", "regiao")
+            regioes = Regiao.objects.exclude(id=1).values_list("id", "regiao")
             context.update({"regioes":regioes})
 
         return context
@@ -122,6 +123,10 @@ def zerar_session(request):
         del(request.session["caller"])
     if request.session.get("info_autor"):
         del(request.session["info_autor"])
+    if request.session.get("regiao_id"):
+        del(request.session["regiao_id"])
+    if request.session.get("genero_id"):
+        del(request.session["genero_id"])
     return request
 
 # Create your views here.
@@ -217,15 +222,21 @@ def meus_livros(request, filtro):
     }
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().order_by("titulo")
+            meus_livros = Livro.objects.all().annotate(
+                titulo_lower = Lower("titulo")
+            ).order_by("titulo_lower")
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=False).annotate(
+                titulo_lower = Lower("titulo")
+            ).order_by("titulo_lower")
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True).annotate(
+                titulo_lower = Lower("titulo")
+            ).order_by("titulo_lower")
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":
@@ -274,6 +285,13 @@ def pegar_este_livro(request):
 
         historico = Historico(livro=livro, data_ini=timezone.localtime(timezone.now()))
         historico.save()
+
+        caller = request.POST.get("caller")
+        filtro = request.POST.get("filtro")
+        if caller == "meus_livros":
+            return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro": filtro}))
+        elif caller == "editar_planejamento":
+            return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro": filtro}))
 
     return HttpResponseRedirect(reverse("bibm:home"))
 

@@ -1,0 +1,13 @@
+<div class="generos-livros-box">
+  {% for livro in genero_livros %}
+
+    <a href="{% url "bibm:meus_livros" "todos" %}?q={{livro.titulo}}" class="generos-livro-titulo paragrafo">
+      - {{livro.titulo}}
+    </a>
+
+  {% empty %}
+  <span class="generos-livro-titulo paragrafo">
+    Sem livros
+  </span>
+{% endfor %}
+</div>

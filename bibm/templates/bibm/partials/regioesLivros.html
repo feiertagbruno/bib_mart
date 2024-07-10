@@ -1,0 +1,16 @@
+<div class="regioes-livros-box">
+  {% for livro in regiao_livros %}
+
+    <a href="{% url "bibm:meus_livros" "todos" %}?q={{livro.titulo}}" class="regioes-livro-titulo paragrafo">
+      - {{livro.titulo}}
+    </a>
+    {% comment %} <span class="regioes-livro-titulo paragrafo">
+      - {{livro.titulo}}
+    </span> {% endcomment %}
+
+  {% empty %}
+  <span class="regioes-livro-titulo paragrafo">
+    Sem livros
+  </span>
+{% endfor %}
+</div>

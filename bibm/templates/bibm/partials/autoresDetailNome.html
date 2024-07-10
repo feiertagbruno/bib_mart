@@ -4,9 +4,9 @@
   <input type="hidden" name="caller" value="buscar_livros">
 
   {% if autor.id == autor_id_livro %}
-  <button type="submit" class="frase-estatica-dourada paragrafo">
+  <button type="submit" class="frase-estatica-dourada">
     {% else %}
-  <button type="submit" class="frase-acende-dourado paragrafo">
+  <button type="submit" class="frase-acende-dourado">
   {% endif %}
     {% if autor.ult_nome == "." %}
       Autor desconhecido

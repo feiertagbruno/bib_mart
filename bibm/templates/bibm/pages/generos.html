@@ -1,0 +1,80 @@
+{% extends "bibm/estru.html" %}
+{% load static %}
+
+{% block content %}
+
+  <div class="titulo-autores">
+
+    <span class="titulo-grande-padrao">Gêneros</span>
+
+    <img 
+    src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+    alt="Abrir modo edição"
+    title="Abrir modo edição"
+    class="modo-edicao-autores"
+    id="modo-edicao-generos"
+    >
+
+  </div>
+
+  <div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
+  
+  <div class="generos-div-principal">
+
+    <div class="generos-page-div">
+
+      <div class="linha-vertical"></div>
+
+      <div class="generos-block">
+
+        {% for genero in generos %}
+          
+          <div class="generos-box">
+            <div class="generos-linha-nome">
+
+              {% if genero.id == genero_id_livro %}
+                <span class="generos-nome frase-estatica-verde">{{genero.genero}}</span>
+              {% else %}
+              <form action="{% url "bibm:generos" %}" method="get">
+                <input type="hidden" name="genero_id" value="{{genero.id}}">
+                <button class="generos-nome frase-acende-verde" type="submit">{{genero.genero}}</button>
+              </form>
+              {% endif %}
+
+              {% include "bibm/partials/generosEditar.html" %}
+
+            </div>
+
+            {% if genero.id == genero_id_livro %}
+              {% include "bibm/partials/generosLivros.html" %}
+
+              {% if genero.comentario %}
+                <div class="generos-comentario">{{genero.comentario}}</div>
+              {% endif %}
+              
+            {% endif %}
+      
+          </div>
+
+
+          
+        {% empty %}
+          Sem resultados
+        {% endfor %}
+
+        <form action="{% url "bibm:add_um_genero_livro" %}" method="get">
+          <input type="hidden" name="caller" value="generos_add">
+          <button type="submit" class="btn-pequeno btn-verde">Adicionar um gênero</button>
+        </form>
+          
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock content %}

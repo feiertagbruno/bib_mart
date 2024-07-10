@@ -38,6 +38,14 @@
   text-align: left;
 }
 
+.endereco-livro-titulo:hover {
+	cursor: grab;
+}
+
+.endereco-livro-titulo:active {
+	cursor: grabbing;
+}
+
 .endereco-descricao-box {
 	display: flex;
 	position: relative;

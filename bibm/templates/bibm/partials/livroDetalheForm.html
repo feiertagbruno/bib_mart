@@ -44,9 +44,9 @@
       
     {% endif %}
 
-    {% if livro.planejamento is None and not livro.lendo %}
+    <div class="linha-botoes-livros-detail">
 
-    <div>
+    {% if livro.planejamento is None and not livro.lendo %}
 
       {% if caller == "meus_livros" %}
         <form action="{% url 'bibm:acrescentar_no_planejamento_meus_livros' %}" method="post">
@@ -62,8 +62,6 @@
         <button type="submit" class="btn-medio {{classe_btn}}">Acrescentar no planejamento</button>
       </form>
 
-    </div>
-
     {% elif livro.planejamento is not None and not livro.lendo %}
 
     <span class="ja-no-planejamento linha-livro-info">
@@ -77,6 +75,19 @@
     </span>
 
     {% endif %}
+
+    {% if not livro.lendo %}
+    
+    <form action="{% url "bibm:pegar_este_livro" %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="livro_id" value="{{livro.id}}">
+      <input type="hidden" name="caller" value="{{caller}}">
+      <input type="hidden" name="filtro" value="{{filtro}}">
+      <button class="btn-medio {{classe_btn}}" type="submit">Pegar este livro</button>
+    </form>
+    
+    {% endif %}
+  </div>
 
     {% if livro.endereco %}
       <span class="linha-livro-info">Endereço: {{livro.endereco}}</span>

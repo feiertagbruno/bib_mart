@@ -1,0 +1,44 @@
+{% load static %}
+
+{% comment %} BOTÃO EDITAR {% endcomment %}
+    {% if genero.genero != "Sem Gênero" %}
+    <div class="flex-flow-row fit-content">
+      <form method="GET" action="{% url 'bibm:generos_editar' %}">
+        <input type="hidden" name="caller" value="generos_editar">
+        <input type="hidden" name="genero_id" value = "{{genero.id}}">
+        <button type="submit">
+          <img 
+            src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+            alt="Editar este gênero"
+            title="Editar este gênero"
+            {% if genero.id == genero_id_livro %}
+            class="btn-editar-genero"
+            {% else %}
+            class="btn-editar-genero invisivel"
+            {% endif %}
+            id="generos_btn_edicao"
+          >
+        </button>
+      </form>
+
+      {% comment %} BOTÃO DELETAR {% endcomment %}
+      <form method="POST" action="{% url 'bibm:generos_deletar' %}"
+        onclick="return confirm('Você confirma a exclusão deste gênero?')">
+        {% csrf_token %}
+        <input type="hidden" name="genero_id" value = "{{genero.id}}">
+        <button type="submit">
+          <img 
+          src="{% static 'bibm/img/trash-solid.svg' %}" 
+          alt="Deletar este gênero"
+          title="Deletar este gênero"
+          {% if genero.id == genero_id_livro %}
+          class="btn-deletar-genero"
+          {% else %}
+          class="btn-deletar-genero invisivel"
+          {% endif %}
+          id="generos_btn_edicao"
+          >
+        </button>
+      </form>
+    </div>
+    {% endif %}

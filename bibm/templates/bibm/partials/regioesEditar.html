@@ -1,0 +1,44 @@
+{% load static %}
+
+{% comment %} BOTÃO EDITAR {% endcomment %}
+    {% if regiao.regiao != "Sem Região" %}
+    <div class="flex-flow-row fit-content">
+      <form method="GET" action="{% url 'bibm:regioes_editar' %}">
+        <input type="hidden" name="caller" value="regioes_editar">
+        <input type="hidden" name="regiao_id" value = "{{regiao.id}}">
+        <button type="submit">
+          <img 
+            src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+            alt="Editar esta região"
+            title="Editar esta região"
+            {% if regiao.id == regiao_id_livro %}
+            class="btn-editar-regiao"
+            {% else %}
+            class="btn-editar-regiao invisivel"
+            {% endif %}
+            id="regioes_btn_edicao"
+          >
+        </button>
+      </form>
+
+      {% comment %} BOTÃO DELETAR {% endcomment %}
+      <form method="POST" action="{% url 'bibm:regioes_deletar' %}"
+        onclick="return confirm('Você confirma a exclusão desta região?')">
+        {% csrf_token %}
+        <input type="hidden" name="regiao_id" value = "{{regiao.id}}">
+        <button type="submit">
+          <img 
+          src="{% static 'bibm/img/trash-solid.svg' %}" 
+          alt="Deletar esta região"
+          title="Deletar esta região"
+          {% if regiao.id == regiao_id_livro %}
+          class="btn-deletar-regiao"
+          {% else %}
+          class="btn-deletar-regiao invisivel"
+          {% endif %}
+          id="regioes_btn_edicao"
+          >
+        </button>
+      </form>
+    </div>
+    {% endif %}

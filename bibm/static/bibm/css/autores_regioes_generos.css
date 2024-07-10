@@ -4,9 +4,10 @@
   width: fit-content;
   margin: 0 auto;
   min-width: 30vw;
+  padding-left: 0.3rem;
 }
 
-.autores-page-div {
+.autores-page-div, .regioes-page-div, .generos-page-div {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -16,7 +17,7 @@
 
 .linha-vertical {
   content: "";
-  width: 2px;
+  width: 2.5px;
   background: gray;
 }
 
@@ -61,7 +62,7 @@
   cursor: pointer;
 }
 
-.autores-linha-autor {
+.autores-linha-autor, .regioes-linha-nome, .generos-linha-nome {
   display: flex;
   flex-flow: row;
 }
@@ -77,22 +78,106 @@
   width: fit-content;
 }
 
+.autores-regiao-linha {
+  position: relative;
+  font-size: calc(1.25rem + .3vw);
+  top: -0.2rem;
+	color: rgba(80, 110, 16, 0.836);
+}
+
 .autores-regiao-abaixo-nome {
   position: relative;
-  top: -0.2rem;
-  display: flex;
+  left: -0.6rem;
+  /* display: flex; */
   text-decoration: underline;
   font-size: calc(1.25rem + .3vw);
 	color: rgba(80, 110, 16, 0.836);
   width: fit-content;
 }
 
-.autores-comentario {
+.autores-comentario, .regioes-comentario, .generos-comentario {
   position: relative;
   top: -0.4rem;
   font-size: calc(1.25rem + .3vw);
   color: rgba(0, 0, 0, 0.581);
-  padding: 0 4rem;
+  padding: 0.3rem 4rem;
 	white-space: pre-wrap;
   width: calc(100vw / 4);
+}
+
+.regioes-comentario, .generos-comentario {
+  top: 0;
+  width: calc(80vw / 4);
+}
+
+/* REGIÕES */
+
+.regioes-div-principal {
+  display: flex;
+  flex-flow: column;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.regioes-box {
+  display: flex;
+  flex-flow: column;
+  min-width: 25vw;
+}
+
+.regioes-nome {
+  font-size: calc(1.5rem + .3vw);
+  padding: 0.3rem;
+  transition: 150ms ease-in;
+}
+
+.regioes-block {
+  display: flex;
+  flex-flow: column;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.regioes-livros-box {
+  display: flex;
+  flex-flow: column;
+}
+
+.regioes-livro-titulo {
+  font-size: calc(1.4rem + .3vw);
+}
+
+.generos-div-principal {
+  display: flex;
+  flex-flow: column;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.generos-box {
+  display: flex;
+  flex-flow: column;
+  min-width: 25vw;
+}
+
+.generos-nome {
+  font-size: calc(1.5rem + .3vw);
+  padding: 0.3rem;
+  transition: 150ms ease-in;
+}
+
+.generos-block {
+  display: flex;
+  flex-flow: column;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.generos-livros-box {
+  display: flex;
+  flex-flow: column;
+}
+
+.generos-livro-titulo {
+  font-size: calc(1.4rem + .3vw);
 }

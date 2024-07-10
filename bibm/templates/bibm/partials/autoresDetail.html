@@ -8,8 +8,8 @@
   </div>
 
   {% if autor.id == autor_id_livro %}
-    <div class="paragrafo">
-      <span class="autores-regiao-abaixo-nome paragrafo">{{autor.regiao.regiao}}</span>
+    <div class="paragrafo flex-flow-row autores-regiao-linha">
+      Região:<span class="autores-regiao-abaixo-nome">{{autor.regiao.regiao}}</span>
     </div>
 
     {% include "bibm/partials/autoresDetailLivro.html" %}

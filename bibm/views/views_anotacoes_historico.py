@@ -88,3 +88,18 @@ def historico(request):
     }
 
     return render(request, "bibm/pages/historico.html", context)
+
+def historico_de_compra(request, filtro):
+
+    filtros = {
+        "todos": "Todos", 
+        "naolidos": "Não lidos", 
+        "lidos": "Lidos", 
+        "lidoeleriadenovo": "Lido e Leria de novo"
+    }
+
+    context = {
+        "filtros": filtros,
+    }
+
+    return render(request, "bibm/pages/historicoDeCompra.html", context)

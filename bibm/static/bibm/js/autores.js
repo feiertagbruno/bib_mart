@@ -33,8 +33,11 @@ document.addEventListener("DOMContentLoaded", function(dom) {
   })
 
   document.addEventListener("click", function(e) {
+    if (e.target.className === "frase-estatica-dourada") {
+      e.preventDefault()
+    }
     if (
-      e.target.className === "frase-acende-dourado paragrafo" ||
+      e.target.className === "frase-acende-dourado" ||
       e.target.className === "btn-editar-autor invisivel"
     ) {
       sessionStorage.setItem('scrollPosition', JSON.stringify(window.scrollY));

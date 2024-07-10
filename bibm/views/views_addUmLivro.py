@@ -1,5 +1,5 @@
 from bibm.forms import LivroForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
-from bibm.models import Livro, Endereco, Autor
+from bibm.models import Livro, Endereco, Autor, Regiao, Genero
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
@@ -7,6 +7,7 @@ from django.shortcuts import render
 from .views_all import context_add_um_livro
 from django.core.exceptions import ValidationError
 from utils.functions import list_para_string
+from bibm.views.views_all import acrescentar_plan
 
 def add_um_livro(request):
     if request.method == "POST":
@@ -15,6 +16,8 @@ def add_um_livro(request):
             livro_salvo = form.save()
             if livro_salvo:
                 messages.success(request,"Livro salvo com sucesso.")
+                if form.cleaned_data.get("acrescentar_no_planejamento") == True:
+                    acrescentar_plan(livro_salvo.id)
         else:
             for er in form.errors.items():
                 messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
@@ -257,6 +260,28 @@ def add_uma_regiao_livro(request):
         }
 
         return render(request, "bibm/pages/addUmaRegiao.html", context)
+    elif request.GET.get("caller") == "regioes_editar":
+        caller = request.GET.get("caller")
+        regiao_id = request.GET.get("regiao_id")
+        regiao = Regiao.objects.get(id = regiao_id)
+        form = RegiaoForm(instance=regiao)
+
+        context = {
+            "add_uma_regiao_livro": True,
+            "caller": caller,
+            "form": form,
+            "regiao_id": regiao_id,
+        }
+        return render(request, "bibm/pages/addUmaRegiao.html", context)
+    elif request.GET.get("caller") == "regioes_add":
+        caller = request.GET.get("caller")
+        form = RegiaoForm()
+        context = {
+            "add_uma_regiao_livro": True,
+            "caller": caller,
+            "form": form,
+        }
+        return render(request, "bibm/pages/addUmaRegiao.html", context)
     else:
         return Http404
 
@@ -265,26 +290,52 @@ def add_uma_regiao_livro_save(request):
         
         caller_regiao = request.session.get("caller_regiao", None)
         caller = request.POST.get("caller")
-        if caller:
-            request.session["caller"] = caller
-            request.session["autor_id"] = request.POST.get("autor_id")
-            request.session["filtro"] = request.POST.get("filtro")
 
-        form = RegiaoForm(data = request.POST)
-
-        if form.is_valid():
-            regiao_salva = form.save()
-            request.session["regiao_salva"] = regiao_salva.id
-            messages.success(request,"Região salva.")
+        if caller == "regioes_editar":
+            regiao_id = request.POST.get("regiao_id")
+            if regiao_id:
+                request.session["regiao_id"] = regiao_id
+            regiao = Regiao.objects.get(id=regiao_id)
+            form = RegiaoForm(instance=regiao, data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Edição de região salva com sucesso.")
+            return HttpResponseRedirect(reverse("bibm:regioes"))
+        elif caller == "regioes_add":
+            form = RegiaoForm(data=request.POST)
+            if form.is_valid():
+                form_salvo = form.save()
+                if form_salvo.id:
+                    messages.success(request, "Região salva.")
+                    request.session["regiao_id"] = form_salvo.id
+                else:
+                    messages.error(request,"A região não foi salva")
+                return HttpResponseRedirect(reverse("bibm:regioes"))
+            else:
+                for er in form.errors.items():
+                    messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+                return HttpResponseRedirect(f"{reverse("bibm:add_uma_regiao_livro")}?caller=regioes_add")
         else:
-            for er in form.errors.items():
-                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+            if caller:
+                request.session["caller"] = caller
+                request.session["autor_id"] = request.POST.get("autor_id")
+                request.session["filtro"] = request.POST.get("filtro")
 
-        
-        if caller_regiao == "add_um_autor":
-            return HttpResponseRedirect(reverse("bibm:add_um_autor_livro"))
-        else:
-            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+            form = RegiaoForm(data = request.POST)
+
+            if form.is_valid():
+                regiao_salva = form.save()
+                request.session["regiao_salva"] = regiao_salva.id
+                messages.success(request,"Região salva.")
+            else:
+                for er in form.errors.items():
+                    messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+
+            
+            if caller_regiao == "add_um_autor":
+                return HttpResponseRedirect(reverse("bibm:add_um_autor_livro"))
+            else:
+                return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
         return Http404
     
@@ -300,23 +351,72 @@ def add_um_genero_livro(request):
         }
 
         return render(request, "bibm/pages/addUmGenero.html", context)
+    elif request.GET.get("caller") == "generos_editar":
+        caller = "generos_editar"
+        genero_id = request.GET.get("genero_id")
+        genero = Genero.objects.get(id = genero_id)
+        form = GeneroForm(instance=genero)
+
+        context = {
+            "add_um_genero_livro": True,
+            "caller": caller,
+            "form": form,
+            "genero_id": genero_id,
+        }
+        return render(request, "bibm/pages/addUmGenero.html", context)
+    elif request.GET.get("caller") == "generos_add":
+        caller = request.GET.get("caller")
+        form = GeneroForm()
+        context = {
+            "add_um_genero_livro": True,
+            "caller": caller,
+            "form": form,
+        }
+        return render(request, "bibm/pages/addUmGenero.html", context)
     else:
         return Http404
 
 def add_um_genero_livro_save(request):
     if request.method == "POST":
         
-        form = GeneroForm(data = request.POST)
+        caller = request.POST.get("caller")
 
-        if form.is_valid():
-            genero_salvo = form.save()
-            request.session["genero_salvo"] = genero_salvo.id
-            messages.success(request,"Gênero salvo.")
+        if caller == "generos_editar":
+            genero_id = request.POST.get("genero_id")
+            if genero_id:
+                request.session["genero_id"] = genero_id
+            genero = Genero.objects.get(id=genero_id)
+            form = GeneroForm(instance=genero, data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Edição de gênero salva com sucesso.")
+            return HttpResponseRedirect(reverse("bibm:generos"))
+        elif caller == "generos_add":
+            form = GeneroForm(data=request.POST)
+            if form.is_valid():
+                form_salvo = form.save()
+                if form_salvo.id:
+                    messages.success(request, "Gênero salva.")
+                    request.session["genero_id"] = form_salvo.id
+                else:
+                    messages.error(request,"O gênero não foi salvo")
+                return HttpResponseRedirect(reverse("bibm:generos"))
+            else:
+                for er in form.errors.items():
+                    messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+                return HttpResponseRedirect(f"{reverse("bibm:add_um_genero_livro")}?caller=generos_add")
         else:
-            for er in form.errors.items():
-                messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
-        
-        return HttpResponseRedirect(reverse("bibm:add_um_livro"))
+            form = GeneroForm(data = request.POST)
+
+            if form.is_valid():
+                genero_salvo = form.save()
+                request.session["genero_salvo"] = genero_salvo.id
+                messages.success(request,"Gênero salvo.")
+            else:
+                for er in form.errors.items():
+                    messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
+            
+            return HttpResponseRedirect(reverse("bibm:add_um_livro"))
     else:
         return Http404
     

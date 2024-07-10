@@ -77,7 +77,7 @@ class Livro(models.Model):
     classificacao = models.IntegerField(choices=notas, blank=True, null=True)
     endereco = models.ForeignKey(Endereco, on_delete=models.SET_NULL, blank=True, null=True)
     data_compra = models.DateField(null=True)
-    regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=2)
+    regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=1)
     comentario = models.TextField(blank=True, null=True)
     planejamento = models.PositiveIntegerField(unique=True, blank=True, null=True)
 

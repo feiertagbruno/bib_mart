@@ -4,8 +4,12 @@
 {% block content %}
 
   <div class="autor-box">
-
+    
+    {% if caller == "regioes_editar" %}
+    <span class="titulo-add-um-livro">Editar Região</span>
+    {% else %}
     <span class="titulo-add-um-livro">Adicionar Região</span>
+    {% endif %}
 
     <form action="{% url "bibm:add_uma_regiao_livro_save" %}" method="post" class="autor-box-form">
         {% csrf_token %}
@@ -18,6 +22,9 @@
         {% endif %}
         {% if filtro %}
           <input type="hidden" name="filtro" value="{{filtro}}">
+        {% endif %}
+        {% if regiao_id %}
+          <input type="hidden" name="regiao_id" value="{{regiao_id}}">
         {% endif %}
 
         <label class="label-add-um-livro" for="regiao_field">Nome da Região:</label>

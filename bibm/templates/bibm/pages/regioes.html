@@ -1,0 +1,80 @@
+{% extends "bibm/estru.html" %}
+{% load static %}
+
+{% block content %}
+
+  <div class="titulo-autores">
+
+    <span class="titulo-grande-padrao">Regiões</span>
+
+    <img 
+    src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
+    alt="Abrir modo edição"
+    title="Abrir modo edição"
+    class="modo-edicao-autores"
+    id="modo-edicao-regioes"
+    >
+
+  </div>
+
+  <div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
+  
+  <div class="regioes-div-principal">
+
+    <div class="regioes-page-div">
+
+      <div class="linha-vertical"></div>
+
+      <div class="regioes-block">
+
+        {% for regiao in regioes %}
+          
+          <div class="regioes-box">
+            <div class="regioes-linha-nome">
+
+              {% if regiao.id == regiao_id_livro %}
+                <span class="regioes-nome frase-estatica-purple">{{regiao.regiao}}</span>
+              {% else %}
+              <form action="{% url "bibm:regioes" %}" method="get">
+                <input type="hidden" name="regiao_id" value="{{regiao.id}}">
+                <button class="regioes-nome frase-acende-purple" type="submit">{{regiao.regiao}}</button>
+              </form>
+              {% endif %}
+
+              {% include "bibm/partials/regioesEditar.html" %}
+
+            </div>
+
+            {% if regiao.id == regiao_id_livro %}
+              {% include "bibm/partials/regioesLivros.html" %}
+
+              {% if regiao.comentario %}
+                <div class="regioes-comentario">{{regiao.comentario}}</div>
+              {% endif %}
+              
+            {% endif %}
+      
+          </div>
+
+
+          
+        {% empty %}
+          Sem resultados
+        {% endfor %}
+
+        <form action="{% url "bibm:add_uma_regiao_livro" %}" method="get">
+          <input type="hidden" name="caller" value="regioes_add">
+          <button type="submit" class="btn-pequeno btn-verde">Adicionar uma região</button>
+        </form>
+          
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock content %}

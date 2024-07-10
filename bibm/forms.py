@@ -64,6 +64,9 @@ class LivroForm(forms.ModelForm):
         #     "required": "Nenhuma região válida foi selecionada."
         # }
     )
+    acrescentar_no_planejamento = forms.BooleanField(
+        required=False
+    )
     class Meta:
         model = Livro
         fields = [

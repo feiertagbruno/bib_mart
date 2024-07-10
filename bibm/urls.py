@@ -43,5 +43,11 @@ urlpatterns = [
     path("autores/editarautor/", views.add_um_autor_livro, name="editar_autor"),
     path("autores/deletarautor/", views.deletar_autor, name="deletar_autor"),
     path("autores/<filtro>/", views.autores, name="autores"),
-	path("testes/", views.chamar_html_teste, name="testes"),
+    path("regioes/", views.regioes, name="regioes"),
+    path("regioes/editar/", views.add_uma_regiao_livro, name="regioes_editar"),
+    path("regioes/deletar/", views.regioes_deletar, name="regioes_deletar"),
+    path("generos/", views.generos, name="generos"),
+    path("generos/editar/", views.add_um_genero_livro, name="generos_editar"),
+    path("generos/deletar/", views.generos_deletar, name="generos_deletar"),
+    path("historicodecompra/<filtro>/", views.historico_de_compra, name="historico_de_compra"),
 ]
