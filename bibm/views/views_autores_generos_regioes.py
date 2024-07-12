@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from bibm.models import Autor, Livro, Regiao, Genero
-from django.db.models.functions import Concat, Lower
+from django.db.models.functions import Concat
 from django.db.models import Value
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 from django.http import HttpResponseRedirect, Http404
@@ -20,25 +20,22 @@ def autores(request, filtro):
 
     if filtro[:9] == "sobrenome":
         autores = Autor.objects.annotate(
-            nome=Concat("ult_nome", Value(", "), "prim_nome"),
-            nome_lower=Lower("nome")
-            ).order_by("nome_lower")
+            nome=Concat("ult_nome", Value(", "), "prim_nome")
+            ).order_by("nome")
         filtro_letra = filtro[9:]
         filtro = "sobrenome"
     elif filtro[:12] == "primeironome":
         autores = Autor.objects.annotate(
-            nome=Concat("prim_nome", Value(" "), "ult_nome"),
-            nome_lower=Lower("nome")
-            ).order_by("nome_lower")
+            nome=Concat("prim_nome", Value(" "), "ult_nome")
+            ).order_by("nome")
         filtro_letra = filtro[12:]
         filtro = "primeironome"
     elif filtro[:6] == "regiao":
         autores = {}
         for regiao in Regiao.objects.filter(id__in = Autor.objects.values("regiao__id").distinct()).order_by("regiao"):
             autores[regiao.regiao] = Autor.objects.filter(regiao__id = regiao.id).annotate(
-                nome=Concat("ult_nome", Value(", "), "prim_nome"),
-                nome_lower = Lower("nome")
-                ).order_by("nome_lower")
+                nome=Concat("ult_nome", Value(", "), "prim_nome")
+                ).order_by("nome")
         filtro_letra = filtro[6:]
         filtro = "regiao"
 
@@ -89,7 +86,7 @@ def deletar_autor(request):
 
 def regioes(request):
 
-    regioes = Regiao.objects.annotate(regiao_lower = Lower("regiao")).order_by("regiao_lower")
+    regioes = Regiao.objects.all().order_by("regiao")
 
     regiao_id_livro = request.GET.get("regiao_id")
     if not regiao_id_livro:
@@ -101,9 +98,7 @@ def regioes(request):
     regiao_livros = None
 
     if regiao_id_livro:
-        regiao_livros = Livro.objects.filter(regiao__id = regiao_id_livro).annotate(
-            titulo_lower=Lower("titulo")
-            ).order_by("titulo_lower")
+        regiao_livros = Livro.objects.filter(regiao__id = regiao_id_livro).order_by("titulo")
 
     context = {
         "caller": "regioes",
@@ -126,7 +121,7 @@ def regioes_deletar(request):
 
 def generos(request):
 
-    generos = Genero.objects.annotate(genero_lower = Lower("genero")).order_by("genero_lower")
+    generos = Genero.objects.all().order_by("genero")
 
     genero_id_livro = request.GET.get("genero_id")
     if not genero_id_livro:
@@ -138,9 +133,7 @@ def generos(request):
     genero_livros = None
 
     if genero_id_livro:
-        genero_livros = Livro.objects.filter(genero__id = genero_id_livro).annotate(
-            titulo_lower=Lower("titulo")
-            ).order_by("titulo_lower")
+        genero_livros = Livro.objects.filter(genero__id = genero_id_livro).order_by("titulo")
 
     context = {
         "caller": "generos",

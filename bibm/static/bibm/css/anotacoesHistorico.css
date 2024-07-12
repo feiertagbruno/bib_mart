@@ -70,3 +70,48 @@
 .anotacao-anotacao {
 	white-space: pre-wrap;
 }
+
+.linha-filtros-historico-de-compras {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.historico-de-compra-box {
+  padding-top: 1rem;
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+}
+
+.historico-de-compra-block {
+  width: fit-content;
+  display: flex;
+  flex-flow: column;
+}
+
+.anotacao-historico-box {
+  display: flex;
+  flex-flow: column;
+  max-width: 50vw;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.data-inicial-anotacao-historico {
+  display: flex;
+  font-size: calc(1.3rem + .3vw);
+  color: black;
+}
+
+.conteudo-anotacao-salva-historico {
+  display: flex;
+  text-align: left;
+  white-space: pre-wrap;
+  text-wrap: wrap;
+  font-size: calc(1.5rem + .3vw);
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-bottom: 1.5rem;
+  color: rgba(73, 73, 73, 0.863);
+}

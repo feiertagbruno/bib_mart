@@ -9,6 +9,10 @@
 		flex-flow: column;
 	}
 
+	.espaco-embaixo {
+		height: 15vh;
+	}
+
 	body {
 		font-size: calc(1.5rem + 1.2vw);
 	}

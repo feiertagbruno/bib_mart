@@ -1,4 +1,6 @@
 def is_integer(variable):
+    if not variable:
+        return False
     try:
         int(variable)
         return True

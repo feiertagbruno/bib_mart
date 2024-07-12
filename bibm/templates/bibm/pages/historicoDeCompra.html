@@ -2,13 +2,32 @@
 
 {% block content %}
 
-{% include "bibm/partials/botoesFiltro.html" %}
+  <div class="linha-filtros-historico-de-compras">
+    {% include "bibm/partials/botoesFiltro.html" %}
+    {% include "bibm/partials/ordemCresDecres.html" %}
+  </div>
 
   <div class="titulo-grande-padrao">
     Histórico de Compra
   </div>
+
+  <div class="linha-divisoria-box">
+    <div class="ldiv linha-divisoria-esquerda"></div>
+    <div class="ldiv linha-divisoria-meio"></div>
+    <div class="ldiv linha-divisoria-direita"></div>
+  </div>
+  
   <div class="historico-de-compra-box">
-    Historico box
+    {% for hist in historico %}
+
+      <div class="historico-de-compra-block">
+        {{hist.data_compra}} -
+        {{hist.titulo}}
+      </div>
+
+    {% empty %}
+      Sem resultados
+    {% endfor %}
   </div>
 
   {% endblock %}

@@ -271,10 +271,14 @@
 		transform: scale(1);
 		color: inherit;
 	}
-
+	33% {
+		color: var(--color-primary);
+	}
 	50% {
 		transform: scale(1.1);
-		color: var(--color-primary);
+	}
+	66% {
+		color: rgba(65, 163, 50, 0.992);
 	}
 }
 

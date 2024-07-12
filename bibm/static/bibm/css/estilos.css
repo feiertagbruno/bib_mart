@@ -228,10 +228,12 @@ a {
 }
 
 .opcoes-meumeu {
-	padding-top: 1rem;
+	padding-top: 7vh;
 	display: flex;
 	flex-flow: row;
-	justify-content: space-evenly;
+	width: 60%;
+	margin: auto;
+	justify-content: space-between;
 }
 
 .meumeu-opc-coluna {
@@ -241,9 +243,9 @@ a {
 
 .opc-meumeu {
 	position: relative;
-	text-align: center;
-	padding: 1vh 0;
+	padding-bottom: 2rem;
 	transition: all 300ms ease-in-out;
+	margin: 0 auto;
 }
 
 .prim {
@@ -254,7 +256,7 @@ a {
 	display: flex;
 	position: relative;
 	bottom: 0;
-	padding-top: 15rem;
+	padding-top: 10vh;
 }
 
 .rodape {

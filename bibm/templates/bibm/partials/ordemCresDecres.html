@@ -1,0 +1,18 @@
+<div class="botoes-filtro-box">
+	<div class="decoracao-linha-filtros-acima"></div>
+	<span>Ordem</span>
+	<div class="filtros-linha">
+  {% for ord_chave, ord_valor in ordens.items %}
+    {% if ord_chave == ordem %}
+      <a href="{% url "bibm:"|add:caller filtro ord_chave %}" class="{{classe_btn}}-estatico">
+        {{ord_valor}}
+      </a>
+    {% else %}
+    <a href="{% url "bibm:"|add:caller filtro ord_chave %}" class="btn-medio {{classe_btn}}">
+      {{ord_valor}}
+    </a>
+  {% endif %}
+  {% endfor %}
+  </div>
+	<div class="decoracao-linha-filtros-abaixo"></div>
+</div>

@@ -1,5 +1,5 @@
 from bibm.forms import LivroForm, AutorForm, RegiaoForm, GeneroForm, EnderecoForm
-from bibm.models import Livro, Endereco, Autor, Regiao, Genero
+from bibm.models import Livro, Endereco, Autor, Regiao, Genero, Historico
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
@@ -9,15 +9,27 @@ from django.core.exceptions import ValidationError
 from utils.functions import list_para_string
 from bibm.views.views_all import acrescentar_plan
 
+def criar_historico(livro):
+    historico = Historico.objects.create(**{
+        "livro":livro,
+        "data_ini":livro.data_leitura,
+        "data_fim":livro.data_leitura,
+        "terminou": True,
+        "classificacao":livro.classificacao
+    })
+    return historico
+
 def add_um_livro(request):
     if request.method == "POST":
         form = LivroForm(request.POST)
         if form.is_valid():
             livro_salvo = form.save()
-            if livro_salvo:
+            if livro_salvo.id:
                 messages.success(request,"Livro salvo com sucesso.")
-                if form.cleaned_data.get("acrescentar_no_planejamento") == True:
+                if form.cleaned_data.get("acrescentar_no_planejamento"):
                     acrescentar_plan(livro_salvo.id)
+                if livro_salvo.lido:
+                    criar_historico(livro_salvo)
         else:
             for er in form.errors.items():
                 messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")

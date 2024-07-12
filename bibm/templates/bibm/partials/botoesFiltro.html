@@ -9,13 +9,11 @@
 			</span>
 			{% else %}
 			<span class="btn-medio {{classe_btn}}">
-				{% if caller == "meus_livros" %}
-				<a href="{% url 'bibm:meus_livros' fil_chave %}">
-				{% elif caller == "editar_planejamento" %}
-				<a href="{% url 'bibm:editar_planejamento' fil_chave %}">
-				{% elif caller == "minhas_anotacoes" %}
-				<a href="{% url 'bibm:minhas_anotacoes' fil_chave %}">
-					{% endif %}
+				{% if ordem %}
+				<a href="{% url 'bibm:'|add:caller fil_chave ordem %}">
+				{% else %}
+				<a href="{% url 'bibm:'|add:caller fil_chave %}">
+				{% endif %}
 					{{fil_valor}}
 				</a>
 			</span>

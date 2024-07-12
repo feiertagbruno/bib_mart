@@ -11,7 +11,6 @@ from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
-from django.db.models.functions import Lower
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True)
@@ -222,21 +221,15 @@ def meus_livros(request, filtro):
     }
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().annotate(
-                titulo_lower = Lower("titulo")
-            ).order_by("titulo_lower")
+            meus_livros = Livro.objects.all().order_by("titulo")
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).annotate(
-                titulo_lower = Lower("titulo")
-            ).order_by("titulo_lower")
+            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).annotate(
-                titulo_lower = Lower("titulo")
-            ).order_by("titulo_lower")
+            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":

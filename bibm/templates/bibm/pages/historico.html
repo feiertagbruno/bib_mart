@@ -16,7 +16,7 @@
   
     <span class="titulo-grande-padrao">Histórico</span>
 
-    <a href="{% url "bibm:historico_de_compra" "todos" %}" class="btn-pequeno btn-verde btn-historico-de-compra">Histórico de Compra</a>
+    <a href="{% url "bibm:historico_de_compra" "todos" "descrescente" %}" class="btn-pequeno btn-verde btn-historico-de-compra">Histórico de Compra</a>
 
   </div>
 
@@ -29,7 +29,7 @@
   <div class="historico-box">
     {% for historico in historicos %}
 
-      <div class="historico-div">
+      <div id="historico_id_{{historico.id}}" class="historico-div">
         <div class="titulo-corpo-padrao">
           {{historico.livro}}
           <div class="linha-divisoria-box">
@@ -52,6 +52,41 @@
           Lendo
         {% endif %}
         <div>Data de início: {{historico.data_ini}}</div>
+
+        <div class="anotacoes-historico">
+
+          {% if historico_id_livro == historico.id %}
+
+          <div class="anotacao-historico-box">
+
+            {% for anotacao in anotacoes %}
+
+                <div class="data-inicial-anotacao-historico">
+                  {{ anotacao.data_inclusao }}
+                </div>
+
+                <div class="conteudo-anotacao-salva-historico">{{ anotacao.anotacao }}</div>
+
+            {% empty %}
+              <div class="conteudo-anotacao-salva-historico">Sem anotações neste período</div>
+            {% endfor %}
+
+          </div>
+
+          {% else %}
+
+            <form action="{% url "bibm:historico" %}" method="get">
+              <input type="hidden" name="historico_id" value="{{historico.id}}">
+              <input type="hidden" name="livro_id" value="{{historico.livro.id}}">
+              <input type="hidden" class="" name="data_ini" value="{{historico.data_ini}}">
+              <input type="hidden" class="" name="data_fim" value="{{historico.data_fim}}">
+              <input type="hidden" class="" name="q" value="{{search_term}}">
+              <button id="btn_abrir_anotacao" type="submit" class="btn-medio btn-azul">Anotações</button>
+            </form>
+
+          {% endif %}
+        </div>
+
       </div>
 
     {% empty %}
