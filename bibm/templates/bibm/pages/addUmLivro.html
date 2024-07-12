@@ -43,7 +43,9 @@
 			<span class="mensagem-vermelha" id="mensagem-autor"></span>
 
 			{% comment %} BOTÃO ADICIONAR UM AUTOR {% endcomment %}
-			<button type="submit" id="add_um_autor_livro" class="btn-pequeno btn-azul invisivel">Adicionar um Autor</button>
+			<button type="submit" id="add_um_autor_livro" class="btn-pequeno btn-azul invisivel">
+				Adicionar um Autor
+			</button>
 
 			{% comment %} TITULO {% endcomment %}
 			<label class="label-add-um-livro" for="titulo">Título:</label>
@@ -79,7 +81,9 @@
 
 			{% comment %} BOTÃO ADICIONAR UMA REGIÃO {% endcomment %}
 			<input type="hidden" name="caller_regiao" id="caller_regiao">
-			<button type="submit" id="add_uma_regiao_livro" class="btn-pequeno btn-azul invisivel">Adicionar uma Região</button>
+			<button type="submit" id="add_uma_regiao_livro" class="btn-pequeno btn-azul invisivel">
+				Adicionar uma Região
+			</button>
 
 			{% comment %} GENERO {% endcomment %}
 			<div class="div-dois-campos">
@@ -109,7 +113,9 @@
 					<span class="mensagem-vermelha" id="mensagem-genero"></span>
 
 					{% comment %} BOTÃO ADICIONAR UM GÊNERO {% endcomment %}
-					<button type="submit" id="add_um_genero_livro" class="btn-pequeno btn-azul invisivel">Adicionar um Gênero</button>
+					<button type="submit" id="add_um_genero_livro" class="btn-pequeno btn-azul invisivel">
+						Adicionar um Gênero
+					</button>
 				</div>
 			{% comment %} TEMA {% endcomment %}
 			<div class="campo-dois-campos">
@@ -132,7 +138,9 @@
 				</div>
 				<div class="campo-tres-campos">
 					<label class="label-add-um-livro" for="data_leitura">Data da leitura:</label>
-					<div class="input-container input-container-menor texto-centralizado" id="data_leitura">{{form.data_leitura}}</div>
+					<div class="input-container input-container-menor texto-centralizado" id="data_leitura">
+						{{form.data_leitura}}
+					</div>
 				</div>
 				<div class="campo-tres-campos flex-flow-row">
 					<label class="label-add-um-livro" for="tema">Leria de novo:</label>
@@ -167,12 +175,19 @@
 					<span class="mensagem-vermelha" id="mensagem-endereco"></span>
 
 					{% comment %} BOTÃO ADICIONAR UM ENDEREÇO {% endcomment %}
-					<button type="submit" id="add_um_endereco_livro" class="btn-pequeno btn-azul invisivel">Adicionar um Endereço</button>
+					<button type="submit" id="add_um_endereco_livro" class="btn-pequeno btn-azul invisivel">
+						Adicionar um Endereço
+					</button>
 				</div>
 				{% comment %} DATA COMPRA {% endcomment %}
 				<div class="campo-dois-campos">
 					<label class="label-add-um-livro" for="data_compra">Data de compra:</label>
-					<div class="input-container input-container-menor texto-centralizado" id="data_compra">{{form.data_compra}}</div>
+					<div 
+						class="input-container input-container-menor texto-centralizado" 
+						id="data_compra"
+					>
+						{{form.data_compra}}
+					</div>
 				</div>
 			</div>
 			{% comment %} ACRESCENTAR NO PLANEJAMENTO {% endcomment %}
@@ -184,7 +199,9 @@
 				</div>
 			</div>
 			{% endif %}
-			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem" id="btn_adicionar">Adicionar</button>
+			<button type="submit" class="btn-medio btn-azul espaco-top-bottom-4rem" id="btn_adicionar">
+				Adicionar
+			</button>
 		</form>
 	</div>
 	<input type="hidden" name="relacao_autor_regiao" id="relacao_autor_regiao" value="{{relacao_autor_regiao}}">

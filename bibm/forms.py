@@ -111,12 +111,14 @@ class LivroForm(forms.ModelForm):
                 attrs={
                     "type":"date",
                     "class":"data-input",
+                    "id": "data_compra_field",
                 }
             ),
             "data_leitura":forms.DateInput(
                 attrs={
                     "type":"date",
                     "class":"data-input",
+                    "id": "data_leitura_field",
                 }
             ),
             "lido":forms.CheckboxInput(

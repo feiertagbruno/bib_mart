@@ -5,6 +5,8 @@ const titulo_input = document.querySelector("#id_titulo")
 const tema_input = document.querySelector("#id_tema")
 const data_compra_input = document.querySelector("#data_compra")
 let elemento_em_foco = null
+const data_leitura_field = document.querySelector("#data_leitura_field")
+const data_compra_field = document.querySelector("#data_compra_field")
 
 document.addEventListener("DOMContentLoaded", function(e) {
 
@@ -17,7 +19,56 @@ document.addEventListener("DOMContentLoaded", function(e) {
 	})
 
 	btn_adicionar.addEventListener("click", function(e) {
+
 		form.removeAttribute("novalidate")
+
+		let data_agora = new Date()
+		data_agora = `${data_agora.getFullYear()}-`+
+			`${(data_agora.getMonth()+1).toString().padStart(2,"0")}-`+
+			`${data_agora.getDate().toString().padStart(2,"0")}`
+
+		// VALIDAÇÕES ANTES DE SALVAR
+		if (
+			checkBox_lido.value === "on" &&
+			!data_leitura_field.value
+		) {
+			if (!confirm("O livro foi marcado como lido, mas a data de leitura não foi preenchida," +
+				" a data de hoje será considerada. Tudo bem?")) {
+					e.preventDefault()
+					data_leitura_field.focus()
+					return
+				} else {
+					data_leitura_field.value = data_agora
+				}
+		}
+		if (data_leitura_field.value > data_agora && data_leitura_field.value) {
+			if (!confirm("A data de leitura é maior do que a data de hoje. Deseja salvar assim mesmo?")) {
+				e.preventDefault()
+				data_leitura_field.focus()
+				return
+			}
+		}
+		if (data_compra_field.value > data_agora && data_compra_field.value) {
+			if (!confirm("A data de compra é maior do que a data de hoje. Deseja salvar assim mesmo?")) {
+				e.preventDefault()
+				data_compra_field.focus()
+				return
+			}
+		}
+		if (
+			data_compra_field.value > data_leitura_field.value &&
+			data_compra_field.value && data_leitura_field.value
+		) {
+			if (!confirm("A data de compra está maior do que a data de leitura, deseja salvar assim mesmo?")) {
+				e.preventDefault()
+				data_compra_field.focus()
+				return
+			}
+		}
+		if (!data_compra_field.value) {
+			data_compra_field.value = data_agora
+		}
+		// VALIDAÇÕES ANTES DE SALVAR -- FIM
 	})
 
 	btn_adicionar.addEventListener("keydown", function(e) {
