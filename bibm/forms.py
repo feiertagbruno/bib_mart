@@ -238,7 +238,7 @@ class AutorForm(forms.ModelForm):
         if is_integer(self.data["regiao"]):
             cleaned_fields["regiao"] = Regiao.objects.filter(id=self.data["regiao"]).first()
         else:
-            cleaned_fields["regiao"] = Regiao.objects.get(id=Livro._meta.get_field("regiao").default)
+            cleaned_fields["regiao"] = Regiao.objects.get(id=Autor._meta.get_field("regiao").default)
 
 class RegiaoForm(forms.ModelForm):
     class Meta:
