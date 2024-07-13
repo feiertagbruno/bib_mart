@@ -19,21 +19,24 @@ def autores(request, filtro):
     ordem_alfabetica_lista = get_ordem_alfabetica_lista()
 
     if filtro[:9] == "sobrenome":
-        autores = Autor.objects.annotate(
+        autores = Autor.objects.filter(deletado=False).annotate(
             nome=Concat("ult_nome", Value(", "), "prim_nome")
             ).order_by("nome")
         filtro_letra = filtro[9:]
         filtro = "sobrenome"
     elif filtro[:12] == "primeironome":
-        autores = Autor.objects.annotate(
+        autores = Autor.objects.filter(deletado=False).annotate(
             nome=Concat("prim_nome", Value(" "), "ult_nome")
             ).order_by("nome")
         filtro_letra = filtro[12:]
         filtro = "primeironome"
     elif filtro[:6] == "regiao":
         autores = {}
-        for regiao in Regiao.objects.filter(id__in = Autor.objects.values("regiao__id").distinct()).order_by("regiao"):
-            autores[regiao.regiao] = Autor.objects.filter(regiao__id = regiao.id).annotate(
+        for regiao in Regiao.objects.filter(
+            id__in = Autor.objects.filter(deletado=False).values("regiao__id").distinct(),
+            deletado=False
+        ).order_by("regiao"):
+            autores[regiao.regiao] = Autor.objects.filter(regiao__id=regiao.id,deletado=False).annotate(
                 nome=Concat("ult_nome", Value(", "), "prim_nome")
                 ).order_by("nome")
         filtro_letra = filtro[6:]
@@ -52,7 +55,9 @@ def autores(request, filtro):
 
     if autor_id_livro is not None: autor_id_livro = int(autor_id_livro)
     if caller == "buscar_livros" or autor_id_livro:
-        livros = Livro.objects.filter(autor__id= autor_id_livro).values_list("titulo", flat=True).order_by("titulo")
+        livros = Livro.objects.filter(
+            autor__id= autor_id_livro,deletado=False
+        ).values_list("titulo", flat=True).order_by("titulo")
 
     context = {
         "autores": autores,
@@ -74,19 +79,26 @@ def deletar_autor(request):
     if request.method != "POST":
         return Http404
     
+    autor_default = Autor.objects.get(id=Livro._meta.get_field("autor").default)
+    
     filtro = request.POST.get("filtro")
     autor = Autor.objects.get(id = request.POST.get("autor_id"))
-    autor.delete()
+    autor.deletado = True
+    autor.ult_nome += "#"
+    autor.save()
 
-    if not autor.id:
-        messages.info(request, "Autor excluído com sucesso. "\
-                      "Os livros deste autor foram realocados para 'Autor desconhecido'.")
+    if autor.deletado:
+        messages.info(request, "Autor excluído com sucesso.")
+        livros = Livro.objects.filter(autor=autor)
+        for livro in livros:
+            livro.autor = autor_default
+            livro.save()
 
     return HttpResponseRedirect(reverse("bibm:autores", kwargs={"filtro":filtro}))
 
 def regioes(request):
 
-    regioes = Regiao.objects.all().order_by("regiao")
+    regioes = Regiao.objects.filter(deletado=False).order_by("regiao")
 
     regiao_id_livro = request.GET.get("regiao_id")
     if not regiao_id_livro:
@@ -98,7 +110,7 @@ def regioes(request):
     regiao_livros = None
 
     if regiao_id_livro:
-        regiao_livros = Livro.objects.filter(regiao__id = regiao_id_livro).order_by("titulo")
+        regiao_livros = Livro.objects.filter(regiao__id=regiao_id_livro,deletado=False).order_by("titulo")
 
     context = {
         "caller": "regioes",
@@ -114,14 +126,32 @@ def regioes_deletar(request):
     if request.method != "POST":
         return Http404
     
+    regiao_default_livro = Regiao.objects.get(id=Livro._meta.get_field("regiao").default)
+    regiao_default_autor = Regiao.objects.get(id=Autor._meta.get_field("regiao").default)
+    
     regiao = Regiao.objects.get(id=request.POST.get("regiao_id"))
-    regiao.delete()
+    regiao.deletado = True
+    regiao.regiao += "#"
+    regiao.save()
+
+    if regiao.deletado:
+        messages.info(request, "Região excluída.")
+
+        livros = Livro.objects.filter(regiao=regiao)
+        for livro in livros:
+            livro.regiao = regiao_default_livro
+            livro.save()
+        
+        autores = Autor.objects.filter(regiao=regiao)
+        for autor in autores:
+            autor.regiao = regiao_default_autor
+            autor.save()
 
     return HttpResponseRedirect(reverse("bibm:regioes"))
 
 def generos(request):
 
-    generos = Genero.objects.all().order_by("genero")
+    generos = Genero.objects.filter(deletado=False).order_by("genero")
 
     genero_id_livro = request.GET.get("genero_id")
     if not genero_id_livro:
@@ -133,7 +163,7 @@ def generos(request):
     genero_livros = None
 
     if genero_id_livro:
-        genero_livros = Livro.objects.filter(genero__id = genero_id_livro).order_by("titulo")
+        genero_livros = Livro.objects.filter(genero__id=genero_id_livro,deletado=False).order_by("titulo")
 
     context = {
         "caller": "generos",
@@ -149,7 +179,18 @@ def generos_deletar(request):
     if request.method != "POST":
         return Http404
     
+    genero_default = Genero.objects.get(id=Livro._meta.get_field("genero").default)
+    
     genero = Genero.objects.get(id=request.POST.get("genero_id"))
-    genero.delete()
+    genero.deletado = True
+    genero.genero += "#"
+    genero.save()
+
+    if genero.deletado:
+        messages.info(request, "Gênero excluído.")
+        livros = Livro.objects.filter(genero=genero)
+        for livro in livros:
+            livro.genero = genero_default
+            livro.save()
 
     return HttpResponseRedirect(reverse("bibm:generos"))

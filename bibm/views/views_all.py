@@ -13,8 +13,8 @@ from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 
 def context_home():
-    livros_lendo = Livro.objects.filter(lendo=True)
-    livros_planejamento = Livro.objects.filter(planejamento=1)
+    livros_lendo = Livro.objects.filter(lendo=True,deletado=False)
+    livros_planejamento = Livro.objects.filter(planejamento=1,deletado=False)
     mostrar_lendo = False
     mostrar_planejamento = False
     if len(livros_lendo) > 0:
@@ -39,37 +39,46 @@ def context_add_um_livro(
     ):
         context = {}
         if autores:
-            autores = list(Autor.objects.annotate(
+            autores = list(Autor.objects.filter(deletado=False).annotate(
                     nome=Concat("prim_nome", Value(" "), "ult_nome")
                 ).values_list("id", "nome")
             )
             context.update({"autores":autores})
 
         if generos:
-            generos = list(Genero.objects.exclude(id=1).values_list("id","genero"))
+            generos = list(Genero.objects.exclude(
+                Q(Q(id=1)|Q(deletado=True))
+            ).values_list("id","genero"))
             context.update({"generos":generos})
 
         if enderecos:
             enderecos = list(
-                Endereco.objects.annotate(
+                Endereco.objects.filter(deletado=False).annotate(
                     nome=Concat("codigo", Value(" "), "descricao")
                 ).values_list("id", "nome")
             )
             context.update({"enderecos":enderecos})
 
         if regioes:
-            regioes = Regiao.objects.exclude(id=1).values_list("id", "regiao")
+            regioes = Regiao.objects.exclude(
+                Q(Q(id=1)|Q(deletado=True))
+            ).values_list("id", "regiao")
             context.update({"regioes":regioes})
 
         return context
 
 def livros_planejamento():
-    livros_plan = Livro.objects.exclude(planejamento=None).order_by("planejamento")
+    livros_plan = Livro.objects.exclude(
+        Q(Q(planejamento=None)|Q(deletado=True))
+    ).order_by("planejamento")
     ultimo_plan = len(livros_plan)
-    ultimo_plan_agregate = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
+    ultimo_plan_agregate = Livro.objects.filter(deletado=False).aggregate(
+        planejamento=Max("planejamento"))["planejamento"]
     p = 1
     if ultimo_plan != None and ultimo_plan != ultimo_plan_agregate:
-        todos_os_planejados = Livro.objects.exclude(planejamento=None).order_by("planejamento")
+        todos_os_planejados = Livro.objects.exclude(
+            Q(Q(planejamento=None)|Q(deletado=True))
+        ).order_by("planejamento")
         for livro in todos_os_planejados:
             livro.planejamento = None
             livro.save()
@@ -77,12 +86,15 @@ def livros_planejamento():
             livro.planejamento = p
             livro.save()
             p += 1
-        livros_plan = Livro.objects.exclude(planejamento=None).order_by("planejamento")
+        livros_plan = Livro.objects.exclude(
+            Q(Q(planejamento=None)|Q(deletado=True))
+        ).order_by("planejamento")
     return livros_plan
 
 def acrescentar_plan(livro_id):
     livros_planejamento()
-    proximo_planejamento = Livro.objects.aggregate(planejamento = Max("planejamento"))["planejamento"]
+    proximo_planejamento = Livro.objects.filter(deletado=False).aggregate(
+        planejamento = Max("planejamento"))["planejamento"]
     if proximo_planejamento == None:
         proximo_planejamento = 1
     else:
@@ -140,7 +152,7 @@ def home(request):
 def add_anotacao(request, livro_id):
 
     livro = Livro.objects.get(id=livro_id)
-    todas_anotacoes_livro = Anotacao.objects.filter(livro=livro).order_by("-id")
+    todas_anotacoes_livro = Anotacao.objects.filter(livro=livro,deletado=False).order_by("-id")
 
     # jogada com locale e timezone feita porque o 'abril' criado pelo timezone ficou com letra minuscula
     # fiz isso para ficar com a data igualzinha à data do django
@@ -176,7 +188,7 @@ def edit_anotacao(request, livro_id, anotacao_id):
     livro = Livro.objects.get(id=livro_id)
     anotacao = Anotacao.objects.get(id=anotacao_id)
     data_inclusao = anotacao.data_inclusao
-    todas_anotacoes_livro = Anotacao.objects.filter(livro=livro_id).order_by("-id")
+    todas_anotacoes_livro = Anotacao.objects.filter(livro=livro_id,deletado=False).order_by("-id")
 
     if request.method != "POST":
         form_anotacao = AnotacaoForm(instance=anotacao)
@@ -203,44 +215,58 @@ def edit_anotacao(request, livro_id, anotacao_id):
 
 def delete_anotacao(request, livro_id, anotacao_id):
     anotacao_para_excluir = Anotacao.objects.get(id=anotacao_id)
-    anotacao_para_excluir.delete()
+    anotacao_para_excluir.deletado = True
+    anotacao_para_excluir.save()
+    if anotacao_para_excluir.deletado == True:
+        messages.info(request, "Anotação deletada.")
+    else:
+        messages.error(request, "Por alguma razão a anotação não foi deletada.")
     return HttpResponseRedirect(
         reverse("bibm:add_anotacao", kwargs={"livro_id": livro_id})
     )
 
 
-def meus_livros(request, filtro):
+def meus_livros(request, filtro, ordem):
     termo_busca = request.GET.get("q", "").strip()
     classe_btn = "btn-azul"
     ordem_alfabetica_lista = get_ordem_alfabetica_lista()
+
     filtros = {
         "todos": "Todos", 
         "naolidos": "Não lidos", 
         "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
+
+    ordens = {
+        "adicao": "Ordem de adição",
+        "alfabetica": "Ordem alfabética",
+    }
+    
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().order_by("titulo")
+            meus_livros = Livro.objects.filter(deletado=False)
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=False,deletado=False)
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True,deletado=False)
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True,deletado=False)
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
+
         if filtro_letra:
             if len(filtro_letra) == 1 or filtro_letra == "0-9...":
                 meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")
+
     else:
-        meus_livros = Livro.objects.filter(Q(
+        meus_livros = Livro.objects.filter(Q(Q(
         Q(titulo__icontains = termo_busca) |
         Q(editora__icontains = termo_busca) |
         Q(autor__prim_nome__icontains = termo_busca) |
@@ -248,8 +274,13 @@ def meus_livros(request, filtro):
         Q(tema__icontains = termo_busca) |
         Q(endereco__codigo__icontains = termo_busca) |
         Q(regiao__regiao__icontains = termo_busca)
-        )).order_by("titulo")
+        ),Q(deletado=False))).order_by("titulo")
         filtro_letra = ""
+
+    if ordem == "adicao":
+        meus_livros = meus_livros.order_by("-id")
+    if ordem == "alfabetica":
+        meus_livros = meus_livros.order_by("titulo")
 
     context = {
         "meus_livros": meus_livros,
@@ -259,6 +290,8 @@ def meus_livros(request, filtro):
         "classe_btn": classe_btn,
         "ordem_alfabetica_lista": ordem_alfabetica_lista,
         "filtro_letra": filtro_letra,
+        "ordem": ordem,
+        "ordens": ordens,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -281,10 +314,17 @@ def pegar_este_livro(request):
 
         caller = request.POST.get("caller")
         filtro = request.POST.get("filtro")
+        ordem = request.POST.get("ordem")
         if caller == "meus_livros":
-            return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro": filtro}))
+            return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={
+                "filtro": filtro,
+                "ordem": ordem,
+            }))
         elif caller == "editar_planejamento":
-            return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro": filtro}))
+            return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={
+                "filtro": filtro,
+                "ordem": ordem,
+            }))
 
     return HttpResponseRedirect(reverse("bibm:home"))
 
@@ -311,14 +351,18 @@ def devolver_sim(request):
         classificacao = request.POST.get("classificacao")
         leria_de_novo = request.POST.get("leria_de_novo")
 
-        historico = Historico.objects.filter(Q(livro=livro), Q(data_fim=None)).order_by("-id").first()
+        historico = Historico.objects.filter(
+            livro=livro, data_fim=None, deletado=False
+        ).order_by("-id").first()
         if historico != None:
             historico.data_fim = timezone.localtime(timezone.now())
             historico.terminou = True
             historico.classificacao = classificacao
             historico.save()
 
-        historico = Historico.objects.filter(Q(livro=livro), Q(data_fim=None)).order_by("-id")
+        historico = Historico.objects.filter(
+            livro=livro, data_fim=None, deletado=False
+        ).order_by("-id")
         if len(historico) > 0:
             for hist in historico:
                 hist.delete()
@@ -341,11 +385,15 @@ def devolver_nao(request):
         livro_id = request.POST.get("livro_id")
         livro = Livro.objects.get(id=livro_id)
 
-        historico = Historico.objects.filter(Q(livro=livro), Q(data_fim=None)).order_by("-id").first()
+        historico = Historico.objects.filter(
+            livro=livro, data_fim=None, deletado=False
+        ).order_by("-id").first()
         historico.data_fim = timezone.localtime(timezone.now())
         historico.save()
 
-        historico = Historico.objects.filter(Q(livro=livro), Q(data_fim=None)).order_by("-id")
+        historico = Historico.objects.filter(
+            livro=livro, data_fim=None, deletado=False
+        ).order_by("-id")
         if len(historico) > 0:
             for hist in historico:
                 hist.delete()
@@ -355,36 +403,44 @@ def devolver_nao(request):
     return HttpResponseRedirect(reverse("bibm:home"))
 
 
-def editar_planejamento(request, filtro):
+def editar_planejamento(request, filtro, ordem):
 
     termo_busca = request.GET.get("q", "").strip()
+
     filtros = {
         "naolidos": "Não lidos", 
         "todos": "Todos", 
         "lidos": "Lidos", 
         "lidoeleriadenovo": "Lido e Leria de novo"
     }
+
+    ordens = {
+        "adicao": "Ordem de adição",
+        "alfabetica": "Ordem alfabética",
+    }
+    
     ordem_alfabetica_lista = get_ordem_alfabetica_lista()
     classe_btn = "btn-vermelho"
 
     livros_plan = livros_planejamento()
-    ultimo_plan = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
+    ultimo_plan = Livro.objects.filter(deletado=False).aggregate(
+        planejamento=Max("planejamento"))["planejamento"]
 
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().order_by("titulo")
+            meus_livros = Livro.objects.filter(deletado=False)
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=False,deletado=False)
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(lido=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True,deletado=False)
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).order_by("titulo")
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True, deletado=False)
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
 
@@ -401,9 +457,15 @@ def editar_planejamento(request, filtro):
                 Q(tema__icontains = termo_busca) |
                 Q(endereco__codigo__icontains = termo_busca) |
                 Q(regiao__regiao__icontains = termo_busca)
-            )
+            ),
+            Q(deletado=False)
         ))
         filtro = filtro_letra = ""
+
+    if ordem == "adicao":
+        meus_livros = meus_livros.order_by("-id")
+    if ordem == "alfabetica":
+        meus_livros = meus_livros.order_by("titulo")
 
     context = {
         "livros_plan": livros_plan,
@@ -416,6 +478,8 @@ def editar_planejamento(request, filtro):
         "classe_btn": classe_btn,
         "ordem_alfabetica_lista": ordem_alfabetica_lista,
         "filtro_letra": filtro_letra,
+        "ordem": ordem,
+        "ordens": ordens,
     }
     return render(request, "bibm/pages/editarPlanejamento.html", context)
 
@@ -424,6 +488,7 @@ def subir_plan(request):
     if request.method == "POST":
         livro_id = request.POST.get("livro_id")
         filtro = request.POST.get("filtro")
+        ordem = request.POST.get("ordem")
 
         livro = Livro.objects.get(id=livro_id)
         if livro.planejamento > 1:
@@ -437,16 +502,21 @@ def subir_plan(request):
             livro_acima.planejamento = livro.planejamento + 1
             livro_acima.save()
 
-    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro":filtro}))
+    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={
+        "filtro":filtro,
+        "ordem": ordem,
+    }))
 
 
 def descer_plan(request):
     if request.method == "POST":
         livro_id = request.POST.get("livro_id")
         filtro = request.POST.get("filtro")
+        ordem = request.POST.get("ordem")
 
         livro = Livro.objects.get(id=livro_id)
-        maior_planejamento = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
+        maior_planejamento = Livro.objects.filter(deletado=False).aggregate(
+            planejamento=Max("planejamento"))["planejamento"]
 
         if livro.planejamento < maior_planejamento:
             livro_abaixo = Livro.objects.filter(planejamento=livro.planejamento + 1).first()
@@ -459,15 +529,21 @@ def descer_plan(request):
             livro_abaixo.planejamento = livro.planejamento - 1
             livro_abaixo.save()
 
-    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro":filtro}))
+    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={
+        "filtro":filtro,
+        "ordem": ordem,
+    }))
 
 def pular_este(request):
     if request.method == "POST":
         livro_id = request.POST.get("livro_id")
         livro = Livro.objects.get(id=livro_id)
-        ultimo_plan = Livro.objects.aggregate(planejamento=Max("planejamento"))["planejamento"]
+        ultimo_plan = Livro.objects.filter(deletado=False).aggregate(
+            planejamento=Max("planejamento"))["planejamento"]
         if livro.planejamento != ultimo_plan:
-            livros_plan_maiores = Livro.objects.filter(planejamento__gt = livro.planejamento).order_by("planejamento")
+            livros_plan_maiores = Livro.objects.filter(
+                planejamento__gt = livro.planejamento, deletado=False
+            ).order_by("planejamento")
             if len(livros_plan_maiores) > 0:
                 livro.planejamento = None
                 livro.save()
@@ -490,6 +566,7 @@ def remover_do_planejamento(request):
     if request.method == "POST":
         livro_id = request.POST.get("livro_id")
         filtro = request.POST.get("filtro")
+        ordem = request.POST.get("ordem")
         livro = Livro.objects.get(id=livro_id)
         livro.planejamento = None
         livro.save()
@@ -497,21 +574,32 @@ def remover_do_planejamento(request):
         livros_planejamento()
 
     return HttpResponseRedirect(
-        reverse("bibm:editar_planejamento", kwargs={"filtro":filtro})
+        reverse("bibm:editar_planejamento", kwargs={
+            "filtro":filtro,
+            "ordem":ordem,
+            })
     )
 
 def acrescentar_no_planejamento(request):
     filtro = request.POST.get("filtro")
+    ordem = request.POST.get("ordem")
     if request.method == "POST":
         livro_id = request.POST.get("livro_id")
         acrescentar_plan(livro_id)
-    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro":filtro}))
+    return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={
+        "filtro":filtro,
+        "ordem": ordem,
+    }))
 
 def acrescentar_no_planejamento_meus_livros(request):
     livro_id = request.POST.get("livro_id")
     filtro = request.POST.get("filtro")
+    ordem = request.POST.get("ordem")
     acrescentar_plan(livro_id)
-    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
+    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={
+        "filtro":filtro,
+        "ordem": ordem,
+    }))
 
 def chamar_html_teste(request):
     if request.method == "GET":

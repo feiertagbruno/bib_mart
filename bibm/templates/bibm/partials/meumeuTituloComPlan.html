@@ -13,13 +13,13 @@
 			<button type="submit" class="btn-menu-grande btn-verde">Pegar este livro</button>
 		</form>
 	</div>
+	<a href="{% url 'bibm:editar_planejamento' 'naolidos' 'adicao' %}">
 	<div class="opc-livro-atual">
 		<span class="btn-menu-grande btn-verde">
-			<a href="{% url 'bibm:editar_planejamento' 'naolidos' %}">
 				Editar Planejamento
-			</a>
-		</span>
+			</span>
 		</div>
+	</a>
 	<div class="opc-livro-atual">
 		<form method="post" action="{% url 'bibm:pular_este'%}">
 			{% csrf_token %}

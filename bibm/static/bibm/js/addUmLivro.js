@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 		// VALIDAÇÕES ANTES DE SALVAR
 		if (
-			checkBox_lido.value === "on" &&
+			checkBox_lido.checked &&
 			!data_leitura_field.value
 		) {
 			if (!confirm("O livro foi marcado como lido, mas a data de leitura não foi preenchida," +

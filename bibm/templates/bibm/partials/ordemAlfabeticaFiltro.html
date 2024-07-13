@@ -2,21 +2,25 @@
 
     {% with concat=filtro|add:letra  %}
       {% if filtro_letra == letra %}
-        <a 
-          href="{% url 'bibm:'|add:caller concat %}" 
+        <span
           class="cor-azul" 
-          title="Filtra livros iniciados em {{letra}}"
         >
+          {{letra}}
+        </span>
       {% else %}
         <a 
+        {% if ordem %}
+          href="{% url 'bibm:'|add:caller concat ordem %}" 
+        {% else %}
           href="{% url 'bibm:'|add:caller concat %}" 
+        {% endif %}
+          id="btn_filtro_id"
           class="opc-infla" 
           title="Filtra livros iniciados em {{letra}}"
         >
-      {% endif %}
-    {% endwith %}
-
           {{letra}}
         </a>
+      {% endif %}
+    {% endwith %}
 
 {% endfor %}

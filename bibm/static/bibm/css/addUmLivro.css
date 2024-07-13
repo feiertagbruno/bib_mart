@@ -98,6 +98,7 @@
 
 .autor-input {
 	padding: 1rem;
+	font-size: calc(1.3rem + .2vw);
 }
 
 .data-input {

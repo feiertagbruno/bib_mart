@@ -149,8 +149,13 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	});
 
 	btn_add_um_autor_livro.addEventListener("click", function(e) {
-		form.action = form.action + "adicionarumautor/"
-		form.setAttribute("novalidate", "novalidate")
+		if (form.action.slice(-18) === "/adicionarumlivro/") {
+			form.action = form.action + "adicionarumautor/"
+			form.setAttribute("novalidate", "novalidate")
+		} 
+		// else if (form.action.slice(-15) === "/editarumlivro/") {
+		// 	form.action = form.action.slice(0, form.action.length - 15) + "/adicionarumlivro/adicionarumautor/"
+		// }
 	})
 
 	btn_add_um_autor_livro.addEventListener("blur", function(e) {
@@ -167,7 +172,9 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	})
 
 	autor_input.addEventListener("focus", function(e) {
-		btn_add_um_autor_livro.style.display = "block"
+		if (!document.querySelector("[name='editar_um_livro']")) {
+			btn_add_um_autor_livro.style.display = "block"
+		}
 	})
 
 	autor_input.addEventListener("blur", function(e) {

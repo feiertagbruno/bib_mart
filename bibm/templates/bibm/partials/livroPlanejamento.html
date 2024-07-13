@@ -15,6 +15,7 @@
 					{% csrf_token %}
 					<input type="hidden" name="livro_id" value={{ livro.id }}>
 					<input type="hidden" name="filtro" value={{ filtro }}>
+					<input type="hidden" name="ordem" value={{ ordem }}>
 					<button type="submit" class="btn-medio btn-vermelho">Pegar este livro</button>
 				</form>
 			</div>
@@ -24,6 +25,7 @@
 					{% csrf_token %}
 					<input type="hidden" name="livro_id" value={{ livro.id }}>
 					<input type="hidden" name="filtro" value={{ filtro }}>
+					<input type="hidden" name="ordem" value={{ ordem }}>
 					<button type="submit" class="btn-medio btn-vermelho">Remover do planejamento</button>
 				</form>
 			</div>
@@ -39,6 +41,7 @@
 				{% csrf_token %}
 				<input type="hidden" name="livro_id" value="{{livro.id}}">
 				<input type="hidden" name="filtro" value="{{filtro}}">
+				<input type="hidden" name="ordem" value="{{ordem}}">
 				<button type="submit" class="btn-nulo btn-subir">
 					<img src="{% static 'bibm/img/sort-up-solid.svg' %}" alt="Seta para cima" />
 				</button>
@@ -58,6 +61,7 @@
 				{% csrf_token %}
 				<input type="hidden" name="livro_id" value="{{livro.id}}">
 				<input type="hidden" name="filtro" value="{{filtro}}">
+				<input type="hidden" name="ordem" value="{{ordem}}">
 				<button type="submit" class="btn-nulo btn-descer">
 					<img src="{% static 'bibm/img/sort-down-solid.svg' %}" alt="Seta para baixo" />
 				</button>

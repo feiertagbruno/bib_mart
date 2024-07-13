@@ -10,9 +10,9 @@
 			{% else %}
 			<span class="btn-medio {{classe_btn}}">
 				{% if ordem %}
-				<a href="{% url 'bibm:'|add:caller fil_chave ordem %}">
+				<a id="btn_filtro_id" href="{% url 'bibm:'|add:caller fil_chave ordem %}">
 				{% else %}
-				<a href="{% url 'bibm:'|add:caller fil_chave %}">
+				<a id="btn_filtro_id" href="{% url 'bibm:'|add:caller fil_chave %}">
 				{% endif %}
 					{{fil_valor}}
 				</a>

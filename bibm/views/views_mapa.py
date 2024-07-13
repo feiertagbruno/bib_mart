@@ -17,7 +17,7 @@ def mapa_da_bibli(request):
             if request.session.get("enderecos"):
                 del(request.session["enderecos"])
 
-            codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
+            codigo_endereco_livro = Livro.objects.filter(titulo__icontains=search_term,deletado=False).first()
 
             if codigo_endereco_livro:
                 try:
@@ -29,11 +29,11 @@ def mapa_da_bibli(request):
 
             try:
                 enderecos = Endereco.objects.filter(Q(
-                    Q(codigo__icontains=search_term) |
-                    Q(descricao__icontains=search_term) |
                     Q(
-                        codigo = codigo_endereco_livro
-                    )
+                        Q(codigo__icontains=search_term) |
+                        Q(descricao__icontains=search_term) |
+                        Q(codigo = codigo_endereco_livro)
+                    ), Q(deletado=False)
                 ))
             except AttributeError:
                 enderecos = Endereco.objects.none()
@@ -61,7 +61,7 @@ def mapa_da_bibli(request):
             enderecos_string = request.session["enderecos"]
             enderecos_list = enderecos_string.split("|")
 
-            codigo_endereco_livro = Livro.objects.filter(titulo__icontains = search_term).first()
+            codigo_endereco_livro = Livro.objects.filter(titulo__icontains=search_term,deletado=False).first()
             
             if codigo_endereco_livro:
                 try:
@@ -73,11 +73,11 @@ def mapa_da_bibli(request):
             
             try:
                 enderecos = Endereco.objects.filter(Q(
-                    Q(codigo__icontains=search_term) |
-                    Q(descricao__icontains=search_term) |
                     Q(
-                        codigo = codigo_endereco_livro
-                    )
+                        Q(codigo__icontains=search_term) |
+                        Q(descricao__icontains=search_term) |
+                        Q(codigo = codigo_endereco_livro)
+                    ), Q(deletado=False)
                 ))
             except AttributeError:
                 enderecos = Endereco.objects.none()
@@ -86,7 +86,7 @@ def mapa_da_bibli(request):
                 del(request.session["guia"])
 
             enderecos = enderecos.union(
-                Endereco.objects.filter(id__in=enderecos_list)
+                Endereco.objects.filter(id__in=enderecos_list,deletado=False)
             )
 
             if enderecos.exists():
@@ -113,11 +113,11 @@ def mapa_da_bibli(request):
         else:
             enderecos_list = enderecos_string[:l].split("|")
 
-        enderecos = Endereco.objects.filter(id__in=enderecos_list)
+        enderecos = Endereco.objects.filter(id__in=enderecos_list,deletado=False)
         del(request.session["funcao_enderecar"])
 
     else:
-        enderecos = Endereco.objects.all().order_by("codigo")
+        enderecos = Endereco.objects.filter(deletado=False).order_by("codigo")
         if request.session.get("guia", None):
             del(request.session["guia"])
         if request.session.get("enderecos", None):
@@ -129,7 +129,7 @@ def mapa_da_bibli(request):
     if enderecos.exists():
         for endereco in enderecos:
             livro_lista = []
-            livros_endereco = Livro.objects.filter(endereco__codigo = endereco.codigo)
+            livros_endereco = Livro.objects.filter(endereco__codigo = endereco.codigo,deletado=False)
             for livro in livros_endereco:
                 livro_lista.append((livro.id, livro.titulo))
             enderecos_dict[endereco.codigo] = ((endereco.id, endereco.descricao),livro_lista)
@@ -137,7 +137,7 @@ def mapa_da_bibli(request):
     if search_term == "" or search_term.lower() in "sem endereço":
 
         livro_lista = []
-        livros_endereco = Livro.objects.filter(endereco = None)
+        livros_endereco = Livro.objects.filter(endereco = None,deletado=False)
 
         for livro in livros_endereco:
             livro_lista.append((livro.id, livro.titulo))
@@ -171,7 +171,7 @@ def enderecar_livro(request):
         livro = Livro.objects.filter(id = request.POST.get("livro_id_form")).first()
         endereco_id = request.POST.get("endereco_id_form")
         if endereco_id != "None":
-            endereco = Endereco.objects.filter(id = endereco_id).first()
+            endereco = Endereco.objects.filter(id = endereco_id,deletado=False).first()
             livro.endereco = endereco
         else:
             livro.endereco = None
@@ -185,7 +185,7 @@ def enderecar_livro(request):
 
 def editar_endereco(request, endereco_id):
 
-    form = EnderecoForm(instance= Endereco.objects.filter(id=endereco_id).first())
+    form = EnderecoForm(instance= Endereco.objects.filter(id=endereco_id,deletado=False).first())
     caller = request.GET.get("caller", None)
 
     context = {
@@ -199,7 +199,17 @@ def editar_endereco(request, endereco_id):
 def deletar_endereco(request):
     if request.method == "POST":
         endereco = Endereco.objects.get(id=request.POST.get("endereco_id"))
-        endereco.delete()
+        endereco.deletado = True
+        endereco.save()
+
+        if endereco.deletado:
+            messages.info(request, "Endereço excluído.")
+
+            livros = Livro.objects.filter(endereco=endereco)
+            for livro in livros:
+                livro.endereco = None
+                livro.save()
+
         return HttpResponseRedirect(reverse("bibm:mapa_da_bibli"))
     else:
         return Http404

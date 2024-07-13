@@ -3,12 +3,17 @@
 
 {% block content %}
   <div class="container-search-box">
-    <form action="{% url 'bibm:meus_livros' 'todos' %}" class="search-form caixa-de-pesquisa">
+    <form action="{% url 'bibm:meus_livros' 'todos' ordem %}" class="search-form caixa-de-pesquisa">
       <input type="search" class="search-input" name="q" value="{{ search_term }}" />
       <button type="submit" class="search-button lupa"><img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" /></button>
     </form>
   </div>
-  {% include "bibm/partials/botoesFiltro.html" %}
+  <div class="linha-filtros-historico-de-compras">
+    {% include "bibm/partials/botoesFiltro.html" %}
+    {% if ordens %}
+    {% include "bibm/partials/ordemCresDecres.html" %}
+    {% endif %}
+  </div>
   <div class="meus-livros-box">
     {% for livro in meus_livros %}
       {% include "bibm/partials/livroDetalheForm.html" %}

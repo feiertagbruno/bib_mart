@@ -74,6 +74,7 @@
 .linha-filtros-historico-de-compras {
   display: flex;
   flex-flow: row wrap;
+  gap: 2rem;
 }
 
 .historico-de-compra-box {

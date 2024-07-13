@@ -126,3 +126,9 @@ env
 local_settings.py
 _local_settings.py
 gunicorn-error-log
+
+Code-Libre.bat
+Code-Libre.vbs
+db.sqlite3
+Exec-Libre.bat
+zTestes.ipynb

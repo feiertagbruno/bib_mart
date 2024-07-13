@@ -165,7 +165,9 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	})
 
 	endereco_input.addEventListener("focus", function(e) {
-		btn_add_um_endereco_livro.style.display = "block"
+		if (!document.querySelector("[name='editar_um_livro']")) {
+			btn_add_um_endereco_livro.style.display = "block"
+		}
 	})
 	
 	endereco_input.addEventListener("blur", function(e) {

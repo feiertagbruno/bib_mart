@@ -13,12 +13,19 @@
   </div>
   <div class="meus-livros-box">
     <div class="container-search-box">
-      <form action="{% url 'bibm:editar_planejamento' 'todos' %}" class="search-form caixa-de-pesquisa">
+      <form action="{% url 'bibm:editar_planejamento' 'todos' ordem %}" class="search-form caixa-de-pesquisa">
         <input type="search" class="search-input" name="q" value="{{ search_term }}" />
         <button type="submit" class="search-button lupa"><img src="{% static 'bibm/img/magnifying-glass-solid.svg' %}" alt="Lupa" /></button>
       </form>
     </div>
-    {% include "bibm/partials/botoesFiltro.html" %}
+
+    <div class="linha-filtros-historico-de-compras">
+      {% include "bibm/partials/botoesFiltro.html" %}
+      {% if ordens %}
+      {% include "bibm/partials/ordemCresDecres.html" %}
+      {% endif %}
+    </div>
+
     {% if termo_pesquisado %}
       <span class="termo-pesquisado">Termo pesquisado: "{{ termo_pesquisado }}"</span>
     {% endif %}

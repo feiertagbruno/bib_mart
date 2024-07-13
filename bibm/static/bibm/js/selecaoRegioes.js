@@ -178,7 +178,9 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 
 	if (btn_add_uma_regiao_livro) {
 		regiao_input.addEventListener("focus", function(e) {
-			btn_add_uma_regiao_livro.style.display = "block"
+			if (!document.querySelector("[name='editar_um_livro']")) {
+				btn_add_uma_regiao_livro.style.display = "block"
+			}
 		})
 	}
 

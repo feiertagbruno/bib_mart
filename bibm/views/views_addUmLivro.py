@@ -60,7 +60,7 @@ def add_um_livro(request):
         del(request.session["caller_regiao"])
     
     relacao_autor_regiao = list_para_string(
-        Autor.objects.all().values_list("id", "regiao__id"),
+        Autor.objects.filter(deletado=False).values_list("id", "regiao__id"),
         "|",
         "-"
     )
@@ -83,9 +83,10 @@ def add_um_livro(request):
 
 def editar_um_livro(request, livro_id):
 
-    livro = Livro.objects.filter(id=livro_id).first()
+    livro = Livro.objects.get(id=livro_id)
     caller = request.GET.get("caller")
     filtro = request.GET.get("filtro")
+    ordem = request.GET.get("ordem")
 
     form = LivroForm(instance=livro)
     if form.instance.data_compra:
@@ -100,6 +101,7 @@ def editar_um_livro(request, livro_id):
         "editar_um_livro":True,
         "caller":caller,
         "filtro":filtro,
+        "ordem": ordem,
     }
 
     context.update({
@@ -112,8 +114,9 @@ def editar_um_livro_save(request):
     livro_id = request.POST.get("livro_id")
     caller = request.POST.get("caller")
     filtro = request.POST.get("filtro")
+    ordem = request.POST.get("ordem")
 
-    livro = Livro.objects.filter(id=livro_id).first()
+    livro = Livro.objects.get(id=livro_id)
     livro_lido = livro.lido
 
     form = LivroForm(instance=livro, data=request.POST)
@@ -130,28 +133,40 @@ def editar_um_livro_save(request):
             messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
 
     if caller == "meus_livros":
-        return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro": filtro}))
+        return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={
+            "filtro": filtro,
+            "ordem": ordem,
+        }))
     elif caller == "editar_planejamento":
-        return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={"filtro": filtro}))
+        return HttpResponseRedirect(reverse("bibm:editar_planejamento", kwargs={
+            "filtro": filtro,
+            "ordem": ordem,
+        }))
     else:
         return HttpResponseRedirect(reverse("bibm:home"))
 
 def deletar_um_livro(request):
     if request.method == "POST":
         filtro = request.POST.get("filtro")
+        ordem = request.POST.get("ordem")
         livro_id = request.POST.get("livro_id")
         if livro_id:
-            livro = Livro.objects.filter(id=livro_id).first()
+            livro = Livro.objects.get(id=livro_id)
             if livro:
-                livro.delete()
+                livro.deletado = True
+                livro.titulo += "#"
+                livro.save()
 
-        if livro.id == None and livro != None:
+        if livro.deletado and livro != None:
             messages.info(request, "Livro deletado com sucesso.")
         else:
             raise ValidationError("Houve um erro durante a deleção.")
     else:
         messages.error(request, "O livro não foi deletado")
-    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={"filtro":filtro}))
+    return HttpResponseRedirect(reverse("bibm:meus_livros", kwargs={
+        "filtro":filtro,
+        "ordem": ordem,
+    }))
 
 def add_um_autor_livro(request):
 

@@ -6,6 +6,7 @@
 
   <div class="meus-livros-abaixo-titulo-box">
 
+    {% comment %} NOME, AUTOR, EDITORA {% endcomment %}
     <div class="autor-editora linha-livro-info">
       {% if livro.autor.prim_nome == 'Autor Desconhecido' %}
         <span class="meus-livros-autor">Autor Desconhecido</span>
@@ -15,14 +16,18 @@
       <span class="meus-livros-editora">Editora: {{ livro.editora }}</span>
     </div>
 
+    {% comment %} REGIÃO {% endcomment %}
     <span class="linha-livro-info">Região: {{livro.regiao}}</span>
     
+    {% comment %} GÊNERO {% endcomment %}
     <span class="meus-livros-genero linha-livro-info">Gênero: {{ livro.genero.genero }}</span>
 
+    {% comment %} TEMA {% endcomment %}
     {% if livro.tema %}
       <span class="meus-livros-tema linha-livro-info">Tema: {{ livro.tema }}</span>
     {% endif %}
 
+    {% comment %} LIDO E DATA DE LEITURA {% endcomment %}
     {% if livro.lido %}
 
       <div class="livro-lido-linha linha-livro-info">
@@ -30,6 +35,7 @@
         <span class="meus-livros-data-leitura">Data: {{ livro.data_leitura }}</span>
       </div>
       
+      {% comment %} CLASSIFICAÇÃO {% endcomment %}
       <div class="flex-flow-row linha-livro-info">
         {% if livro.classificacao %}
         <div class="livro-classificacao">
@@ -37,6 +43,7 @@
         </div>
         {% endif %}
 
+        {% comment %} LERIA DE NOVO {% endcomment %}
         {% if livro.leria_de_novo %}
           <span class="meus-livros-leria-de-novo">| Leria de novo</span>
         {% endif %}
@@ -48,6 +55,7 @@
 
     {% if livro.planejamento is None and not livro.lendo %}
 
+    {% comment %} BOTÃO ACRESCENTAR NO PLANEJAMENTO {% endcomment %}
       {% if caller == "meus_livros" %}
         <form action="{% url 'bibm:acrescentar_no_planejamento_meus_livros' %}" method="post">
       {% else %}
@@ -55,9 +63,8 @@
       {% endif %}
 
         {% csrf_token %}
-        {% if filtro %}
-          <input type="hidden" name="filtro" value="{{filtro}}">
-        {% endif %}
+        <input type="hidden" name="filtro" value="{{filtro}}">
+        <input type="hidden" name="ordem" value="{{ordem}}">
         <input type="hidden" name="livro_id" value={{ livro.id }}>
         <button type="submit" class="btn-medio {{classe_btn}}">Acrescentar no planejamento</button>
       </form>
@@ -78,30 +85,34 @@
 
     {% if not livro.lendo %}
     
+    {% comment %} BOTÃO PEGAR ESTE LIVRO {% endcomment %}
     <form action="{% url "bibm:pegar_este_livro" %}" method="post">
       {% csrf_token %}
       <input type="hidden" name="livro_id" value="{{livro.id}}">
       <input type="hidden" name="caller" value="{{caller}}">
       <input type="hidden" name="filtro" value="{{filtro}}">
+      <input type="hidden" name="ordem" value="{{ordem}}">
       <button class="btn-medio {{classe_btn}}" type="submit">Pegar este livro</button>
     </form>
     
     {% endif %}
   </div>
 
+  {% comment %} ENDEREÇO {% endcomment %}
     {% if livro.endereco %}
       <span class="linha-livro-info">Endereço: {{livro.endereco}}</span>
     {% endif %}
 
+    {% comment %} DATA DE COMPRA {% endcomment %}
     <span  class="linha-livro-info">Data de Compra: {{livro.data_compra}}</span>
 
     {% comment %} BOTÃO EDITAR {% endcomment %}
     <div class="flex-flow-row espaco-top-2rem">
       <form method="GET" action="{% url 'bibm:editar_um_livro' livro.id %}">
         <input type="hidden" name="caller" value="{{caller}}">
-        {% if filtro %}
         <input type="hidden" name="filtro" value="{{filtro}}">
-        {% endif %}
+        <input type="hidden" name="ordem" value="{{ordem}}">
+
         <button type="submit">
           <img 
             src="{% static 'bibm/img/pen-to-square-solid.svg' %}" 
@@ -117,9 +128,9 @@
         onclick="return confirm('Você confirma a exclusão deste livro?')">
         {% csrf_token %}
         <input type="hidden" name="livro_id" value="{{livro.id}}">
-        {% if filtro %}
         <input type="hidden" name="filtro" value="{{filtro}}">
-        {% endif %}
+        <input type="hidden" name="ordem" value="{{ordem}}">
+
         <button type="submit">
           <img 
           src="{% static 'bibm/img/trash-solid.svg' %}" 

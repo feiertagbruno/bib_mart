@@ -13,6 +13,12 @@
 			{% if filtro %}
 			<input type="hidden" name="filtro" value ="{{filtro}}">
 			{% endif %}
+			{% if ordem %}
+			<input type="hidden" name="ordem" value ="{{ordem}}">
+			{% endif %}
+			{% if editar_um_livro %}
+			<input type="hidden" name="editar_um_livro" value="{{editar_um_livro}}">
+			{% endif %}
 			<input type="hidden" name="caller" value="{{caller}}">
 			<input type="hidden" name="livro_id" value="{{livro_id}}">
 			{{form.planejamento}}

@@ -165,7 +165,9 @@ document.addEventListener("DOMContentLoaded", function(dom) {
 	})
 
 	genero_input.addEventListener("focus", function(e) {
-		btn_add_um_genero_livro.style.display = "block"
+		if (!document.querySelector("[name='editar_um_livro']")) {
+			btn_add_um_genero_livro.style.display = "block"
+		}
 	})
 	
 	genero_input.addEventListener("blur", function(e) {

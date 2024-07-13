@@ -11,6 +11,7 @@ def validacao_endereco(regiao):
 class Regiao(models.Model):
     regiao = models.CharField(max_length=65, unique=True, verbose_name="região")
     comentario = models.TextField(blank=True, null=True)
+    deletado = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "regiões"
@@ -22,6 +23,7 @@ class Regiao(models.Model):
 class Genero(models.Model):
     genero = models.CharField(max_length=65, unique=True)
     comentario = models.TextField(blank=True, null=True)
+    deletado = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "gênero"
@@ -34,6 +36,7 @@ class Endereco(models.Model):
     codigo = models.CharField(max_length=5, validators=[validacao_endereco])
     descricao = models.CharField(max_length=300, blank=True, null=True)
     comentario = models.TextField(blank=True, null=True)
+    deletado = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Endereço"
@@ -48,8 +51,9 @@ class Autor(models.Model):
     prim_nome = models.CharField(max_length=65)
     ult_nome = models.CharField(max_length=65)
     nacionalidade = models.CharField(max_length=65, blank=True, null=True, default="")
-    regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=2)
+    regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=1)
     comentario = models.TextField(blank=True, null=True)
+    deletado = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "autores"
@@ -80,18 +84,21 @@ class Livro(models.Model):
     regiao = models.ForeignKey(Regiao, on_delete=models.SET_DEFAULT, default=1)
     comentario = models.TextField(blank=True, null=True)
     planejamento = models.PositiveIntegerField(unique=True, blank=True, null=True)
+    deletado = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.titulo)
     
 class Historico(models.Model):
     # Livro, Data Inicio, Data Fim, Terminou
-    livro = models.ForeignKey(Livro, on_delete=models.DO_NOTHING)
+    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
     data_ini = models.DateTimeField()
     data_fim = models.DateTimeField(blank=True,null=True)
     terminou = models.BooleanField(default=False)
     notas = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),(6,"6"),(7,"7"),(8,"8"),(9,"9"),(10,"10")]
     classificacao = models.IntegerField(choices=notas, blank=True, null=True)
+    deletado = models.BooleanField(default=False)
+
     def __str__(self):
         return str(self.id) + " - " + str(self.livro.titulo)
 
@@ -99,5 +106,7 @@ class Anotacao(models.Model):
     livro = models.ForeignKey(Livro, on_delete=models.DO_NOTHING)
     data_inclusao = models.DateTimeField(auto_now_add=True)
     anotacao = models.TextField()
+    deletado = models.BooleanField(default=False)
+
     def __str__(self):
         return str(self.id) + " - " + str(f"{self.anotacao[:20]}")

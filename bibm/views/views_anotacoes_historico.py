@@ -5,7 +5,7 @@ from utils.functions import get_queryset_filtro_letra, is_integer
 from datetime import datetime as dt
 from dateparser import parse
 from django.db.models.functions import Coalesce
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def minhas_anotacoes(request, filtro):
 
@@ -21,25 +21,25 @@ def minhas_anotacoes(request, filtro):
 
     if termo_busca == "":
         if filtro[:5] == "todos":
-            meus_livros = Livro.objects.all().annotate(
+            meus_livros = Livro.objects.filter(deletado=False).annotate(
                 ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
             ).order_by("-ultima_anotacao_data")
             filtro_letra = filtro[5:]
             filtro = "todos"
         if filtro[:8] == "naolidos":
-            meus_livros = Livro.objects.filter(lido=False).annotate(
+            meus_livros = Livro.objects.filter(lido=False,deletado=False).annotate(
                 ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
             ).order_by("-ultima_anotacao_data")
             filtro_letra = filtro[8:]
             filtro = "naolidos"
         elif filtro[:5] == "lidos":
-            meus_livros = Livro.objects.filter(Q(Q(lido=True)|Q(lendo=True))).annotate(
+            meus_livros = Livro.objects.filter(Q(Q(Q(lido=True)|Q(lendo=True)),Q(deletado=False))).annotate(
                 ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
             ).order_by("-ultima_anotacao_data")
             filtro_letra = filtro[5:]
             filtro = "lidos"
         elif filtro[:16] == "lidoeleriadenovo":
-            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True).annotate(
+            meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True,deletado=False).annotate(
                 ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
             ).order_by("-ultima_anotacao_data")
             filtro_letra = filtro[16:]
@@ -58,13 +58,14 @@ def minhas_anotacoes(request, filtro):
                 Q(tema__icontains = termo_busca) |
                 Q(endereco__codigo__icontains = termo_busca) |
                 Q(regiao__regiao__icontains = termo_busca)
-            )
+            ),
+            Q(deletado=False)
         ))
         filtro = filtro_letra = ""
 
     anotacoes = []
     for livro in meus_livros:
-        anot = Anotacao.objects.filter(livro__id=livro.id).order_by("-id")
+        anot = Anotacao.objects.filter(livro__id=livro.id,deletado=False).order_by("-id")
         anotacoes.append((livro, anot))
 
     context = {
@@ -87,9 +88,10 @@ def historico(request):
         historico_id_livro = int(historico_id_livro)
     
     if search_term:
-        historicos = Historico.objects.filter(livro__titulo__icontains=search_term).order_by("-data_fim")
+        historicos = Historico.objects.filter(
+            livro__titulo__icontains=search_term,deletado=False).order_by("-data_fim")
     else:
-        historicos = Historico.objects.all().order_by("-data_fim")
+        historicos = Historico.objects.filter(deletado=False).order_by("-data_fim")
 
     anotacoes = None
 
@@ -107,9 +109,10 @@ def historico(request):
             data_fim = parse(data_fim)
 
         anotacoes = Anotacao.objects.filter(Q(
+            Q(deletado=False),
             Q(livro = livro_id),
-            Q(data_inclusao__gte = data_ini) |
-            Q(data_inclusao__lte = data_fim)
+            Q(data_inclusao__gte = data_ini),
+            Q(data_inclusao__lte = data_fim + timedelta(minutes=1))
         )).order_by("-id")
 
     context = {
@@ -137,13 +140,13 @@ def historico_de_compra(request, filtro, ordem):
     }
 
     if filtro == "todos":
-        historico = Livro.objects.all()
+        historico = Livro.objects.filter(deletado=False)
     elif filtro == "naolidos":
-        historico = Livro.objects.filter(lido=False)
+        historico = Livro.objects.filter(lido=False,deletado=False)
     elif filtro == "lidos":
-        historico = Livro.objects.filter(lido=True)
+        historico = Livro.objects.filter(lido=True,deletado=False)
     elif filtro == "lidoeleriadenovo":
-        historico = Livro.objects.filter(lido=True,leria_de_novo=True)
+        historico = Livro.objects.filter(lido=True,leria_de_novo=True,deletado=False)
     
     if ordem == "crescente":
         historico = historico.order_by("data_compra")
