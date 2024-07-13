@@ -5,12 +5,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 import locale
-from django.db.models import Q
-from django.db.models import Max
+from django.db.models import Q, Max
 from django.contrib import messages
 from django.db.models import Value
 from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
+import random
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True,deletado=False)
@@ -614,3 +614,17 @@ def chamar_html_teste(request):
             livro = form.save(commit=False)
             ...
     return render(request,"bibm/testes.html", context)
+
+def sortear_um_livro(request):
+    lista_ids = list(Livro.objects.filter(
+        Q(Q(lido=False)|Q(leria_de_novo=True)),
+        Q(deletado=False)
+    ).values_list("id", flat=True))
+
+    if lista_ids:
+        livro_aleatorio = random.choice(lista_ids)
+        acrescentar_plan(livro_aleatorio)
+    else:
+        messages.info(request, "Não há livros para sortear.")
+    
+    return HttpResponseRedirect(reverse("bibm:home"))

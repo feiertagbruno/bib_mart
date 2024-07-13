@@ -2,19 +2,27 @@
 	Ainda não há planejamento
 </span>
 <div class="opcoes-livro-atual">
+
+	<a class="opc-livro-atual" href="{% url "bibm:sortear_um_livro" %}">
+		<div>
+			<span class="btn-menu-grande btn-vermelho">
+				Sortear um Livro
+			</span>
+		</div>
+	</a>
+
+	<a class="opc-livro-atual" href="{% url 'bibm:editar_planejamento' "naolidos" "adicao" %}">
+	<div>
+		<span class="btn-menu-grande btn-vermelho">
+				Editar Planejamento
+			</span>
+		</div>
+	</a>
+{% comment %} 
 	<div class="opc-livro-atual">
 		<span class="btn-menu-grande btn-vermelho">
-			Sortear um Livro
+			
 		</span>
-	</div>
-	<div class="opc-livro-atual">
-		<span class="btn-menu-grande btn-vermelho">
-			<a href="{% url 'bibm:editar_planejamento' "naolidos" "adicao" %}">Editar Planejamento</a>
-		</span>
-	</div>
-	<div class="opc-livro-atual">
-		<span class="btn-menu-grande btn-vermelho">
-			Pegar um Livro
-		</span>
-	</div>
+	</div> {% endcomment %}
+
 </div>

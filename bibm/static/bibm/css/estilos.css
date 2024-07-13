@@ -190,7 +190,9 @@ a {
 .opcoes-livro-atual {
 	display: flex;
 	flex-flow: wrap;
-	margin: 1rem 10vw;
+	width: 80%;
+	margin: 1rem auto;
+	place-items: center;
 }
 
 .opc-livro-atual {
@@ -199,6 +201,7 @@ a {
 	flex-grow: 1;
 	flex-shrink: 1;
 	place-items: center;
+	padding: 1rem;
 }
 
 .form-devolver-sim {

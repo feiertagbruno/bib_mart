@@ -50,4 +50,5 @@ urlpatterns = [
     path("generos/editar/", views.add_um_genero_livro, name="generos_editar"),
     path("generos/deletar/", views.generos_deletar, name="generos_deletar"),
     path("historicodecompra/<filtro>/<ordem>/", views.historico_de_compra, name="historico_de_compra"),
+    path("sortearumlivro/", views.sortear_um_livro, name="sortear_um_livro"),
 ]

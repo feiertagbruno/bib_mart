@@ -5,20 +5,20 @@
 	{% endif %}
 </span>
 <div class="opcoes-livro-atual">
-	<div class="opc-livro-atual">
-		<span class="btn-menu-grande btn-azul">
-			<a href="{% url 'bibm:add_anotacao' livro.id %}">
+	<a class="opc-livro-atual" href="{% url 'bibm:add_anotacao' livro.id %}">
+		<div>
+			<span class="btn-menu-grande btn-azul">
 				Anotações
-			</a>
-		</span>
-	</div>
-	<div class="opc-livro-atual">
-		<span class="btn-menu-grande btn-azul">
-			<a href="{% url "bibm:editar_um_livro" livro.id %}">
+			</span>
+		</div>
+	</a>
+	<a class="opc-livro-atual" href="{% url "bibm:editar_um_livro" livro.id %}">
+		<div>
+			<span class="btn-menu-grande btn-azul">
 				Alterar Cadastro do Livro
-			</a>
-		</span>
-	</div>
+			</span>
+		</div>
+	</a>
 	<div class="opc-livro-atual">
 		{% if devolvendo and livro.id == livro_id %}
 			{% if classificacao %}
@@ -47,9 +47,13 @@
 			</div>
 			{% endif %}
 		{% else %}
-		<span class="btn-menu-grande btn-azul">
-			<a href="{% url 'bibm:devolver' livro.id %}">Devolver</a>
-		</span>
+		<a class="opc-livro-atual" href="{% url 'bibm:devolver' livro.id %}">
+			<div>
+				<span class="btn-menu-grande btn-azul">
+					Devolver
+				</span>
+			</div>
+		</a>
 		{% endif %}
 	</div>
 </div>
