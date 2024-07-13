@@ -341,7 +341,7 @@ def add_uma_regiao_livro_save(request):
             else:
                 for er in form.errors.items():
                     messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
-                return HttpResponseRedirect(f"{reverse("bibm:add_uma_regiao_livro")}?caller=regioes_add")
+                return HttpResponseRedirect(f"{reverse('bibm:add_uma_regiao_livro')}?caller=regioes_add")
         else:
             if caller:
                 request.session["caller"] = caller
@@ -431,7 +431,7 @@ def add_um_genero_livro_save(request):
             else:
                 for er in form.errors.items():
                     messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
-                return HttpResponseRedirect(f"{reverse("bibm:add_um_genero_livro")}?caller=generos_add")
+                return HttpResponseRedirect(f"{reverse('bibm:add_um_genero_livro')}?caller=generos_add")
         else:
             form = GeneroForm(data = request.POST)
 
