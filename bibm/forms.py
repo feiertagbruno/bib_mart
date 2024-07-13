@@ -188,7 +188,8 @@ class AutorForm(forms.ModelForm):
             attrs={
                 "id":"regiao_id_field"
             }
-        )
+        ),
+        required=False
     )
     
     class Meta:

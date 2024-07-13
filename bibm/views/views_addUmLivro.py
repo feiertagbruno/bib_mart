@@ -246,6 +246,9 @@ def add_um_autor_livro_save(request):
                 form_save = form.save()
                 if form_save.id:
                     messages.success(request, "Autor salvo.")
+            else:
+                for er in form.errors.items():
+                    messages.error(request, f"{er[0].capitalize()} - {er[1][0]}")
             return HttpResponseRedirect(reverse("bibm:autores", kwargs={"filtro":filtro}))
         else:
             form = AutorForm(data = request.POST)
