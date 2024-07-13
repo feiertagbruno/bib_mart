@@ -25,11 +25,15 @@
 
         {% comment %} PRIMEIRO NOME {% endcomment %}
         <label class="label-add-um-livro" for="prim_nome_field">Primeiros nomes:</label>
-        <div class="input-container" id="prim_nome_field">{{form.prim_nome}}</div>
+        <div class="input-container" id="prim_nome_field" autocomplete="off">
+          {{form.prim_nome}}
+        </div>
 
         {% comment %} ULTIMO NOME {% endcomment %}
         <label class="label-add-um-livro" for="ult_nome_field">Sobrenome:</label>
-        <div class="input-container" id="ult_nome_field">{{form.ult_nome}}</div>
+        <div class="input-container" id="ult_nome_field" autocomplete="off">
+          {{form.ult_nome}}
+        </div>
 
         {% comment %} <div class="div-dois-campos"> {% endcomment %}
 
