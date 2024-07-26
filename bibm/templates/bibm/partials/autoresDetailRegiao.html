@@ -14,6 +14,12 @@
       </div>
 
       {% if autor.id == autor_id_livro %}
+	  
+	  {% if quantos_livros == 1 %}
+	  <span class="generos-livro-titulo paragrafo quantos_livros">1 livro.</span>
+	  {% else %}
+	  <span class="generos-livro-titulo paragrafo quantos_livros">{{quantos_livros}} livros.</span>
+	  {% endif %}
 
         {% include "bibm/partials/autoresDetailLivro.html" %}
 

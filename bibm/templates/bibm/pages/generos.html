@@ -50,6 +50,13 @@
             </div>
 
             {% if genero.id == genero_id_livro %}
+			  
+			  {% if quantos_livros == 1 %}
+			  <span class="generos-livro-titulo paragrafo quantos_livros">1 livro.</span>
+			  {% else %}
+			  <span class="generos-livro-titulo paragrafo quantos_livros">{{quantos_livros}} livros.</span>
+			  {% endif %}
+			
               {% include "bibm/partials/generosLivros.html" %}
 
               {% if genero.comentario %}

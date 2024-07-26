@@ -19,6 +19,13 @@
     {% comment %} REGIÃO {% endcomment %}
     <span class="linha-livro-info">Região: {{livro.regiao}}</span>
     
+	{% comment %} CATEGORIA {% endcomment %}
+	{% if livro.categoria == "F" %}
+    <span class="linha-livro-info">Categoria: Ficção</span>
+	{% else %}
+    <span class="linha-livro-info">Categoria: Não-Ficção</span>
+	{% endif %}
+
     {% comment %} GÊNERO {% endcomment %}
     <span class="meus-livros-genero linha-livro-info">Gênero: {{ livro.genero.genero }}</span>
 
@@ -96,6 +103,16 @@
     </form>
     
     {% endif %}
+	
+	
+	<a class="btn-medio {{classe_btn}}" href="{% url 'bibm:add_anotacao' livro.id %}">
+		<div>
+			<span>
+				Anotações
+			</span>
+		</div>
+	</a>
+
   </div>
 
   {% comment %} ENDEREÇO {% endcomment %}

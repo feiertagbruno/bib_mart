@@ -84,6 +84,7 @@ class LivroForm(forms.ModelForm):
             "autor",
             "genero",
             "planejamento",
+            "categoria",
         ]
         widgets = {
             "titulo":forms.TextInput(
@@ -136,6 +137,11 @@ class LivroForm(forms.ModelForm):
                     "id":"form_id_field"
                 }
             ),
+            "categoria": forms.Select(
+                attrs={
+                    "class":"categoria-field",
+                }
+            )
         }
 
     def clean(self):

@@ -14,6 +14,9 @@
     {% include "bibm/partials/ordemCresDecres.html" %}
     {% endif %}
   </div>
+  <div class="quantidade-livros">
+  {{quantos_livros}} livros.
+  </div>
   <div class="meus-livros-box">
     {% for livro in meus_livros %}
       {% include "bibm/partials/livroDetalheForm.html" %}

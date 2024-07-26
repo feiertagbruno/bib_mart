@@ -91,6 +91,14 @@
 				Adicionar uma Região
 			</button>
 
+			{% comment %} CATEGORIA FICÇÃO OU NÃO FICÇÃO {% endcomment %}
+			<div class="div-dois-campos espaco-top-2rem categoria-div">
+				<div class="campo-dois-campos flex-flow-row categoria-field">
+					<label class="label-add-um-livro" for="categoria">Categoria:</label>
+					{{form.categoria}}
+				</div>
+			</div>
+
 			{% comment %} GENERO {% endcomment %}
 			<div class="div-dois-campos">
 				<div class="campo-dois-campos">

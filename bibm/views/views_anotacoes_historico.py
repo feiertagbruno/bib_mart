@@ -16,7 +16,10 @@ def minhas_anotacoes(request, filtro):
         "lidos": "Lidos", 
         "todos": "Todos", 
         "naolidos": "Não lidos", 
-        "lidoeleriadenovo": "Lido e Leria de novo"
+        "lidoeleriadenovo": "Lido e Leria de novo",
+        "ficcao": "Ficção",
+        "naoficcao": "Não-Ficção",
+
     }
 
     if termo_busca == "":
@@ -44,6 +47,18 @@ def minhas_anotacoes(request, filtro):
             ).order_by("-ultima_anotacao_data")
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
+        elif filtro[:6] == "ficcao":
+            meus_livros = Livro.objects.filter(categoria="F",deletado=False).annotate(
+                ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
+            ).order_by("-ultima_anotacao_data")
+            filtro_letra = filtro[6:]
+            filtro = "ficcao"
+        elif filtro[:9] == "naoficcao":
+            meus_livros = Livro.objects.filter(categoria="NF",deletado=False).annotate(
+                ultima_anotacao_data = Max(Coalesce(F("anotacao__id"),Value(-1))),
+            ).order_by("-ultima_anotacao_data")
+            filtro_letra = filtro[9:]
+            filtro = "naoficcao"
 
         if len(filtro_letra) == 1 or filtro_letra == "0-9...":
             meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")

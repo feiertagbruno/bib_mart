@@ -1,3 +1,3 @@
-cd c:\Users\bruno.martini\Desktop\Python\bib_mart
+cd "~/appdata/local/bibmart/bib_mart"
 call .\venv\scripts\activate
-code .
+python manage.py runserver

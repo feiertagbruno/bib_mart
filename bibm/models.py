@@ -68,6 +68,12 @@ class Autor(models.Model):
         return str(self.id) + " - " + str(self.prim_nome) + " " + str(self.ult_nome)
 
 class Livro(models.Model):
+        
+    categoria_choices = [
+        ('F', 'Ficção'),
+        ('NF', 'Não-Ficção'),
+    ]    
+    
     titulo = models.CharField(max_length=300, unique=True)
     editora = models.CharField(max_length=300, blank=True, null=True)
     autor = models.ForeignKey(Autor, on_delete=models.SET_DEFAULT, default=1)
@@ -85,6 +91,7 @@ class Livro(models.Model):
     comentario = models.TextField(blank=True, null=True)
     planejamento = models.PositiveIntegerField(unique=True, blank=True, null=True)
     deletado = models.BooleanField(default=False)
+    categoria = models.CharField(max_length=2, choices=categoria_choices, default='F')
 
     def __str__(self):
         return str(self.titulo)

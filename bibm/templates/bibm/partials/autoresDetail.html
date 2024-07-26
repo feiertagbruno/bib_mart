@@ -11,6 +11,13 @@
     <div class="paragrafo flex-flow-row autores-regiao-linha">
       Região:<span class="autores-regiao-abaixo-nome">{{autor.regiao.regiao}}</span>
     </div>
+	
+	  {% if quantos_livros == 1 %}
+	  <span class="generos-livro-titulo paragrafo quantos_livros">1 livro.</span>
+	  {% else %}
+	  <span class="generos-livro-titulo paragrafo quantos_livros">{{quantos_livros}} livros.</span>
+	  {% endif %}
+
 
     {% include "bibm/partials/autoresDetailLivro.html" %}
 

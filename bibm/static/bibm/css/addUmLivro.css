@@ -132,3 +132,19 @@
 .box-se-lido {
 	display: none;
 }
+
+.categoria-div {
+	display: flex;
+	align-items: center;
+	align-content: center;
+	text-align: center;
+}
+
+.categoria-field {
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	text-align: center;
+	height: fit-content;
+	align-self: center;
+}

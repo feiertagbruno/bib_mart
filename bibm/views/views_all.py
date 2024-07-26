@@ -235,7 +235,9 @@ def meus_livros(request, filtro, ordem):
         "todos": "Todos", 
         "naolidos": "Não lidos", 
         "lidos": "Lidos", 
-        "lidoeleriadenovo": "Lido e Leria de novo"
+        "lidoeleriadenovo": "Lido e Leria de novo",
+        "ficcao": "Ficção",
+        "naoficcao": "Não-Ficção",
     }
 
     ordens = {
@@ -260,6 +262,14 @@ def meus_livros(request, filtro, ordem):
             meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True,deletado=False)
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
+        elif filtro[:6] == "ficcao":
+            meus_livros = Livro.objects.filter(categoria="F",deletado=False)
+            filtro_letra = filtro[6:]
+            filtro = "ficcao"
+        elif filtro[:9] == "naoficcao":
+            meus_livros = Livro.objects.filter(categoria="NF",deletado=False)
+            filtro_letra = filtro[9:]
+            filtro = "naoficcao"
 
         if filtro_letra:
             if len(filtro_letra) == 1 or filtro_letra == "0-9...":
@@ -281,6 +291,8 @@ def meus_livros(request, filtro, ordem):
         meus_livros = meus_livros.order_by("-id")
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
+    
+    quantos_livros = meus_livros.count()
 
     context = {
         "meus_livros": meus_livros,
@@ -292,6 +304,7 @@ def meus_livros(request, filtro, ordem):
         "filtro_letra": filtro_letra,
         "ordem": ordem,
         "ordens": ordens,
+        "quantos_livros": quantos_livros,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -411,7 +424,9 @@ def editar_planejamento(request, filtro, ordem):
         "naolidos": "Não lidos", 
         "todos": "Todos", 
         "lidos": "Lidos", 
-        "lidoeleriadenovo": "Lido e Leria de novo"
+        "lidoeleriadenovo": "Lido e Leria de novo",
+        "ficcao": "Ficção",
+        "naoficcao": "Não-Ficção",
     }
 
     ordens = {
@@ -443,6 +458,14 @@ def editar_planejamento(request, filtro, ordem):
             meus_livros = Livro.objects.filter(lido=True, leria_de_novo=True, deletado=False)
             filtro_letra = filtro[16:]
             filtro = "lidoeleriadenovo"
+        elif filtro[:6] == "ficcao":
+            meus_livros = Livro.objects.filter(categoria="F",deletado=False)
+            filtro_letra = filtro[6:]
+            filtro = "ficcao"
+        elif filtro[:9] == "naoficcao":
+            meus_livros = Livro.objects.filter(categoria="NF",deletado=False)
+            filtro_letra = filtro[9:]
+            filtro = "naoficcao"
 
         if len(filtro_letra) == 1 or filtro_letra == "0-9...":
             meus_livros = get_queryset_filtro_letra(filtro_letra, meus_livros, "titulo")

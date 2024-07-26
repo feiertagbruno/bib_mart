@@ -181,3 +181,7 @@
 .generos-livro-titulo {
   font-size: calc(1.4rem + .3vw);
 }
+
+.quantos_livros {
+	color: gray;
+}

@@ -37,7 +37,7 @@ def autores(request, filtro):
             deletado=False
         ).order_by("regiao"):
             autores[regiao.regiao] = Autor.objects.filter(regiao__id=regiao.id,deletado=False).annotate(
-                nome=Concat("ult_nome", Value(", "), "prim_nome")
+                nome=Concat("prim_nome", Value(" "), "ult_nome")
                 ).order_by("nome")
         filtro_letra = filtro[6:]
         filtro = "regiao"
@@ -52,12 +52,16 @@ def autores(request, filtro):
         if not autor_id_livro:
             autor_id_livro = request.session.get("autor_id")
         del(request.session["autor_id"])
-
+    
     if autor_id_livro is not None: autor_id_livro = int(autor_id_livro)
+    
+    quantos_livros = 0
+    
     if caller == "buscar_livros" or autor_id_livro:
         livros = Livro.objects.filter(
             autor__id= autor_id_livro,deletado=False
         ).values_list("titulo", flat=True).order_by("titulo")
+        quantos_livros = livros.count()
 
     context = {
         "autores": autores,
@@ -68,6 +72,7 @@ def autores(request, filtro):
         "filtro_letra": filtro_letra,
         "livros": livros,
         "autor_id_livro": autor_id_livro,
+        "quantos_livros": quantos_livros,
     }
 
     request = zerar_session(request)
@@ -108,15 +113,18 @@ def regioes(request):
     if regiao_id_livro: regiao_id_livro = int(regiao_id_livro)
     
     regiao_livros = None
+    quantos_livros = 0
 
     if regiao_id_livro:
         regiao_livros = Livro.objects.filter(regiao__id=regiao_id_livro,deletado=False).order_by("titulo")
+        quantos_livros = regiao_livros.count()
 
     context = {
         "caller": "regioes",
         "regioes": regioes,
         "regiao_id_livro": regiao_id_livro,
         "regiao_livros": regiao_livros,
+        "quantos_livros": quantos_livros,
     }
 
     return render(request, "bibm/pages/regioes.html", context)
@@ -161,15 +169,19 @@ def generos(request):
     if genero_id_livro: genero_id_livro = int(genero_id_livro)
     
     genero_livros = None
+    quantos_livros = 0
 
     if genero_id_livro:
         genero_livros = Livro.objects.filter(genero__id=genero_id_livro,deletado=False).order_by("titulo")
+        quantos_livros = genero_livros.count()
+    
 
     context = {
         "caller": "generos",
         "generos": generos,
         "genero_id_livro": genero_id_livro,
         "genero_livros": genero_livros,
+        "quantos_livros": quantos_livros,
     }
 
     return render(request, "bibm/pages/generos.html", context)
