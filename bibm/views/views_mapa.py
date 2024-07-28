@@ -192,6 +192,7 @@ def editar_endereco(request, endereco_id):
         "form": form,
         "caller": caller,
         "endereco_id": endereco_id,
+        "editar_endereco": True,
     }
 
     return render(request, "bibm/pages/addUmEndereco.html", context)

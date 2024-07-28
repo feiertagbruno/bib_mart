@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from bibm.models import Autor, Livro, Regiao, Genero
 from django.db.models.functions import Concat
-from django.db.models import Value
+from django.db.models import Value, Q
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
@@ -61,6 +61,10 @@ def autores(request, filtro):
         livros = Livro.objects.filter(
             autor__id= autor_id_livro,deletado=False
         ).values_list("titulo", flat=True).order_by("titulo")
+        # quantos_livros = livros.filter(
+        #     Q(Q(endereco__presencial = True) |
+        #     Q(endereco = None))
+        # ).count()
         quantos_livros = livros.count()
 
     context = {
@@ -117,6 +121,10 @@ def regioes(request):
 
     if regiao_id_livro:
         regiao_livros = Livro.objects.filter(regiao__id=regiao_id_livro,deletado=False).order_by("titulo")
+        # quantos_livros = regiao_livros.filter(
+        #     Q(Q(endereco__presencial = True) |
+        #     Q(endereco = None))
+        # ).count()
         quantos_livros = regiao_livros.count()
 
     context = {
@@ -173,6 +181,10 @@ def generos(request):
 
     if genero_id_livro:
         genero_livros = Livro.objects.filter(genero__id=genero_id_livro,deletado=False).order_by("titulo")
+        # quantos_livros = genero_livros.filter(
+        #     Q(Q(endereco__presencial = True) |
+        #     Q(endereco = None))
+        # ).count()
         quantos_livros = genero_livros.count()
     
 

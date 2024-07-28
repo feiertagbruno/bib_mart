@@ -292,7 +292,10 @@ def meus_livros(request, filtro, ordem):
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
     
-    quantos_livros = meus_livros.count()
+    quantos_livros = meus_livros.filter(
+        Q(Q(endereco__presencial = True) |
+          Q(endereco = None))
+    ).count()
 
     context = {
         "meus_livros": meus_livros,
@@ -483,7 +486,7 @@ def editar_planejamento(request, filtro, ordem):
             ),
             Q(deletado=False)
         ))
-        filtro = filtro_letra = ""
+        filtro_letra = ""
 
     if ordem == "adicao":
         meus_livros = meus_livros.order_by("-id")

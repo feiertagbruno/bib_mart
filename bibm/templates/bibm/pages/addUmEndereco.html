@@ -14,11 +14,27 @@
         <input type="hidden" name="endereco_id" value="{{endereco_id}}">
         {% endif %}
 
+        {% comment %} CÓDIGO DO ENDEREÇO {% endcomment %}
         <label class="label-add-um-livro" for="endereco_field">Código do Endereço:</label>
         <div class="input-container" id="endereco_field">{{form.codigo}}</div>
 
+        {% comment %} DESCRIÇÃO DO ENDEREÇO {% endcomment %}
         <label class="label-add-um-livro" for="descricao_field">Descrição:</label>
         <div class="input-container" id="descricao_field">{{form.descricao}}</div>
+
+        {% comment %} PRESENCIAL {% endcomment %}
+        <div class="div-dois-campos espaco-top-2rem">
+          <div class="campo-dois-campos flex-flow-row texto-centralizado">
+            <label class="label-add-um-livro" for="presencial">Endereço presencial:</label>
+            {{form.presencial}}
+          </div>
+          <span 
+            class="mensagem-presencial" 
+            id="mensagem_presencial" 
+          >
+            Este endereço não será considerado na contagem de livros.
+          </span>
+        </div>
 
         <button class="btn-medio btn-azul" type="submit">Adicionar</button>
     </form>

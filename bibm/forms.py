@@ -307,6 +307,7 @@ class EnderecoForm(forms.ModelForm):
         fields = [
             "codigo",
             "descricao",
+            "presencial",
         ]
         widgets = {
             "codigo": forms.TextInput(
@@ -324,6 +325,11 @@ class EnderecoForm(forms.ModelForm):
                     "autocomplete":"off",
                 }
             ),
+            "presencial": forms.CheckboxInput(
+                attrs={
+                    "id": "presencial_id"
+                }
+            )
         }
 
     def clean(self):

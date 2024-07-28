@@ -57,3 +57,8 @@
 	font-size: calc(1rem + .5vw);
 	color: rgba(50, 50, 50, .5);
 }
+
+.mensagem-presencial {
+	color: blue;		
+	font-size: calc(1.3rem + 0.3vw);
+}

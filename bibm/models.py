@@ -37,6 +37,7 @@ class Endereco(models.Model):
     descricao = models.CharField(max_length=300, blank=True, null=True)
     comentario = models.TextField(blank=True, null=True)
     deletado = models.BooleanField(default=False)
+    presencial = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Endereço"

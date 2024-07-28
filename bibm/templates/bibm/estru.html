@@ -82,6 +82,9 @@
 	{% if caller == "editar_planejamento" %}
 	<script src="{% static "bibm/js/editarPlanejamento.js" %}"></script>
 	{% endif %}
+	{% if add_um_endereco_livro or editar_endereco %}
+	<script src="{% static "bibm/js/addUmEndereco.js" %}"></script>
+	{% endif %}
 </body>
 
 </html>

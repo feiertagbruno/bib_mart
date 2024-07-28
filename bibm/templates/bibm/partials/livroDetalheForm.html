@@ -2,9 +2,16 @@
 
 <div class="livro-box">
 
-  <span class="meus-livros-titulo">{{ livro.titulo }}</span>
+  <span class="meus-livros-titulo">
+    {{ livro.titulo }}
+  </span>
 
   <div class="meus-livros-abaixo-titulo-box">
+
+    {% comment %} NÃO PRESENCIAL {% endcomment %}
+    {% if not livro.endereco.presencial and livro.endereco %}
+    <span class="linha-livro-info">(Não presencial)</span>
+    {% endif %}
 
     {% comment %} NOME, AUTOR, EDITORA {% endcomment %}
     <div class="autor-editora linha-livro-info">
