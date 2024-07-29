@@ -62,7 +62,12 @@ def autores(request, filtro):
             autor__id= autor_id_livro,deletado=False
         ).values_list("titulo", "endereco__codigo").order_by("titulo")
 
-        quantos_livros = livros.count()
+        quantos_livros = livros.filter(
+            Q(Q(endereco__presencial = True) |
+            Q(endereco = None))
+        ).count()
+
+        # quantos_livros = livros.count()
 
     context = {
         "autores": autores,
@@ -119,7 +124,12 @@ def regioes(request):
     if regiao_id_livro:
         regiao_livros = Livro.objects.filter(regiao__id=regiao_id_livro,deletado=False).order_by("titulo")
 
-        quantos_livros = regiao_livros.count()
+        quantos_livros = regiao_livros.filter(
+            Q(Q(endereco__presencial = True) |
+            Q(endereco = None))
+        ).count()
+
+        # quantos_livros = regiao_livros.count()
 
     context = {
         "caller": "regioes",
@@ -175,11 +185,11 @@ def generos(request):
 
     if genero_id_livro:
         genero_livros = Livro.objects.filter(genero__id=genero_id_livro,deletado=False).order_by("titulo")
-        # quantos_livros = genero_livros.filter(
-        #     Q(Q(endereco__presencial = True) |
-        #     Q(endereco = None))
-        # ).count()
-        quantos_livros = genero_livros.count()
+        quantos_livros = genero_livros.filter(
+            Q(Q(endereco__presencial = True) |
+            Q(endereco = None))
+        ).count()
+        # quantos_livros = genero_livros.count()
     
 
     context = {
