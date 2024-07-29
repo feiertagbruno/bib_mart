@@ -60,11 +60,8 @@ def autores(request, filtro):
     if caller == "buscar_livros" or autor_id_livro:
         livros = Livro.objects.filter(
             autor__id= autor_id_livro,deletado=False
-        ).values_list("titulo", flat=True).order_by("titulo")
-        # quantos_livros = livros.filter(
-        #     Q(Q(endereco__presencial = True) |
-        #     Q(endereco = None))
-        # ).count()
+        ).values_list("titulo", "endereco__codigo").order_by("titulo")
+
         quantos_livros = livros.count()
 
     context = {
@@ -121,10 +118,7 @@ def regioes(request):
 
     if regiao_id_livro:
         regiao_livros = Livro.objects.filter(regiao__id=regiao_id_livro,deletado=False).order_by("titulo")
-        # quantos_livros = regiao_livros.filter(
-        #     Q(Q(endereco__presencial = True) |
-        #     Q(endereco = None))
-        # ).count()
+
         quantos_livros = regiao_livros.count()
 
     context = {

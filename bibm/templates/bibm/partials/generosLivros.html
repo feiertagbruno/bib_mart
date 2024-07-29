@@ -3,6 +3,9 @@
 
     <a href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro.titulo}}" class="generos-livro-titulo paragrafo">
       - {{livro.titulo}}
+      {% if livro.endereco %}
+      - {{livro.endereco.codigo}}
+      {% endif %}
     </a>
 
   {% empty %}

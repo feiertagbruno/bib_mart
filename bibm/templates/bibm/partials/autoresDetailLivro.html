@@ -1,8 +1,14 @@
 <div class="autores-livros-box paragrafo">
-  {% for livro in livros %}
+  {% for livro, endereco in livros %}
 
-    <a href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro}}" class="autores-titulo-livro paragrafo">
+    <a 
+      href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro}}" 
+      class="autores-titulo-livro paragrafo"
+    >
       - {{livro}}
+      {% if endereco %}
+      - {{endereco}}
+      {% endif %}
     </a>
     {% comment %} <span class="autores-titulo-livro paragrafo">
     </span> {% endcomment %}
