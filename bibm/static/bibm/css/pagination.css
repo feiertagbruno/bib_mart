@@ -1,0 +1,31 @@
+.pagination-box {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.pagination-item:hover {
+  display: flex;
+  animation: infla 1s ease-in-out;
+}
+
+.current-pagination-item {
+  scale: 1.3;
+  animation: girinho 1s ease-in-out infinite;
+}
+
+@keyframes girinho {
+  0%,
+  50%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -20deg;
+  }
+  75% {
+    rotate: 20deg;
+  }
+}

@@ -98,14 +98,14 @@ class LivroForm(forms.ModelForm):
                 attrs={
                     "class":"autor-input",
                     "placeholder":"Digite aqui a editora.",
-                    "autocomplete": "off",
+                    "autocomplete": "on",
                 }
             ),
             "tema":forms.TextInput(
                 attrs={
                     "class":"autor-input",
                     "placeholder":"Digite o tema.",
-                    "autocomplete": "off",
+                    "autocomplete": "on",
                 }
             ),
             "data_compra":forms.DateInput(

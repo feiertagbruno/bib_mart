@@ -1,7 +1,7 @@
 <div class="regioes-livros-box">
   {% for livro in regiao_livros %}
 
-    <a href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro.titulo}}" class="regioes-livro-titulo paragrafo">
+    <a href="{% url "bibm:meus_livros" "todos" ordem_padrao_livros %}?q={{livro.titulo}}" class="regioes-livro-titulo paragrafo">
       - {{livro.titulo}}
       {% if livro.endereco %}
       - {{livro.endereco.codigo}}

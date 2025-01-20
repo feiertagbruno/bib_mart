@@ -2,7 +2,7 @@
   {% for livro, endereco in livros %}
 
     <a 
-      href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro}}" 
+      href="{% url "bibm:meus_livros" "todos" ordem_padrao_livros %}?q={{livro}}" 
       class="autores-titulo-livro paragrafo"
     >
       - {{livro}}

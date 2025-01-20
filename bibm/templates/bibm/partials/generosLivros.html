@@ -1,7 +1,7 @@
 <div class="generos-livros-box">
   {% for livro in genero_livros %}
 
-    <a href="{% url "bibm:meus_livros" "todos" "adicao" %}?q={{livro.titulo}}" class="generos-livro-titulo paragrafo">
+    <a href="{% url "bibm:meus_livros" "todos" ordem_padrao_livros %}?q={{livro.titulo}}" class="generos-livro-titulo paragrafo">
       - {{livro.titulo}}
       {% if livro.endereco %}
       - {{livro.endereco.codigo}}

@@ -56,6 +56,11 @@ input[type="checkbox"] {
 	border: none;
 }
 
+input[autocomplete="on"]:-webkit-autofill {
+	border-radius: inherit;
+	width: 100%;
+}
+
 button {
 	position: inherit;
 	border: none;

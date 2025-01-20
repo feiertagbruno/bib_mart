@@ -11,6 +11,7 @@ from django.db.models import Value
 from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 import random
+from django.core.paginator import Paginator
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True,deletado=False)
@@ -139,6 +140,43 @@ def zerar_session(request):
     if request.session.get("genero_id"):
         del(request.session["genero_id"])
     return request
+
+def get_pagination_range(current_page, num_pages):
+    range_size = 20
+    mid_num = int(range_size/2)
+
+    if num_pages <= range_size:
+        return [i for i in range(1,num_pages+1)]
+
+    first_num = current_page - mid_num + 2
+    last_num = current_page + mid_num + 1 + (range_size % 2)
+
+    if first_num < 1:
+        last_num += 1-first_num
+        first_num = 1
+    
+    if last_num > num_pages:
+        first_num -= (last_num - num_pages)
+        last_num = num_pages
+
+    if last_num > num_pages: last_num = num_pages
+    pagination_range = []
+
+    for i in range(first_num,last_num + 1):
+        pagination_range.append(i)
+
+    return pagination_range
+
+
+def get_pagination(current_page,pagination_obj):
+    paginator = Paginator(pagination_obj, 15)
+    page_obj = paginator.get_page(current_page)
+    first_step_pagination_range = get_pagination_range(current_page,paginator.num_pages)
+    pagination_range = []
+    for i in first_step_pagination_range:
+        pagination_range.append((i, paginator.get_page(i)[0].titulo))
+
+    return (page_obj, pagination_range)
 
 # Create your views here.
 
@@ -291,11 +329,18 @@ def meus_livros(request, filtro, ordem):
         meus_livros = meus_livros.order_by("-id")
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
-    
+
     quantos_livros = meus_livros.filter(
         Q(Q(endereco__presencial = True) |
           Q(endereco = None))
     ).count()
+
+    try:
+        current_page = int(request.GET.get("page",1))
+    except:
+        current_page = 1
+
+    meus_livros, pagination_range = get_pagination(current_page,meus_livros)
 
     context = {
         "meus_livros": meus_livros,
@@ -308,6 +353,8 @@ def meus_livros(request, filtro, ordem):
         "ordem": ordem,
         "ordens": ordens,
         "quantos_livros": quantos_livros,
+        "pagination_range": pagination_range,
+        "current_page": current_page,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -493,6 +540,10 @@ def editar_planejamento(request, filtro, ordem):
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
 
+    current_page = request.GET.get("page",1)
+
+    meus_livros, pagination_range = get_pagination(current_page,meus_livros)
+
     context = {
         "livros_plan": livros_plan,
         "ultimo_plan": ultimo_plan,
@@ -506,6 +557,8 @@ def editar_planejamento(request, filtro, ordem):
         "filtro_letra": filtro_letra,
         "ordem": ordem,
         "ordens": ordens,
+        "pagination_range":pagination_range,
+        "current_page": current_page,
     }
     return render(request, "bibm/pages/editarPlanejamento.html", context)
 

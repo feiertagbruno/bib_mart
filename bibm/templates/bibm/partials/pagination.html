@@ -1,0 +1,20 @@
+{% if meus_livros.has_other_pages %}
+<div class="decoracao-linha-filtros-acima"></div>
+  <div class="pagination-box">
+    {% for page,titulo in pagination_range %}
+      <a 
+        {% if page == current_page %}
+          class="current-pagination-item"
+          title="Página atual"
+        {% else %}
+          href="?page={{page}}"
+          class="pagination-item" 
+          title="{{titulo}}"
+        {% endif %}
+      >
+        {{page}}
+      </a>
+    {% endfor %}
+  </div>
+<div class="decoracao-linha-filtros-abaixo"></div>
+{% endif %}

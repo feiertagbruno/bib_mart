@@ -18,6 +18,9 @@
 	<link rel="stylesheet" href="{% static 'bibm/css/mapaDaBibli.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/anotacoesHistorico.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/autores_regioes_generos.css' %}">
+	{% if caller == "editar_planejamento" or caller == "meus_livros" %}
+	<link rel="stylesheet" href="{% static 'bibm/css/pagination.css' %}">
+	{% endif %}
 	<link rel="stylesheet" href="{% static 'bibm/css/genericos.css' %}">
 	<link rel="stylesheet" href="{% static 'bibm/css/media.css' %}">
 </head>
