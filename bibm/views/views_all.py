@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from bibm.models import Livro, Anotacao, Historico, Endereco, Autor, Genero, Regiao
 from bibm.forms import AnotacaoForm, LivroForm, ClassificacaoForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.utils import timezone
 import locale
@@ -12,6 +12,10 @@ from django.db.models.functions import Concat
 from utils.functions import get_ordem_alfabetica_lista, get_queryset_filtro_letra
 import random
 from django.core.paginator import Paginator
+from openpyxl import Workbook
+from datetime import datetime
+import os
+from django.conf import settings
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True,deletado=False)
@@ -185,6 +189,49 @@ def get_pagination(current_page,pagination_obj):
 
     return (page_obj, pagination_range)
 
+
+
+def gerar_livros_excel(livros):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Meus Livros"
+    ws.append([
+        "Título", "Editora","Autor", 
+        "Nacionalidade Autor", "Região Autor", "Comentário Sobre o Autor",
+        "Gênero","Tema","Lendo?", 
+        "Lido?","Data da Leitura","Leria Novamente?",
+        "Classificação","Endereço", "Descrição do Endereço",
+        "Data da Compra", 
+        "Região","Comentário","No Planejamento?", "Categoria" 
+    ])
+    
+    for livro in livros:
+        ws.append([
+            livro.titulo,
+            livro.editora,
+            livro.autor.prim_nome + " " + livro.autor.ult_nome,
+            livro.autor.nacionalidade,
+            livro.autor.regiao.regiao,
+            livro.autor.comentario,
+            livro.genero.genero,
+            livro.tema,
+            livro.lendo,
+            livro.lido,
+            datetime.strftime(livro.data_leitura,"%d/%m/%Y") if livro.data_leitura else None,
+            livro.leria_de_novo,
+            livro.classificacao,
+            livro.endereco.codigo if livro.endereco else None,
+            livro.endereco.descricao if livro.endereco else None,
+            datetime.strftime(livro.data_compra,"%d/%m/%Y") if livro.data_compra else None,
+            livro.regiao.regiao,
+            livro.comentario,
+            livro.planejamento,
+            livro.categoria
+        ])
+    caminho_arquivo = os.path.join(settings.MEDIA_ROOT,"meus_livros.xlsx")
+    wb.save(caminho_arquivo)
+    return caminho_arquivo
+
 # Create your views here.
 
 
@@ -342,6 +389,8 @@ def meus_livros(request, filtro, ordem):
           Q(endereco = None))
     ).count()
 
+    caminho_arquivo = gerar_livros_excel(meus_livros)
+
     try:
         current_page = int(request.GET.get("page",1))
     except:
@@ -362,6 +411,7 @@ def meus_livros(request, filtro, ordem):
         "quantos_livros": quantos_livros,
         "pagination_range": pagination_range,
         "current_page": current_page,
+        "caminho_arquivo":caminho_arquivo,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -717,3 +767,8 @@ def sortear_um_livro(request):
         messages.info(request, "Não há livros para sortear.")
     
     return HttpResponseRedirect(reverse("bibm:home"))
+
+def exportar_livros_excel(request):
+    caminho_arquivo = request.POST.get("caminho_arquivo")
+    caminho_arquivo = os.path.join(settings.MEDIA_ROOT,"meus_livros.xlsx")
+    return FileResponse(open(caminho_arquivo,"rb"), as_attachment=True, filename="meus_livros.xlsx")

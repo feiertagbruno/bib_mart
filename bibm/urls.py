@@ -51,4 +51,5 @@ urlpatterns = [
     path("generos/deletar/", views.generos_deletar, name="generos_deletar"),
     path("historicodecompra/<filtro>/<ordem>/", views.historico_de_compra, name="historico_de_compra"),
     path("sortearumlivro/", views.sortear_um_livro, name="sortear_um_livro"),
+    path("exportarlivrosexcel", views.exportar_livros_excel, name="exportar_livros_excel"),
 ]

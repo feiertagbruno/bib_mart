@@ -565,3 +565,7 @@ a {
 .ja-no-planejamento {
 	align-self: center;
 }
+
+.exportar-excel {
+	color: gray;
+}
