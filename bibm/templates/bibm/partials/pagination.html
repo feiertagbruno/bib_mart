@@ -1,7 +1,7 @@
 {% if meus_livros.has_other_pages %}
 <div class="decoracao-linha-filtros-acima"></div>
   <div class="pagination-box">
-    {% for page,titulo in pagination_range %}
+    {% for text,page,titulo in pagination_range %}
       <a 
         {% if page == current_page %}
           class="current-pagination-item"
@@ -12,7 +12,7 @@
           title="{{titulo}}"
         {% endif %}
       >
-        {{page}}
+        {{text}}
       </a>
     {% endfor %}
   </div>

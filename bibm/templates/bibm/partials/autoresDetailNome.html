@@ -1,4 +1,4 @@
-<form action="{% url "bibm:autores" filtro %}">
+<form action="{% url "bibm:autores" filtro|add:filtro_letra %}">
 
   <input type="hidden" name="autor_id" value="{{autor.id}}">
   <input type="hidden" name="caller" value="buscar_livros">

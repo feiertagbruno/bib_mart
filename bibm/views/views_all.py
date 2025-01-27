@@ -172,9 +172,16 @@ def get_pagination(current_page,pagination_obj):
     paginator = Paginator(pagination_obj, 15)
     page_obj = paginator.get_page(current_page)
     first_step_pagination_range = get_pagination_range(current_page,paginator.num_pages)
+    
+    primeira = True if first_step_pagination_range[0] != 1 else False
+    ultima = True if first_step_pagination_range[len(first_step_pagination_range)-1] != paginator.num_pages else False
+
     pagination_range = []
     for i in first_step_pagination_range:
-        pagination_range.append((i, paginator.get_page(i)[0].titulo))
+        pagination_range.append([i, i, paginator.get_page(i)[0].titulo])
+
+    if primeira: pagination_range.insert(0,["primeira", 1,""])
+    if ultima: pagination_range.append(["última", paginator.num_pages,""])
 
     return (page_obj, pagination_range)
 
@@ -540,7 +547,10 @@ def editar_planejamento(request, filtro, ordem):
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
 
-    current_page = request.GET.get("page",1)
+    try:
+        current_page = int(request.GET.get("page",1))
+    except:
+        current_page = 1
 
     meus_livros, pagination_range = get_pagination(current_page,meus_livros)
 

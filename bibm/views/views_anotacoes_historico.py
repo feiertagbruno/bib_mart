@@ -130,12 +130,35 @@ def historico(request):
             Q(data_inclusao__lte = data_fim + timedelta(minutes=1))
         )).order_by("-id")
 
+    leitura_concluida = True
+    leitura_nao_concluida = True
+    data_inicial_str = request.POST.get("data-inicial-name")
+    data_final_str = request.POST.get("data-final-name")
+
+    if request.method == "POST":
+        leitura_concluida = request.POST.get("leitura-concluida")
+        leitura_nao_concluida = request.POST.get("leitura-nao-concluida")
+        if data_inicial_str and data_final_str:
+            data_inicial = datetime.strptime(data_inicial_str, "%Y-%m-%d").date()
+            data_final = datetime.strptime(data_final_str, "%Y-%m-%d").date()
+
+            if (leitura_concluida and leitura_nao_concluida) or (not leitura_concluida and not leitura_nao_concluida):
+                historicos = historicos.filter(data_fim__gte = data_inicial, data_fim__lte = data_final)
+            elif leitura_concluida and not leitura_nao_concluida:
+                historicos = historicos.filter(data_fim__gte = data_inicial, data_fim__lte = data_final, terminou = True)
+            else:
+                historicos = historicos.filter(data_fim__gte = data_inicial, data_fim__lte = data_final, terminou = False)
+
     context = {
         "historicos": historicos,
         "historico_id_livro": historico_id_livro,
         "anotacoes": anotacoes,
         "search_term": search_term,
-        "caller": "historico"
+        "caller": "historico",
+        "data_inicial": data_inicial_str,
+        "data_final": data_final_str,
+        "leitura_concluida":leitura_concluida,
+        "leitura_nao_concluida": leitura_nao_concluida,
     }
 
     return render(request, "bibm/pages/historico.html", context)

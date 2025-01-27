@@ -26,6 +26,34 @@
     <div class="ldiv linha-divisoria-direita"></div>
   </div>
 
+  <form class="form-datas-historico-form" action="{% url "bibm:historico" %}" method="post">
+
+    {% csrf_token %}
+    <div class="form-datas-historico">
+      <label class="label-add-um-livro" for="data-inicial-id">Data Inicial:</label>
+      <div class="input-container data-historico-container" id="data-inicial">
+        <input class="autor-input datas-historico" type="date" name="data-inicial-name" id="data-inicial-id" value="{{data_inicial}}">
+      </div>
+
+      <label class="label-add-um-livro" for="data-final-id">Data Final:</label>
+      <div class="input-container data-historico-container" id="data-final">
+        <input class="autor-input datas-historico" type="date" name="data-final-name" id="data-final-id" value="{{data_final}}">
+      </div>
+
+    </div>
+    <div class="form-datas-historico">
+      <label for="check-leitura-concluida-id">Leitura Concluída: </label>
+      <input type="checkbox" name="leitura-concluida" id="check-leitura-concluida-id" 
+      {% if leitura_concluida %}checked{% endif %}
+      >
+      <label for="check-leitura-nao-concluida-id">Leitura Não Concluída: </label>
+      <input type="checkbox" name="leitura-nao-concluida" id="check-leitura-nao-concluida-id" 
+      {% if leitura_nao_concluida %}checked{% endif %}
+      >
+      <button class="btn-pequeno btn-azul" type="submit">Buscar</button>
+    </div>
+  </form>
+
   <div class="historico-box">
     {% for historico in historicos %}
 

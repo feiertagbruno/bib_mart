@@ -116,3 +116,20 @@
   padding-bottom: 1.5rem;
   color: rgba(73, 73, 73, 0.863);
 }
+
+.form-datas-historico {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.data-historico-container {
+  width: 20%;
+}
+
+.form-datas-historico-form {
+  display: flex;
+  flex-flow: column;
+}
