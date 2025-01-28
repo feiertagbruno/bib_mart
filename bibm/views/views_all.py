@@ -16,6 +16,7 @@ from openpyxl import Workbook
 from datetime import datetime
 import os
 from django.conf import settings
+from django.core.serializers import serialize, deserialize
 
 def context_home():
     livros_lendo = Livro.objects.filter(lendo=True,deletado=False)
@@ -143,6 +144,8 @@ def zerar_session(request):
         del(request.session["regiao_id"])
     if request.session.get("genero_id"):
         del(request.session["genero_id"])
+    if request.session.get("meus_livros_excel"):
+        del(request.session["meus_livros_excel"])
     return request
 
 def get_pagination_range(current_page, num_pages):
@@ -384,12 +387,14 @@ def meus_livros(request, filtro, ordem):
     if ordem == "alfabetica":
         meus_livros = meus_livros.order_by("titulo")
 
+    request.session["meus_livros_excel"] = serialize("json",meus_livros)
+
     quantos_livros = meus_livros.filter(
         Q(Q(endereco__presencial = True) |
           Q(endereco = None))
     ).count()
 
-    caminho_arquivo = gerar_livros_excel(meus_livros)
+    
 
     try:
         current_page = int(request.GET.get("page",1))
@@ -411,7 +416,6 @@ def meus_livros(request, filtro, ordem):
         "quantos_livros": quantos_livros,
         "pagination_range": pagination_range,
         "current_page": current_page,
-        "caminho_arquivo":caminho_arquivo,
     }
 
     return render(request, "bibm/pages/meusLivros.html", context)
@@ -769,6 +773,13 @@ def sortear_um_livro(request):
     return HttpResponseRedirect(reverse("bibm:home"))
 
 def exportar_livros_excel(request):
-    caminho_arquivo = request.POST.get("caminho_arquivo")
-    caminho_arquivo = os.path.join(settings.MEDIA_ROOT,"meus_livros.xlsx")
+
+    meus_livros_json = request.session.get("meus_livros_excel")
+
+    meus_livros = [obj.object for obj in deserialize("json",meus_livros_json)]
+
+    if not meus_livros:
+        return HttpResponseRedirect(reverse("bibm:home"))
+
+    caminho_arquivo = gerar_livros_excel(meus_livros)
     return FileResponse(open(caminho_arquivo,"rb"), as_attachment=True, filename="meus_livros.xlsx")

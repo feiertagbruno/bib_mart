@@ -17,13 +17,11 @@
   <div class="flex-flow-row">
   <div class="quantidade-livros">
   {{quantos_livros}} livros.
+  <a class="cursor-pointer exportar-excel" href="{% url "bibm:exportar_livros_excel" %}"><u>Exportar Livros para Excel</u></a>
   </div>
-  <form class="cursor-pointer" action="{% url "bibm:exportar_livros_excel" %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="caminho-aquivo" value="{{caminho_arquivo}}">
-    <button class="cursor-pointer exportar-excel" type="submit"><u>Exportar Livros para Excel</u></button>
-  </form>
-  </div>
+  
+
+</div>
   <div class="meus-livros-box">
     {% for livro in meus_livros %}
       {% include "bibm/partials/livroDetalheForm.html" %}
