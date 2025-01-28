@@ -183,6 +183,9 @@ def get_pagination(current_page,pagination_obj):
     primeira = True if first_step_pagination_range[0] != 1 else False
     ultima = True if first_step_pagination_range[len(first_step_pagination_range)-1] != paginator.num_pages else False
 
+    if len(first_step_pagination_range) == 1:
+        return (pagination_obj, first_step_pagination_range)
+
     pagination_range = []
     for i in first_step_pagination_range:
         pagination_range.append([i, i, paginator.get_page(i)[0].titulo])
@@ -375,6 +378,7 @@ def meus_livros(request, filtro, ordem):
         Q(titulo__icontains = termo_busca) |
         Q(editora__icontains = termo_busca) |
         Q(autor__prim_nome__icontains = termo_busca) |
+        Q(autor__ult_nome__icontains = termo_busca) |
         Q(genero__genero__icontains = termo_busca) |
         Q(tema__icontains = termo_busca) |
         Q(endereco__codigo__icontains = termo_busca) |
