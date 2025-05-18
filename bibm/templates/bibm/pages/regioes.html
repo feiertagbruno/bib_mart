@@ -31,6 +31,11 @@
 
       <div class="regioes-block">
 
+        <form action="{% url "bibm:add_uma_regiao_livro" %}" method="get">
+          <input type="hidden" name="caller" value="regioes_add">
+          <button type="submit" class="btn-pequeno btn-verde">Adicionar uma região</button>
+        </form>
+        
         {% for regiao in regioes %}
           
           <div class="regioes-box">
@@ -70,11 +75,6 @@
         {% empty %}
           Sem resultados
         {% endfor %}
-
-        <form action="{% url "bibm:add_uma_regiao_livro" %}" method="get">
-          <input type="hidden" name="caller" value="regioes_add">
-          <button type="submit" class="btn-pequeno btn-verde">Adicionar uma região</button>
-        </form>
           
       </div>
 

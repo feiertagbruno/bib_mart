@@ -135,7 +135,7 @@ a {
 }
 
 .nome-app {
-	font-size: calc(2rem + 6vw);
+	font-size: calc(2rem + 5vw);
 	text-transform: uppercase;
 	position: inherit;
 	top: -1rem;

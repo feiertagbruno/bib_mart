@@ -31,6 +31,11 @@
 
       <div class="generos-block">
 
+        <form action="{% url "bibm:add_um_genero_livro" %}" method="get">
+          <input type="hidden" name="caller" value="generos_add">
+          <button type="submit" class="btn-pequeno btn-verde">Adicionar um gênero</button>
+        </form>
+        
         {% for genero in generos %}
           
           <div class="generos-box">
@@ -72,11 +77,6 @@
         {% empty %}
           Sem resultados
         {% endfor %}
-
-        <form action="{% url "bibm:add_um_genero_livro" %}" method="get">
-          <input type="hidden" name="caller" value="generos_add">
-          <button type="submit" class="btn-pequeno btn-verde">Adicionar um gênero</button>
-        </form>
           
       </div>
 
