@@ -183,7 +183,7 @@ a {
 	display: flex;
 	flex-flow: column;
 	place-content: center;
-	font-size: calc(1rem + 3vw);
+	font-size: calc(1rem + 2.2vw);
 	text-align: center;
 	padding: 0 1.3rem;
 }
