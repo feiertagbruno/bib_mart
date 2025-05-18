@@ -206,7 +206,7 @@ a {
 	flex-grow: 1;
 	flex-shrink: 1;
 	place-items: center;
-	padding: 1rem;
+	padding: 0.7rem 1rem;
 }
 
 .form-devolver-sim {
