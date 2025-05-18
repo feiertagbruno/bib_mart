@@ -196,7 +196,7 @@ a {
 	display: flex;
 	flex-flow: wrap;
 	width: 80%;
-	margin: 1rem auto;
+	margin: 0 auto;
 	place-items: center;
 }
 
